@@ -54,6 +54,7 @@
     <v-main>
       <HelloWorld msg="Welcome to Your AIGARET"/>
     </v-main>
+    <router-view/>
   </v-app>
 </template>
 
