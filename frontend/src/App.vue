@@ -1,10 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
+    <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img
           alt="Vuetify Logo"
@@ -24,6 +20,24 @@
           width="100"
         />
       </div>
+
+      <router-link to="/">
+        <v-btn text style="">
+          <span class="routerLink mr-2 ml-2">Home</span>
+        </v-btn>
+      </router-link>
+
+      <router-link to="/login" style="text-decoration: none;">
+        <v-btn text style="height: 99%; outline:none;">
+          <span class="routerLink mr-2 ml-2">Login</span>
+        </v-btn>
+      </router-link>
+
+      <router-link to="/game" style="text-decoration: none;">
+        <v-btn text style="height: 99%; outline:none;">
+          <span class="routerLink mr-2 ml-2">Game</span>
+        </v-btn>
+      </router-link>
 
       <v-spacer></v-spacer>
 
