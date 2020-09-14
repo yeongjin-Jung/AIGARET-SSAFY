@@ -1,21 +1,21 @@
 <template>
-  <div class="container">
-    <div style="width: 400px; height: 70px; margin: auto;">
+  <div>
+    <div style="width: 400px; height: 90px; margin: auto;">
         <div style="font-weight: bold; font-size: 36px; text-align: center;" class="">AIGARET</div>
         <div style="font-weight: bold; font-size: 24px; text-align: center;" class="">AI Game Rehabilitation Trainer</div>
     </div>
 
-    <div style="width: 533px; height: 400px; margin: 30px auto; background: black;">
+    <div style="width: 533px; height: 400px; margin: 20px auto; background: black;">
       <video id="video" height="400" autoplay muted></video>
     </div>
 
-    <div style="margin: 20px auto;">
+    <div style="width: 533px; margin: 20px auto;">
       <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: rgb(52, 152, 219);">로그인</div>
       <div style="display:inline-block; width: 33px;"></div>
       <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(64, 64, 64); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: rgb(224, 224, 224);">회원가입</div>
+      <div style="font-size:16px; color: rgb(41, 90, 221); text-decoration:underline;">아이디로 로그인하기</div>
     </div>
 
-    <div style="font-size:16px; color: rgb(41, 90, 221); text-decoration:underline;">아이디로 로그인하기</div>
   </div>
 </template>
 

@@ -8,6 +8,7 @@
 <script>
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
+
 export default {
   name: "GamePlay",
   data: function () {
@@ -21,7 +22,7 @@ export default {
     };
   },
   components: {
-    "vue-p5": VueP5,
+    VueP5,
   },
   methods: {
     setup(sketch) {
@@ -72,6 +73,14 @@ export default {
           sketch.fill(0, 0, 255);
           sketch.ellipse(that.pose.rightWrist.x, that.pose.rightWrist.y, 32);
           sketch.ellipse(that.pose.leftWrist.x, that.pose.leftWrist.y, 32);
+          if (
+            that.pose.rightWrist.x > that.position_x - 50 &&
+            that.pose.rightWrist.x < that.position_x + 50 &&
+            that.pose.rightWrist.y - 50 > that.position_y - 50 &&
+            that.pose.rightWrist.y - 50 < that.position_y + 50
+          ) {
+            that.chanege();
+          }
 
           for (let i = 0; i < that.pose.keypoints.length; i++) {
             const x = that.pose.keypoints[i].position.x;
