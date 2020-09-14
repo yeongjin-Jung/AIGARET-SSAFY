@@ -21,25 +21,25 @@
         />
       </div>
 
-      <router-link to="/">
-        <v-btn text style="">
-          <span class="routerLink mr-2 ml-2">Home</span>
+      <router-link to="/" style="text-decoration: none;">
+        <v-btn text>
+          <span>Home</span>
         </v-btn>
       </router-link>
 
       <router-link to="/login" style="text-decoration: none;">
-        <v-btn text style="height: 99%; outline:none;">
-          <span class="routerLink mr-2 ml-2">Login</span>
+        <v-btn text>
+          <span>Login</span>
         </v-btn>
       </router-link>
 
       <router-link to="/game" style="text-decoration: none;">
-        <v-btn text style="height: 99%; outline:none;">
-          <span class="routerLink mr-2 ml-2">Game</span>
+        <v-btn text>
+          <span>Game</span>
         </v-btn>
       </router-link>
 
-      <v-spacer></v-spacer>
+      <v-spacer />
 
       <v-btn
         href="https://github.com/vuetifyjs/vuetify/releases/latest"
@@ -52,20 +52,20 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld msg="Welcome to Your AIGARET"/>
+      <v-container fluid>
+        <router-view />
+      </v-container>
     </v-main>
-    <router-view/>
+
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
 
   components: {
-    HelloWorld
+
   },
 
   data: () => ({
