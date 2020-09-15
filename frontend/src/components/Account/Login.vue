@@ -10,9 +10,9 @@
     </div>
 
     <div style="width: 533px; margin: 20px auto;">
-      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: rgb(52, 152, 219);">로그인</div>
+      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: #53cde2;">로그인</div>
       <div style="display:inline-block; width: 33px;"></div>
-      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(64, 64, 64); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: rgb(224, 224, 224);">회원가입</div>
+      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: #005792">회원가입</div>
       <div style="font-size:16px; color: rgb(41, 90, 221); text-decoration:underline;">아이디로 로그인하기</div>
     </div>
 
