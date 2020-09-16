@@ -12,33 +12,102 @@
     <div style="width: 533px; margin: 20px auto;">
       <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: #53cde2;">로그인</div>
       <div style="display:inline-block; width: 33px;"></div>
-      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: #005792">회원가입</div>
-      <div style="font-size:16px; color: rgb(41, 90, 221); text-decoration:underline;">아이디로 로그인하기</div>
-    </div>
+      <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(64, 64, 64); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: rgb(224, 224, 224);" @click="signup()">회원가입</div>
 
+      <div style="font-size:16px; color: rgb(41, 90, 221); text-decoration:underline;" @click="loginModal = !loginModal">아이디로 로그인하기</div>
+
+      <v-dialog v-model="loginModal" persistent max-width="500px">
+      <ValidationObserver ref="observer" v-slot="{invalid}">
+        <v-card class="elevation-12">
+          <v-toolbar dark flat>
+            <v-toolbar-title>LogIn</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-form>
+
+              <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
+                <v-text-field
+                  v-model="loginData.id"
+                  :error-messages="errors"
+                  label="ID"
+                  name="id"
+                  
+                  prepend-icon="mdi-account"
+                ></v-text-field>
+              </ValidationProvider>
+
+              <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" rules="required">
+                <v-text-field
+                  v-model="loginData.password"
+                  :error-messages="errors"
+                  label="Password"
+                  name="password"
+                  type="password"
+                  prepend-icon="mdi-lock"
+                ></v-text-field>
+              </ValidationProvider>
+            </v-form>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="loginModal = !loginModal; login(loginData)" :disabled="invalid">Login</v-btn>
+            <v-btn @click="loginModal = !loginModal">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </ValidationObserver>
+    </v-dialog>
+    </div>
   </div>
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider, setInteractionMode, extend } from 'vee-validate'
+import { required, email } from 'vee-validate/dist/rules';
+
+import { mapState, mapActions } from 'vuex';
+
+extend('required', {
+  ...required,
+  message: '{_field_} 값은 반드시 입력해야 합니다.',
+})
+
 export default {
   name: 'Login',
-  components: {
 
+  components: {
+    ValidationProvider,
+    ValidationObserver,
   },
+
   data () {
     return {
-      faceapi: null
+      faceapi: null,
+      loginModal: "",
+      loginData: {
+        id: "",
+        password: ""
+      }
     }
   },
+
   methods: {
+    ...mapActions([
+      'login'
+    ]),
+
     startVideo (val) {
       navigator.getUserMedia(
         { video: true },
         stream => { val.srcObject = stream },
         err => console.error(err)
       )
-    }
+    },
+
+    signup() {
+      this.$router.push({name: "Signup"})
+    },
   },
+
   mounted () {
     const video = document.getElementById('video')
     this.startVideo(video)
@@ -73,3 +142,6 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+</style>
