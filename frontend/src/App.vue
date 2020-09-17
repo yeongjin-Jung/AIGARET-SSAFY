@@ -52,11 +52,30 @@
     </v-app-bar> -->
 
     <v-main>
+    <!-- <v-main class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
       <v-container fluid class="fill-height">
         <router-view />
       </v-container>
     </v-main>
-
+  
+    <v-footer app padless>
+    <!-- <v-footer app style="border: white dashed; background-color: black;"> -->
+      <v-bottom-navigation
+        :value="activeBtn"
+        color="#53cde2"
+        horizontal
+      >
+        <v-btn
+          v-for="(icon, index) in icons"
+          :key="index"
+          height="56"
+          class="pa-0 mx-4"
+        >
+          <h1>{{ icon.title }}</h1>
+          <v-icon x-large>{{ icon.img }}</v-icon>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-footer>
   </v-app>
 </template>
 
@@ -69,7 +88,21 @@ export default {
   },
 
   data: () => ({
-    //
+    activeBtn: 1,
+    icons: [
+      {
+        title: 'Recents',
+        img: 'mdi-history',
+      },
+      {
+        title: 'Favorites',
+        img: 'mdi-heart',
+      },
+      {
+        title: 'Nearby',
+        img: 'mdi-map-marker',
+      },
+    ],
   })
 }
 </script>
