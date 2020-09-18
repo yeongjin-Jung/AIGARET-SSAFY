@@ -65,14 +65,14 @@
             height="500"
             tile
           >
-            <v-row
+            <!-- <v-row
               class="fill-height"
               align="center"
               justify="center"
-            >
-              <h3 class="title">Selected {{ model }}</h3>
-              <Game />
-            </v-row>
+            > -->
+              <h3 class="title">Selected {{ model+1 }}</h3>
+              <GameIntro />
+            <!-- </v-row> -->
           </v-sheet>
         </v-expand-transition>
       <!-- </v-sheet> -->
@@ -81,12 +81,12 @@
 </template>
 
 <script>
-import Game from '../components/Game/Game.vue'
+import GameIntro from '../components/Game/GameIntro.vue'
 
 export default {
   name: 'Home',
   components: {
-    Game
+    GameIntro
   },
   data: () => ({
     model: null,
