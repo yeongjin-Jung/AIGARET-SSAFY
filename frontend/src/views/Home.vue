@@ -1,82 +1,82 @@
 <template>
-  <v-container class="text-center">
+  <v-container fluid class="text-center">
   <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
-    <v-row align="center" justify="center">
-      <v-slide-group v-model="model" center-active>
-        <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ toggle }">
-          <v-col
-            cols="12"
-            md="2"
-          >
-            <v-hover v-slot:default="{ hover }">
-              <v-card
-                :elevation="hover ? 12 : 2"
-                :class="{ 'on-hover': hover }"
-                @click="toggle"
-              >
-                <v-img
-                  :src="item.img"
-                  width="225px"
-                  height="100px"
+    <!-- <v-row align="center" justify="center"> -->
+      <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
+        <v-slide-group v-model="model" show-arrows center-active>
+          <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
+            <v-col cols="2">
+              <v-hover v-slot:default="{ hover }">
+                <v-card
+                  :elevation="hover ? 12 : 2"
+                  :class="{ 'on-hover': hover, 'on-active': active, 'on-minimize': model != null }"
+                  @click="toggle"
                 >
-                  <v-card-title class="title white--text">
-                    <v-row
-                      class="fill-height flex-column"
-                      justify="space-between"
-                    >
-                      <p class="mt-4 subheading text-left">{{ item.title }}</p>
+                  <v-img
+                    :src="item.img"
+                    width="100%"
+                    height="100%"
+                  >
+                    <v-card-title class="title white--text">
+                      <v-row
+                        class="fill-height flex-column"
+                        justify="space-between"
+                      >
+                        <p class="mt-4 subheading text-left">{{ item.title }}</p>
 
-                      <div>
-                        <p class="ma-0 body-1 font-weight-bold font-italic text-left">
-                          {{ item.text }}
-                        </p>
-                        <p class="caption font-weight-medium font-italic text-left">
-                          {{ item.subtext }}
-                        </p>
-                      </div>
+                        <div>
+                          <p class="ma-0 body-1 font-weight-bold font-italic text-left">
+                            {{ item.text }}
+                          </p>
+                          <p class="caption font-weight-medium font-italic text-left">
+                            {{ item.subtext }}
+                          </p>
+                        </div>
 
-                      <div class="align-self-center">
-                        <v-btn
-                          v-for="(icon, index) in icons"
-                          :key="index"
-                          :class="{ 'show-btns': hover }"
-                          color="transparent"
-                          icon
-                        >
-                          <v-icon
+                        <div class="align-self-center">
+                          <v-btn
+                            v-for="(icon, index) in icons"
+                            :key="index"
                             :class="{ 'show-btns': hover }"
+                            color="transparent"
+                            icon
                           >
-                            {{ icon }}
-                          </v-icon>
-                        </v-btn>
-                      </div>
-                    </v-row>
-                  </v-card-title>
-                </v-img>
-              </v-card>
-            </v-hover>
-          </v-col>
-        </v-slide-item>
-      </v-slide-group>
-      
-      <v-expand-transition>
-        <v-sheet
-          v-if="model != null"
-          color="grey lighten-4"
-          height="500"
-          tile
-        >
-          <v-row
-            class="fill-height"
-            align="center"
-            justify="center"
+                            <v-icon
+                              :class="{ 'show-btns': hover }"
+                              color="transparent"
+                            >
+                              {{ icon }}
+                            </v-icon>
+                          </v-btn>
+                        </div>
+                      </v-row>
+                    </v-card-title>
+                  </v-img>
+                </v-card>
+              </v-hover>
+            </v-col>
+          </v-slide-item>
+        </v-slide-group>
+        
+        <v-expand-transition>
+          <v-sheet
+            v-if="model != null"
+            color="grey lighten-4"
+            height="500"
+            tile
           >
-            <h3 class="title">Selected {{ model }}</h3>
-            <Game />
-          </v-row>
-        </v-sheet>
-      </v-expand-transition>
-    </v-row>
+            <v-row
+              class="fill-height"
+              align="center"
+              justify="center"
+            >
+              <h3 class="title">Selected {{ model }}</h3>
+              <Game />
+            </v-row>
+          </v-sheet>
+        </v-expand-transition>
+      <!-- </v-sheet> -->
+    <!-- </v-row> -->
   </v-container>
 </template>
 
@@ -136,12 +136,25 @@ export default {
 
 <style scoped>
 .v-card {
-  transition: opacity .4s ease-in-out;
+  transition: opacity .4s ease-in-out, width .1s ease-in-out, height .2s ease-in-out;
+  width: 252px;
+  height: 126px;
 }
 
+.v-card:not(.on-minimize) {
+  width: 300px;
+  height: 300px;
+}
+
+/* -----------한세트----------- */
 .v-card:not(.on-hover) {
   opacity: 0.6;
- }
+}
+/* 위아래 순서 바뀌면 안됨 */
+.v-card.on-active {
+  opacity: 1;
+}
+/* --------------------------- */
 
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
