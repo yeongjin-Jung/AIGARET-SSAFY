@@ -1,5 +1,5 @@
 <template>
-  <v-app style="background: #FCFCFF">
+  <v-app>
     <!-- <v-app-bar app color="primary" dark>
       <div class="d-flex align-center">
         <v-img
@@ -80,11 +80,13 @@
 </template>
 
 <script>
+// import Login from '@/components/Account/Login'
+
 export default {
   name: 'App',
 
   components: {
-
+    // Login
   },
 
   data: () => ({
