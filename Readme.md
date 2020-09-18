@@ -65,11 +65,11 @@ http://localhost:8080/game
 
   1. 가칭 "쿠키런 게임"
 
-  <img src="/Users/kimmuseong/Library/Application Support/typora-user-images/스크린샷 2020-09-18 오전 11.29.25.png" alt="스크린샷 2020-09-18 오전 11.29.25" style="zoom:50%;" />
+  ![game1](/uploads/559878ae192eee503331cebb74669f77/game1.png)
 
   2. 스네이크 게임
 
-  <img src="/Users/kimmuseong/Library/Application Support/typora-user-images/스크린샷 2020-09-18 오전 11.29.57.png" alt="스크린샷 2020-09-18 오전 11.29.57" style="zoom:50%;" />
+  ![game2](/uploads/5296af7411e537773e5b991d9f454815/game2.png)
 
 
 
