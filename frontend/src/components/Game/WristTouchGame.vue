@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h4>게임 플레이 화면</h4>
+  <div style="width :  100vw; height: 100vh">
+    <!-- <h4>손목터치게임</h4> -->
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
   </div>
 </template>
@@ -8,9 +8,10 @@
 <script>
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
+import $ from 'jquery';
 
 export default {
-  name: "GamePlay",
+  name: "WristTouchGame",
   data: function () {
     return {
       video: null,
@@ -19,6 +20,8 @@ export default {
       skeleton: null,
       position_x: 300,
       position_y: 200,
+      window_width: 1700,
+      window_height: 1050,
     };
   },
   components: {
@@ -26,8 +29,10 @@ export default {
   },
   methods: {
     setup(sketch) {
-      sketch.createCanvas(640, 480);
+      sketch.createCanvas(this.window_width, this.window_height);
+      sketch.background(0);
       this.video = sketch.createCapture(sketch.VIDEO);
+      this.video.size(this.window_width, this.window_height);
       this.video.hide();
       this.poseNet = ml5.poseNet(this.video, {
         outputStride: 16,
@@ -46,13 +51,14 @@ export default {
           that.skeleton = results[0].skeleton;
         }
       });
+      $("#defaultCanvas0").parent().css({"width" : "100%", "text-align" : "center"});
     },
     chanege() {
       this.position_x = Math.floor(Math.random() * 200 + 100);
       this.position_y = Math.floor(Math.random() * 150 + 100);
     },
     draw(sketch) {
-      sketch.image(this.video, 0, 0);
+      sketch.image(this.video, 0, 0, this.window_width, this.window_height);
       sketch.rect(this.position_x, this.position_y, 50, 50);
       var that = this;
       if (this.pose) {
@@ -99,13 +105,21 @@ export default {
             sketch.line(a.position.x, a.position.y, b.position.x, b.position.y);
           }
         }
-      }else{
-        sketch.image(this.video,0,0);
+      } else {
+        sketch.image(this.video, 0, 0);
       }
     },
+  },
+  created() {
+
+      
+      
   },
 };
 </script>
 
 <style>
+#defaultCanvas0 {
+  display: inline-block;
+}
 </style>
