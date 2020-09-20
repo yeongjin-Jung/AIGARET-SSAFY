@@ -24,6 +24,11 @@ const routes = [
     path: '/game/WristTouchGame',
     name: 'WristTouchGame',
     component: () => import('../components/Game/WristTouchGame.vue')
+  },
+  {
+    path: '/game/SnakeGame',
+    name: 'SnakeGame',
+    component: () => import('../components/Game/SnakeGame.vue')
   }
 ]
 
