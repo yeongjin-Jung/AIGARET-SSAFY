@@ -1,11 +1,11 @@
 function Jumper(sketch,height,jumper) {
 
 
-    this.r = 100;
+    this.r = 200;
     this.x = 50;
     this.y = height - this.r;
     this.vy = 0;
-    this.gravity = 1.6;
+    this.gravity = 1.5;
 
 
     this.move = function () {
@@ -17,14 +17,14 @@ function Jumper(sketch,height,jumper) {
 
     this.jump = function () {
         if (this.y == height - this.r) {
-            this.vy = -31;
+            this.vy = -37;
             // ding.play();
         }
     }
 
     this.collide = function (other) {
-        let hitX = this.x + this.r - 10 > other.x && this.x < other.x + other.r -40
-        let hitY = this.y + this.r -20> other.y
+        let hitX = this.x + this.r - 30 > other.x && this.x < other.x + other.r -50
+        let hitY = this.y + this.r -50> other.y
         return (hitX && hitY)
     }
 
