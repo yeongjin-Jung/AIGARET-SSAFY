@@ -14,7 +14,7 @@
           height="75"
           style="margin-left : 40px;"
         />
-        <p style="font-size: 50px; font-weight: 600; margin-left: 30px; margin-top:20px;">불타는 붕어빵</p>
+        <p style="font-size: 50px; font-weight: 600; margin-left: 30px; margin-top:15px;  font-family: CookieRun-Bold;">불타는 붕어빵</p>
         <v-spacer></v-spacer>
         <p style="font-size: 50px; font-weight: 600; margin-right: 100px; margin-top:15px;">{{this.date}}</p>
         <p style="font-size: 50px; font-weight: 600; margin-right: 20px; margin-top:15px;">{{this.dateTime}}</p>
@@ -102,4 +102,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@font-face {
+  font-family: CookieRun-Bold;
+  src: url('assets/CookieRun-Bold.ttf');
+}
+
+</style>
 
