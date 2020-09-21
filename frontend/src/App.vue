@@ -1,56 +1,5 @@
 <template>
-  <v-app>
-    <!-- <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <router-link to="/" style="text-decoration: none;">
-        <v-btn text>
-          <span>Home</span>
-        </v-btn>
-      </router-link>
-
-      <router-link to="/login" style="text-decoration: none;">
-        <v-btn text>
-          <span>Login</span>
-        </v-btn>
-      </router-link>
-
-      <router-link to="/game" style="text-decoration: none;">
-        <v-btn text>
-          <span>Game</span>
-        </v-btn>
-      </router-link>
-
-      <v-spacer />
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar> -->
-
+  <v-app style="background: #FCFCFF">
     <v-main>
     <!-- <v-main class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
       <v-container fluid class="fill-height">
@@ -69,10 +18,10 @@
           v-for="(icon, index) in icons"
           :key="index"
           height="56"
-          class="pa-0 mx-4"
+          class="pa-4"
         >
-          <h1>{{ icon.title }}</h1>
-          <v-icon x-large>{{ icon.img }}</v-icon>
+          <h2>{{ icon.title }}</h2>
+          <v-icon large>{{ icon.img }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </v-footer>
@@ -93,16 +42,16 @@ export default {
     activeBtn: 1,
     icons: [
       {
-        title: 'Recents',
+        title: 'Profile',
+        img: 'mdi-card-account-details',
+      },
+      {
+        title: 'Report',
         img: 'mdi-history',
       },
       {
-        title: 'Favorites',
-        img: 'mdi-heart',
-      },
-      {
-        title: 'Nearby',
-        img: 'mdi-map-marker',
+        title: 'Settings',
+        img: 'mdi-application-cog',
       },
     ],
   })
