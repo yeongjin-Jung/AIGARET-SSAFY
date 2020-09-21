@@ -20,7 +20,7 @@
 <script>
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
-import { Snake } from "../../api/snake";
+import { Snake } from "../../api/game/snake/snake";
 import $ from "jquery";
 export default {
   name: "SnakeGame",
