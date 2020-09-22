@@ -1,5 +1,5 @@
 <template>
-  <v-main id="container" style="background-color: #fcfeff" class="fill-height">
+  <v-main id="container" class="fill-height">
     <v-container style="height: 100%" class="fill-height">
 
       <!-- <div class="fill-height" style="margin: auto;"> -->

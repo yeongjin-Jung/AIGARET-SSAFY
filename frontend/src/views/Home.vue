@@ -1,83 +1,75 @@
 <template>
   <v-container fluid class="text-center">
-
-  <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
+    <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
     <!-- <v-row align="center" justify="center"> -->
-      <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
-        <v-slide-group v-model="model" show-arrows center-active>
-          <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
-            <v-col cols="2">
-              <v-hover v-slot:default="{ hover }">
-                <v-card
-                  :elevation="hover ? 12 : 2"
-                  :class="{ 'on-hover': hover, 'on-active': active, 'on-minimize': model != null }"
-                  @click="toggle"
-                >
-                  <v-img
-                    :src="item.img"
-                    width="100%"
-                    height="100%"
-                  >
-                    <v-card-title class="title white--text">
-                      <v-row
-                        class="fill-height flex-column"
-                        justify="space-between"
+    <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
+     
+    <v-slide-group v-model="model" show-arrows center-active>
+      <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
+        <v-col cols="2">
+          <v-hover v-slot:default="{ hover }">
+            <v-card
+              :elevation="hover ? 12 : 2"
+              :class="{ 'on-hover': hover, 'on-active': active, 'on-minimize': model != null }"
+              @click="toggle"
+            >
+              <v-img :src="item.img" width="100%" height="100%">
+                <v-card-title class="title white--text">
+                  <v-row class="fill-height flex-column" justify="space-between">
+                    <p class="mt-4 subheading text-left">{{ item.title }}</p>
+
+                    <div>
+                      <p class="ma-0 body-1 font-weight-bold font-italic text-left">{{ item.text }}</p>
+                      <p class="caption font-weight-medium font-italic text-left">{{ item.subtext }}</p>
+                    </div>
+
+
+
+                    <div class="align-self-center">
+                      <v-btn
+                        v-for="(icon, index) in icons"
+                        :key="index"
+                        :class="{ 'show-btns': hover }"
+                        color="transparent"
+                        icon
                       >
-                        <p class="mt-4 subheading text-left">{{ item.title }}</p>
-
-                        <div>
-                          <p class="ma-0 body-1 font-weight-bold font-italic text-left">
-                            {{ item.text }}
-                          </p>
-                          <p class="caption font-weight-medium font-italic text-left">
-                            {{ item.subtext }}
-                          </p>
-                        </div>
-
-                        <div class="align-self-center">
-                          <v-btn
-                            v-for="(icon, index) in icons"
-                            :key="index"
-                            :class="{ 'show-btns': hover }"
-                            color="transparent"
-                            icon
-                          >
-                            <v-icon
-                              :class="{ 'show-btns': hover }"
-                              color="transparent"
-                            >
-                              {{ icon }}
-                            </v-icon>
-                          </v-btn>
-                        </div>
-                      </v-row>
-                    </v-card-title>
-                  </v-img>
-                </v-card>
-              </v-hover>
-            </v-col>
-          </v-slide-item>
-        </v-slide-group>
-        
-        <v-expand-transition>
-          <v-sheet
-            v-if="model != null"
-            color="grey lighten-4"
-            height="500"
-            tile
-          >
-            <!-- <v-row
-              class="fill-height"
-              align="center"
-              justify="center"
-            > -->
-              <h3 class="title">Selected {{ model+1 }}</h3>
-              <GameIntro />
-            <!-- </v-row> -->
-          </v-sheet>
-        </v-expand-transition>
-      <!-- </v-sheet> -->
-    <!-- </v-row> -->
+                        <v-icon
+                          :class="{ 'show-btns': hover }"
+                          color="transparent"
+                        >
+                          {{ icon }}
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </v-row>
+                </v-card-title>
+              </v-img>
+            </v-card>
+          </v-hover>
+        </v-col>
+      </v-slide-item>
+    </v-slide-group>
+    
+    <v-expand-transition>
+      <v-sheet
+        v-if="model != null"
+        color="grey lighten-4"
+        height="500"
+        tile
+      >
+        <!-- <v-row
+          class="fill-height"
+          align="center"
+          justify="center"
+        >-->
+        <h3 class="title">Selected {{ model+1 }}</h3>
+        <div style="font-size: 20px; font-weight: 600;">
+          <MARQUEE scrollamount="15" width="500px">게임 제목을 입력해 주세요</MARQUEE>
+        </div>
+        <GameIntro />
+        <!-- </v-row> -->
+      </v-sheet>
+    </v-expand-transition>
   </v-container>
 </template>
 
