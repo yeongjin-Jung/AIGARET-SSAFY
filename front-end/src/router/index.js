@@ -1,5 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+
+Vue.use(VueRouter)
 
 const routes = [
   {
@@ -13,14 +16,40 @@ const routes = [
     component: () => import('../components/Account/Login.vue')
   },
   {
-    path: '/game',
-    name: 'Game',
-    component: () => import('../components/Game/Game.vue')
+    path: '/signup',
+    name: 'Signup',
+    component: () => import('../components/Account/Signup.vue')
+  },
+  {
+    path: '/myinfo',
+    name: 'Myinfo',
+    component: () => import('../components/UserInfomation/MyInfo.vue')
+  },
+  {
+    path: '/report',
+    name: 'Report',
+    component: () => import('../components/UserInfomation/MyTrainingReport.vue')
+  },
+  {
+    path: '/game/WristTouchGame',
+    name: 'WristTouchGame',
+    component: () => import('../components/Game/WristTouchGame.vue')
+  },
+  {
+    path: '/game/SnakeGame',
+    name: 'SnakeGame',
+    component: () => import('../components/Game/SnakeGame.vue')
+  },
+  {
+    path: '/game/JumpGame',
+    name: 'JumpGame',
+    component: () => import('../components/Game/JumpGame.vue')
   }
 ]
 
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes
 })
 

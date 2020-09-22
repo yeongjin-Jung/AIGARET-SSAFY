@@ -29,7 +29,7 @@ git clone https://lab.ssafy.com/s03-ai-sub2/s03p22b203.git
 ```
 
 ```
-cd frontend
+cd front-end
 ```
 
 ```
