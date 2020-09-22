@@ -50,13 +50,13 @@
     </v-slide-group>
     
     <v-expand-transition >
-      <v-sheet v-if="model != null" color="grey lighten-4" style="height: 55vh;" tile>
+      <v-sheet v-if="model != null"  style="height: 55vh; background-color: rgba(0,0,0,0);" tile >
         <!-- <v-row
           class="fill-height"
           align="center"
           justify="center"
         >-->
-        <p style="font-size: 4.5vh; font-weight:700; margin-bottom:0;">Selected {{ model+1 }}</p>
+        <p style="font-size: 4.5vh; font-weight:700; margin-bottom:0; font-family: CookieRun-Bold;">Selected {{ model+1 }}</p>
         <!-- <div style="font-size: 20px; font-weight: 600;">
           <MARQUEE scrollamount="15" width="500px">게임 제목을 입력해 주세요</MARQUEE>
         </div> -->
@@ -142,10 +142,19 @@ export default {
 /* 위아래 순서 바뀌면 안됨 */
 .v-card.on-active {
   opacity: 1;
+  border-style: solid;
+  border-color: #ffffff;
+  border-width: 8px;
 }
 /* --------------------------- */
 
 .show-btns {
   color: rgba(255, 255, 255, 1) !important;
+}
+
+
+@font-face {
+  font-family: CookieRun-Bold;
+  src: url("../assets/CookieRun-Bold.ttf");
 }
 </style>
