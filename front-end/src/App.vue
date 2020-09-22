@@ -145,7 +145,7 @@ export default {
 #mainApp{
   background-image: url("assets/bluemoon.png");
   background-size : cover;
-  
+  height: 100vh;
 }
 
 img{

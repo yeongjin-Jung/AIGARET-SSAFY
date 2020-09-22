@@ -1,7 +1,7 @@
 <template>
   <div class="d-inline-block mx-auto" style="width: 100%; height:48vh;">
     <v-container fluid style="max-height: 100%;">
-      <v-row style="height:47vh; ">
+      <v-row style="height:42.5vh; ">
         <v-col cols="6" justify="center" align="center" style="max-height: 100%;">
           <div id="imgContainer" style="max-height: 100%;">
           <v-img src="https://cdn.vuetifyjs.com/images/cards/store.jpg" style="max-width: 100%;  max-height: 40vh; display: block;"></v-img>
