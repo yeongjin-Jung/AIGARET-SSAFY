@@ -21,9 +21,14 @@ const routes = [
     component: () => import('../components/Account/Signup.vue')
   },
   {
-    path: '/info',
-    name: 'Info',
-    component: () => import('../components/Account/Info.vue')
+    path: '/myinfo',
+    name: 'Myinfo',
+    component: () => import('../components/UserInfomation/MyInfo.vue')
+  },
+  {
+    path: '/report',
+    name: 'Report',
+    component: () => import('../components/UserInfomation/MyTrainingReport.vue')
   },
   {
     path: '/game/WristTouchGame',

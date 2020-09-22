@@ -34,10 +34,12 @@
     <v-footer app padless>
       <!-- <v-footer app style="border: white dashed; background-color: black;"> -->
       <v-bottom-navigation :value="activeBtn" color="#53cde2" horizontal>
-        <v-btn v-for="(icon, index) in icons" :key="index" height="56" class="pa-4">
-          <h2>{{ icon.title }}</h2>
-          <v-icon large>{{ icon.img }}</v-icon>
-        </v-btn>
+        <router-link v-for="(icon, index) in icons" :key="index" :to="icon.url" style="text-decoration: none; color: #53cde2;">
+          <v-btn height="56" class="pa-4">
+            <h2>{{ icon.title }}</h2>
+            <v-icon large>{{ icon.img }}</v-icon>
+          </v-btn>
+        </router-link>
       </v-bottom-navigation>
     </v-footer>
   </v-app>
@@ -65,14 +67,17 @@ export default {
       {
         title: "Profile",
         img: "mdi-card-account-details",
+        url: "myinfo",
       },
       {
         title: "Report",
         img: "mdi-history",
+        url: "report",
       },
       {
         title: "Settings",
         img: "mdi-application-cog",
+        url: "/",
       },
     ],
   }),

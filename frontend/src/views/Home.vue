@@ -3,13 +3,7 @@
     <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
     <!-- <v-row align="center" justify="center"> -->
     <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
-
-      
      
-    <p style="font-size: 50px; font-weight: 600; position: relative; left: -25vw; top: 30px;">
-      <MARQUEE scrollamount="13" width="500px" height="100%">게임 제목을 입력해 주세요</MARQUEE>
-      <!-- 크기 조절 -->
-    </p>
     <v-slide-group v-model="model" show-arrows center-active>
       <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
         <v-col cols="2">
@@ -28,6 +22,8 @@
                       <p class="ma-0 body-1 font-weight-bold font-italic text-left">{{ item.text }}</p>
                       <p class="caption font-weight-medium font-italic text-left">{{ item.subtext }}</p>
                     </div>
+
+
 
                     <div class="align-self-center">
                       <v-btn
@@ -48,21 +44,27 @@
         </v-col>
       </v-slide-item>
     </v-slide-group>
-
+    
     <v-expand-transition>
-      <v-sheet v-if="model != null" color="grey lighten-4" height="500" tile>
+      <v-sheet
+        v-if="model != null"
+        color="grey lighten-4"
+        height="500"
+        tile
+      >
         <!-- <v-row
-              class="fill-height"
-              align="center"
-              justify="center"
+          class="fill-height"
+          align="center"
+          justify="center"
         >-->
         <h3 class="title">Selected {{ model+1 }}</h3>
+        <div style="font-size: 20px; font-weight: 600;">
+          <MARQUEE scrollamount="15" width="500px">게임 제목을 입력해 주세요</MARQUEE>
+        </div>
         <GameIntro />
         <!-- </v-row> -->
       </v-sheet>
     </v-expand-transition>
-    <!-- </v-sheet> -->
-    <!-- </v-row> -->
   </v-container>
 </template>
 
