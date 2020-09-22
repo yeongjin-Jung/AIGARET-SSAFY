@@ -1,6 +1,10 @@
 <template>
-  <div>
+  <div style="width :  100vw; height: 99%">
     <h1>aaaaa</h1>
+    <v-btn id="gameStart">게임시작</v-btn>
+    <v-btn id="poseSave">점프포즈</v-btn>
+    <v-btn id="noPoseSave">노점프포즈</v-btn>
+    <v-btn id="poseTrain">포즈학습</v-btn>
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
   </div>
 </template>
@@ -12,26 +16,31 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
+import $ from "jquery";
 export default {
   name: "JumpGame",
   data: function () {
     return {
-      sketchObj : null,
+      sketchObj: null,
       classifier: {},
       mobilenet: null,
       video: null,
       label: "",
 
       score: null,
-      scroll: 10,
+      scroll: 18,
       scrollBg: 0,
       trains: [],
       unicorn: null,
       failsounds: [],
       restart: false,
       video: null,
-      height: 700,
-      width: 400,
+      canvas: null,
+      videoCanvas: null,
+      canvasWidth: 1150,
+      canvasHeight: 800,
+      videoWidth: 1100,
+      videoHeight: 800,
 
       //preload
       music: null,
@@ -41,14 +50,27 @@ export default {
       train: null,
       jumper: null,
 
+      //posenet
+      featureExtractor: null,
+      classifier: null,
+      targetLabel: "jump",
+      classificationResult: null,
+
       // js File
       unicorn: null,
-
       key: null,
 
       //train
-      poseNet: null,
-      brain : null,
+      brain: null,
+      poseSave: null,
+      noPoseSave : null,
+      trainButton: null,
+      state: "waiting",
+
+      //game
+      gameState: false,
+
+      confidence: null,
     };
   },
   components: {
@@ -56,8 +78,12 @@ export default {
   },
   methods: {
     setup(sketch) {
+      var that = this;
       this.sketchObj = sketch;
-      sketch.createCanvas(700, 400);
+      sketch.createCanvas(
+        this.canvasWidth + this.videoWidth,
+        this.canvasHeight
+      );
       this.train = sketch.createImg(
         "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
       );
@@ -73,96 +99,201 @@ export default {
 
       this.unicorn = new Jumper(sketch, sketch.height, this.jumper);
       this.video = sketch.createCapture(sketch.VIDEO);
-      // this.video.hide();
-      // this.poseNet = ml5.poseNet(video,modelLoaded);
-      // this.poseNet.on('pose',gotPoses);
+      this.video.hide();
+      this.video.size(this.videoWidth, this.videoHeight);
 
+      this.featureExtractor = ml5.featureExtractor(
+        "MobileNet",
+        this.modelLoaded
+      );
 
+      const options = { numLabels: 2 };
+      this.classifier = this.featureExtractor.classification(
+        this.video,
+        options
+      );
+
+      this.setupButton(sketch);
+
+      $("#defaultCanvas0")
+        .parent()
+        .css({ width: "100%", "text-align": "center" });
     },
+
+    modelLoaded() {
+      console.log("MobileNet loaded!");
+    },
+
     videoReady() {
       console.log("webcam load... finished");
     },
-    jump(sketch){
-      if(this.restart){
+
+    gotResults(err, result) {
+      var that = this;
+      if (err) {
+        console.error(err);
+      } else {
+        that.label = result[0].label;
+        that.confidence = result[0].confidence;
+        that.classifier.classify(that.gotResults);
+      }
+    },
+
+    setupButton(sketch) {
+      var that = this;
+      //left button
+      this.poseSave = sketch.select("#poseSave");
+      this.poseSave.mousePressed(function () {
+        that.classifier.addImage("jump");
+      });
+
+      this.noPoseSave = sketch.select("#noPoseSave");
+      this.noPoseSave.mousePressed(function () {
+        that.classifier.addImage("noJump");
+      });
+
+      this.gameStart = sketch.select("#gameStart");
+      this.gameStart.mousePressed(function () {
+        that.gameState = true;
+      });
+
+      //train button
+      this.trainButton = sketch.select("#poseTrain");
+      this.trainButton.mousePressed(function () {
+        that.classifier.train(that.whileTraining);
+      });
+    },
+    finished(loss) {
+      console.log("학습");
+    },
+
+    whileTraining(loss) {
+      var that = this;
+
+      if (loss == null) {
+        that.classifier.classify(that.gotResults);
+        // console.log(that.gotResults);
+      } else {
+        console.log(loss);
+      }
+    },
+
+    jump(sketch) {
+      if (this.restart) {
         this.restart = false;
         this.score = 0;
         this.scrollBg = 0;
-        this.scroll =10;
+        this.scroll = 10;
         this.trains = [];
         this.sketchObj.loop();
       }
-      if(event.key == ' '){
+      if (event.key == " ") {
         this.unicorn.jump();
         return false;
       }
     },
     draw(sketch) {
       var that = this;
-      sketch.image(this.bg, -this.scrollBg, 0, sketch.width, sketch.height);
+      // sketch.translate(this.video.width, 0);
+      // sketch.scale(-1, 1);
+      // sketch.image(this.video, 0, 0, this.video.width, this.video.height);
+
+      // sketch.translate(this.bg.width, 0);
+      // sketch.scale(-1, 1);
+
+
+      if(this.confidence >= 0.99 && this.label =="jump"){
+        this.unicorn.jump();
+      }
+ 
+
+      sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
       sketch.image(
-        this.bg,
-        -this.scrollBg + sketch.width,
+        this.video,
+        this.canvasWidth,
         0,
-        sketch.width,
+        this.videoWidth,
         sketch.height
       );
 
-      if (this.scrollBg > sketch.width) {
-        this.scrollBg = 0;
-      }
-
-      if (sketch.random(1) < 0.75 && sketch.frameCount % 50 == 0) {
-        this.trains.push(
-          new Train(
-            sketch,
-            this.train,
-            sketch.width,
-            sketch.height,
-            this.scroll
-          )
+      if (this.gameState) {
+        sketch.image(
+          this.bg,
+          -this.scrollBg + sketch.width,
+          0,
+          sketch.width,
+          sketch.height
         );
-      }
-      // if(this.score % 100 == 0 && this.score != 0){
-      //   s
-      // }
-      if (sketch.frameCount % 5 == 0) {
-        this.score++;
-      }
 
-      sketch.fill(255);
-      sketch.textSize(32);
-      sketch.textFont("monospace");
-      sketch.text(`Score: ${this.score}`, 10, 30);
-
-      for (let t of this.trains) {
-        t.move();
-        t.show();
-
-        if (this.unicorn.collide(t)) {
-          sketch.noLoop();
-          // music.stop();
-          // let sound = sketch.random(failSounds);
-          // sound.play();
-
-          sketch.fill(255);
-          sketch.text(
-            `Game Over! Press any key to restart`,
-            45,
-            sketch.height / 2
-          );
-          that.restart = true;
+        if (this.scrollBg > sketch.width) {
+          this.scrollBg = 0;
         }
-      }
 
-      this.unicorn.show();
-      this.unicorn.move();
+        if (sketch.random(1) < 0.75 && sketch.frameCount % 70 == 0) {
+          this.trains.push(
+            new Train(
+              sketch,
+              this.train,
+              this.canvasWidth,
+              sketch.height,
+              this.scroll
+            )
+          );
+        }
+        // if(this.score % 100 == 0 && this.score != 0){
+        //   s
+        // }
+        if (sketch.frameCount % 5 == 0) {
+          this.score++;
+        }
+
+        sketch.fill(255);
+        sketch.textSize(60);
+        sketch.textFont("monospace");
+        sketch.text(`Score: ${this.score}`, 15, 60);
+
+        for (let t of this.trains) {
+          t.move();
+          t.show();
+
+          if (this.unicorn.collide(t)) {
+            sketch.noLoop();
+            // music.stop();
+            // let sound = sketch.random(failSounds);
+            // sound.play();
+
+            sketch.fill(255);
+            sketch.textSize(56);
+            sketch.text(
+              `Game Over! Press any key to restart`,
+              80,
+              sketch.height / 2
+            );
+
+            that.restart = true;
+          }
+        }
+
+        // if (this.confidence >= 0.9) {
+        //   // sketch.text("jump", this.videoWidt / 2, this.videoHeight / 2);
+        //   // sketch.rect(100,100,100,100);
+
+        //   console.log("확인")
+        // }
+
+        this.unicorn.show();
+        this.unicorn.move();
+      }
     },
   },
-  created(){
-      window.addEventListener('keydown', this.jump)
+  created() {
+    window.addEventListener("keydown", this.jump);
   },
 };
 </script>
 
 <style>
+#defaultCanvas0 {
+  display: inline-block;
+}
 </style>

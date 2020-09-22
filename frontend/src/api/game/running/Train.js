@@ -1,7 +1,7 @@
 function Train(sketch,train,width,height,scroll) {
 
   
-        this.r = 75;
+        this.r = 120;
         this.x = width;
         this.y = height - this.r;
       

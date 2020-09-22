@@ -29,9 +29,11 @@
             <v-spacer></v-spacer>
 
             <v-col>
-              <div style="float: left; width: 533px; height: 400px; margin: 20px auto; background: black;">
+              <!-- <div style="float: left; width: 533px; height: 400px; margin: 20px auto; background: black;">
                 <video id="video" height="400" autoplay muted></video>
-              </div>
+              </div> -->
+              <img src="@/assets/image1.png" width="400px" height="400px">
+              <h3 style="margin-bottom: 40px; text-align: center;">자택에서도 재미있게 재활을!</h3>
             </v-col>
           </v-row>
       <!-- </div> -->
