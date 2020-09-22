@@ -3,8 +3,10 @@
     <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
     <!-- <v-row align="center" justify="center"> -->
     <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
+
+      
      
-    <p style="font-size: 50px; font-weight: 600; position: relative; left: -800px;">
+    <p style="font-size: 50px; font-weight: 600; position: relative; left: -25vw; top: 30px;">
       <MARQUEE scrollamount="13" width="500px" height="100%">게임 제목을 입력해 주세요</MARQUEE>
       <!-- 크기 조절 -->
     </p>
@@ -79,7 +81,7 @@ export default {
       {
         title: "New Releases",
         text: "It's New Release Friday",
-        subtext: "Newly released songs. Updated daily.",
+        subtext: "Newly released songs. Updated daily",
         img: "http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg",
       },
       {
@@ -135,7 +137,7 @@ export default {
 
 /* -----------한세트----------- */
 .v-card:not(.on-hover) {
-  opacity: 0.6;
+  opacity: 0.7;
 }
 /* 위아래 순서 바뀌면 안됨 */
 .v-card.on-active {

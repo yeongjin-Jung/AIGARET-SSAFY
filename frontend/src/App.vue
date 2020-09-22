@@ -1,6 +1,6 @@
 <template>
-  <v-app style="background: #FCFCFF">
-    <v-main>
+  <v-app style="background: #FCFCFF;">
+    <v-main id="mainApp">
       <v-system-bar
         color="orange"
         :height="height"
@@ -14,10 +14,16 @@
           height="75"
           style="margin-left : 40px;"
         />
-        <p style="font-size: 50px; font-weight: 600; margin-left: 30px; margin-top:15px;  font-family: CookieRun-Bold;">불타는 붕어빵</p>
+        <p
+          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-left: 30px; margin-top:15px; display:inline; font-family: CookieRun-Bold;"
+        >불타는 붕어빵</p>
         <v-spacer></v-spacer>
-        <p style="font-size: 50px; font-weight: 600; margin-right: 100px; margin-top:15px;">{{this.date}}</p>
-        <p style="font-size: 50px; font-weight: 600; margin-right: 20px; margin-top:15px;">{{this.dateTime}}</p>
+        <p
+          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-right: 100px; margin-top:15px;"
+        >{{this.date}}</p>
+        <p
+          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:15px;"
+        >{{this.dateTime}}</p>
       </v-system-bar>
       <!-- <v-main class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
       <v-container fluid class="fill-height">
@@ -87,15 +93,38 @@ export default {
         today.getDate();
 
       var hour = 0;
-      if (today.getHours() >= 12) {
+      var minute = 0;
+      if (today.getHours() > 12) {
         hour = today.getHours() - 12;
-        const time = hour + ":" + today.getMinutes();
+        if (today.getMinutes() < 10) {
+          minute = "0" + today.getMinutes();
+        } else {
+          minute = today.getMinutes();
+        }
+        const time = hour + ":" + minute;
         const dateTime = time + " pm";
         this.dateTime = dateTime;
+
       } else if (today.getHours() < 12) {
         hour = today.getHours();
-        const time = hour + ":" + today.getMinutes();
+        if (today.getMinutes() < 10) {
+          minute = "0" + today.getMinutes();
+        } else {
+          minute = today.getMinutes();
+        }
+        const time = hour + ":" + minute;
         const dateTime = time + " am";
+        this.dateTime = dateTime;
+
+      } else {
+        hour = today.getHours();
+        if (today.getMinutes() < 10) {
+          minute = "0" + today.getMinutes();
+        } else {
+          minute = today.getMinutes();
+        }
+        const time = hour + ":" + minute;
+        const dateTime = time + " pm";
         this.dateTime = dateTime;
       }
     },
@@ -106,8 +135,18 @@ export default {
 <style lang="scss">
 @font-face {
   font-family: CookieRun-Bold;
-  src: url('assets/CookieRun-Bold.ttf');
+  src: url("assets/CookieRun-Bold.ttf");
 }
 
+
+#mainApp{
+  background-image: url("assets/bluemoon.png");
+  background-size : cover;
+  
+}
+
+img{
+  opacity: 1;
+}
 </style>
 
