@@ -54,7 +54,6 @@
       <!-- <div style="background: black; float: left; width: 427px; height: 425px; text-align: center;"> -->
       <div style="background: #fcfeff; height: 500px; text-align: center; float: left; vertical-align: middle;">
         <div style="margin-top: 80px; text-algin: center;">
-          <!-- <span>TEST</span> -->
           <video id="video2" height="300" autoplay muted></video>
           <canvas id="canvas" class="overlay"></canvas>
           <h3 style="padding: 15px auto; font-size: 22px">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
@@ -152,7 +151,7 @@ export default {
       // console.log("video", this.video2)
       
       // this.detectLandMarkes()
-      // this.startVideo(this.video2)
+      this.startVideo(this.video2)
     },
 
     detectLandMarkes() {
@@ -183,14 +182,16 @@ export default {
         // val.srcObject = stream;
         var video = document.getElementById("video2")
         var videoEl = $("#video2");
+
         var left = videoEl.offset().left;
         var top = videoEl.offset().top;
-    
-        // console.log("x : " + x + ", " + "y : " + y)
+        
+        var canvas = $("#canvas")
 
-        // var top = video.getBoundingClientRect().top
-        // var left = video.getBoundingClientRect().left
-        // console.log("top : " + top + ", " + "left : " + left)
+        var canvas_left = canvas.offset().left;
+
+        $("#canvas").css("left", left)
+        $("#canvas").css("top", top)
 
         video.srcObject = stream;
         video.onloadedmetadata = function(e) {
@@ -203,23 +204,11 @@ export default {
             console.log("detect")
             const MODEL_URL = "/models";
 
-            // await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-            // await faceapi.loadFaceLandmarkModel(MODEL_URL);
-            // await faceapi.loadFaceRecognitionModel(MODEL_URL);
             await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
             await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
             await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
 
-            // let canvasTag = $("#canvas").get(0);
-            var dia = that.dialog
-
-            // let facedetection = setInterval(async () => {
-            // this.facedetection = setInterval(async () => {
-            // this.facedetection = setInterval(async () => {
-              console.log("dia : ", dia)
-              // if(this.dialog == false) {
               console.log("setInterval()")
-              // }
               let fullFaceDescriptions = await faceapi
                 .detectAllFaces(video)
                 .withFaceLandmarks()
@@ -235,40 +224,39 @@ export default {
               faceapi.draw.drawDetections(canvasTag, fullFaceDescriptions);
               faceapi.draw.drawFaceLandmarks(canvasTag, fullFaceDescriptions)
 
-            // }, 300);
-
-            console.log(displaySize);
+              console.log(displaySize);
           } // end method detect
 
           detect()
         };
         this.localStream = stream
+
+        setTimeout(() => {
+          // this.localStream.getTracks()[0].pause()
+          video.pause()
+        }, 5000);
       },
 
       err => console.error(err)
       )
       
-      
     },
 
     pause() {
+      this.localStream.getTracks()[0].stop()
+
+      console.log(this.localStream.getTracks()[0])
+      
       this.detectLandMarkes()
 
       setTimeout(() => {
         clearInterval(this.facedetection)
         console.log("타이머 종료됨.")
       }, 5000);
-      
-      $("#video2").get(0).pause();
 
-      // var canvas = document.createElement("canvas");
-      // canvas.width = video.videoWidth * scale;
-      // canvas.height = video.videoHeight * scale;
-      // canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
- 
-      // var img = document.createElement("img");
-      // img.src = canvas.toDataURL();
-      // $output.prepend(img);
+      console.log(this.localStream.getTracks()[0])
+      this.localStream.getTracks()[0].stop()
+      
     },
 
     play() {
