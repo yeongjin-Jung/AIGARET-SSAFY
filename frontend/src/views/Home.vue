@@ -4,6 +4,10 @@
     <!-- <v-row align="center" justify="center"> -->
     <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
      
+    <p style="font-size: 5vh; font-weight: 600; position: relative; width : 40vw;  top: 30px;">
+      <MARQUEE scrollamount="15" height="100%" style="width : 30vw;">게임 제목을 입력해 주세요</MARQUEE>
+      <!-- 크기 조절 -->
+    </p>
     <v-slide-group v-model="model" show-arrows center-active>
       <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
         <v-col cols="2">
@@ -46,12 +50,7 @@
     </v-slide-group>
     
     <v-expand-transition>
-      <v-sheet
-        v-if="model != null"
-        color="grey lighten-4"
-        height="500"
-        tile
-      >
+      <v-sheet v-if="model != null" color="grey lighten-4" height="400" tile>
         <!-- <v-row
           class="fill-height"
           align="center"
@@ -128,13 +127,13 @@ export default {
 .v-card {
   transition: opacity 0.4s ease-in-out, width 0.1s ease-in-out,
     height 0.2s ease-in-out;
-  width: 252px;
-  height: 126px;
+  width: 12vw;
+  height: 15vh;
 }
 
 .v-card:not(.on-minimize) {
-  width: 300px;
-  height: 300px;
+  width: 28vw;
+  height: 37vh;
 }
 
 /* -----------한세트----------- */

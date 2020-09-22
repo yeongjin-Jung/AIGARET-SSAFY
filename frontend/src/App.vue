@@ -3,26 +3,24 @@
     <v-main id="mainApp">
       <v-system-bar
         color="orange"
-        :height="height"
+        
         :lights-out="lightsOut"
         :window="window"
-        style="position : absolute; width:100%;"
+        style="position : absolute; width:100%; height : 10vh"
       >
         <img
           src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"
-          width="75"
-          height="75"
-          style="margin-left : 40px;"
+          style="margin-left : 40px; width : 4vw; height: 8vh;"
         />
         <p
-          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-left: 30px; margin-top:15px; display:inline; font-family: CookieRun-Bold;"
+          style="font-size: 5vh; white-space:nowrap; font-weight: 600; margin-left: 30px; margin-top:15px; display:inline; font-family: CookieRun-Bold;"
         >불타는 붕어빵</p>
         <v-spacer></v-spacer>
         <p
-          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-right: 100px; margin-top:15px;"
+          style="font-size: 5vh; white-space:nowrap; font-weight: 600; margin-right: 100px; margin-top:15px;"
         >{{this.date}}</p>
         <p
-          style="font-size: 50px; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:15px;"
+          style="font-size: 5vh; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:15px;"
         >{{this.dateTime}}</p>
       </v-system-bar>
       <!-- <v-main class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
@@ -31,7 +29,7 @@
       </v-container>
     </v-main>
 
-    <v-footer app padless>
+    <v-footer app padless >
       <!-- <v-footer app style="border: white dashed; background-color: black;"> -->
       <v-bottom-navigation :value="activeBtn" color="#53cde2" horizontal>
         <router-link v-for="(icon, index) in icons" :key="index" :to="icon.url" style="text-decoration: none; color: #53cde2;">
