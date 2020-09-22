@@ -17,7 +17,7 @@
               :class="{ 'on-hover': hover, 'on-active': active, 'on-minimize': model != null }"
               @click="toggle"
             >
-              <v-img :src="item.img" width="100%" height="100%">
+              <v-img :src="item.img" width="100vw" height="100%">
                 <v-card-title class="title white--text">
                   <v-row class="fill-height flex-column" justify="space-between">
                     <p class="mt-4 subheading text-left">{{ item.title }}</p>
@@ -49,17 +49,17 @@
       </v-slide-item>
     </v-slide-group>
     
-    <v-expand-transition>
-      <v-sheet v-if="model != null" color="grey lighten-4" height="400" tile>
+    <v-expand-transition >
+      <v-sheet v-if="model != null" color="grey lighten-4" style="height: 55vh;" tile>
         <!-- <v-row
           class="fill-height"
           align="center"
           justify="center"
         >-->
-        <h3 class="title">Selected {{ model+1 }}</h3>
-        <div style="font-size: 20px; font-weight: 600;">
+        <p style="font-size: 4.5vh; font-weight:700; margin-bottom:0;">Selected {{ model+1 }}</p>
+        <!-- <div style="font-size: 20px; font-weight: 600;">
           <MARQUEE scrollamount="15" width="500px">게임 제목을 입력해 주세요</MARQUEE>
-        </div>
+        </div> -->
         <GameIntro />
         <!-- </v-row> -->
       </v-sheet>
@@ -125,14 +125,13 @@ export default {
 
 <style scoped>
 .v-card {
-  transition: opacity 0.4s ease-in-out, width 0.1s ease-in-out,
-    height 0.2s ease-in-out;
-  width: 12vw;
+  transition: opacity 0.4s ease-in-out, width 0.1s ease-in-out, height 0.2s ease-in-out;
+  width: 25vw;
   height: 15vh;
 }
 
 .v-card:not(.on-minimize) {
-  width: 28vw;
+  width: 25vw;
   height: 37vh;
 }
 
