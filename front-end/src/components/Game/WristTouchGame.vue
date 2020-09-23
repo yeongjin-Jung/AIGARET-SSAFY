@@ -74,6 +74,7 @@ export default {
       Tutorial: false,
       gameStart: false,
       firstStart : true,
+      gamestatus : false,
     };
   },
   components: {
@@ -143,7 +144,7 @@ export default {
       sketch.image(this.video, 0, 0, this.window_width, this.window_height);
 
       var that = this;
-      if (this.pose != null) {
+      if (this.pose != null &&  this.gamestatus == true) {
         this.loading = false;
         //장애물
         sketch.rect(this.position_x, this.position_y, 100, 100);
@@ -169,6 +170,7 @@ export default {
         if (this.countDown == 0) {
           this.modal = true;
           this.score = 0;
+          this.gamestatus = false;
         }
 
         if (this.pose.score > 0.25 && this.pose != null) {
@@ -238,6 +240,7 @@ export default {
       this.countDown = 10;
       this.countDownTimer();
       this.closeModal();
+      this.gamestatus = true;
     },
     doCloseTutorial() {
       this.Tutorial = false;
@@ -245,6 +248,7 @@ export default {
       if(this.firstStart == true){
         this.countDownTimer();
       }
+      this.gamestatus = true;
       this.firstStart = false;
     },
   },
