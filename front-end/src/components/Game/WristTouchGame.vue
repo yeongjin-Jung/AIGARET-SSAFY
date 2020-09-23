@@ -1,5 +1,5 @@
 <template>
-  <div style="width :  100vw; height: 99%">
+  <div style="width:100vw; height:95vh;">
     <!-- <h4>손목터치게임</h4> -->
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
   </div>
@@ -20,8 +20,8 @@ export default {
       skeleton: null,
       position_x: 900,
       position_y: 500,
-      window_width: 1500,
-      window_height: 1050,
+      window_width: 1000,
+      window_height: 700,
     };
   },
   components: {
@@ -45,14 +45,24 @@ export default {
 
       $("#defaultCanvas0")
         .parent()
-        .css({ width: "100%", "text-align": "center" });
+        .css({
+          width: "100vw",
+          "text-align": "center",
+          position: "absolute",
+          top: "7vh",
+        });
+
+      $("#defaultCanvas0").css({ width: "65vw", height: "85vh" });
     },
     modelReady() {
       console.log("Model Loaded");
     },
-    chanege() {
+    chanege(x) {
       this.position_x = Math.floor(Math.random() * 800 + 100);
-      this.position_y = Math.floor(Math.random() * 500 + 200);
+      this.position_y = Math.floor(Math.random() * 300 + 50);
+      if(this.position_x >= 300 && this.position_x <= 700){
+        this.chanege(x);
+      }
     },
     draw(sketch) {
       sketch.translate(this.window_width, 0);
@@ -60,13 +70,27 @@ export default {
       sketch.image(this.video, 0, 0, this.window_width, this.window_height);
       sketch.rect(this.position_x, this.position_y, 100, 100);
       var that = this;
-      if (this.pose.score > 0.3) {
+      if (this.pose.score > 0.25) {
         let eyeR = that.pose.rightEye;
         let eyeL = that.pose.leftEye;
         let d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
         sketch.fill(255, 0, 0);
         sketch.ellipse(that.pose.nose.x, that.pose.nose.y, d);
         sketch.fill(0, 0, 255);
+
+        if (
+          (that.pose.rightWrist.x > that.position_x  &&
+            that.pose.rightWrist.x < that.position_x + 100 &&
+            that.pose.rightWrist.y > that.position_y  &&
+            that.pose.rightWrist.y < that.position_y + 100) ||
+          (that.pose.leftWrist.x > that.position_x  &&
+            that.pose.leftWrist.x < that.position_x + 100 &&
+            that.pose.leftWrist.y > that.position_y  &&
+            that.pose.leftWrist.y < that.position_y + 100)
+        ) {
+          that.chanege();
+        }
+
         sketch.ellipse(that.pose.rightWrist.x, that.pose.rightWrist.y, 32);
         sketch.ellipse(that.pose.leftWrist.x, that.pose.leftWrist.y, 32);
 
@@ -96,5 +120,6 @@ export default {
 <style>
 #defaultCanvas0 {
   display: inline-block;
+  height: 70vh;
 }
 </style>
