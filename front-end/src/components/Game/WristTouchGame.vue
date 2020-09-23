@@ -4,7 +4,7 @@
     <div style="text-align: center; width : 70vw; height: 70vh;  margin-top : 10vh;"></div>
     <vue-p5 v-if="gameStart" @setup="setup" @draw="draw"></vue-p5>
     <v-btn @click="Tutorial = !Tutorial" text style="position:absolute; top:2vh;; left:1vw; margin-top:7vh; height: 7vh; width:8vw; background:yellow; ">
-      <p style="font-weight:1000; margin-top: 2vh;">게임조작법</p>
+      <p style="font-weight:1000; font-size: 2.5vh;  margin-top: 2vh;">게임조작법</p>
     </v-btn>
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->

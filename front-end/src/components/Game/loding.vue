@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="position: absolute; top:0; height: 100vh; width:100vw;">
     <div class="body">
       <span>
         <span></span>
@@ -36,14 +36,14 @@ p {
   font-size: 40px;
   text-transform: uppercase;
   left: 45%;
-  top: 58%;
+  top: 45%;
   margin-left: -20px;
   color : yellow;
 }
 
 .body {
   position: absolute;
-  top: 50%;
+  top: 40%;
   margin-left: -50px;
   left: 50%;
   animation: speeder .4s linear infinite;
