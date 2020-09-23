@@ -65,7 +65,7 @@ export default {
       {
         title: "Profile",
         img: "mdi-card-account-details",
-        url: "myinfo",
+        url: "info",
       },
       {
         title: "Report",

@@ -30,13 +30,7 @@
 
 
                     <div class="align-self-center">
-                      <v-btn
-                        v-for="(icon, index) in icons"
-                        :key="index"
-                        :class="{ 'show-btns': hover }"
-                        color="transparent"
-                        icon
-                      >
+                      <v-btn v-for="(icon, index) in icons" :key="index" :class="{ 'show-btns': hover }" color="transparent" icon>
                         <v-icon :class="{ 'show-btns': hover }" color="transparent">{{ icon }}</v-icon>
                       </v-btn>
                     </div>

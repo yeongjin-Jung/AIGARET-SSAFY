@@ -1,5 +1,5 @@
 <template>
-  <v-container id="container" style="background-color: #fcfeff" class="fill-height">
+  <v-container id="container" style="background-color: #fcfeff">
     <v-card color="basil" height="100%" class="mx-auto" width="1000" outlined>
       <v-card-title class="text-center justify-center py-6">
         <h1 class="font-weight-bold display-3 basil--text">내 정보 수정</h1>
