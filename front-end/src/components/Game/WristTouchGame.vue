@@ -8,7 +8,7 @@
       <!-- /default -->
       <!-- /footer -->
       <template slot="footer" style="background-color : rgba(0,0,0,1);">
-        <button @click="doClose" style="background-color : red; height :8vh; font-size : 4vh; font-weight: 400;">다시시작</button>
+        <button @click="doClose" style="background-color : red; height :8vh; border-radius: 12px;  width:10vw; font-size : 4vh; font-weight: 600; color:yellow;">다시시작</button>
       </template>
     </GameFinishModal>
   </div>
@@ -33,6 +33,7 @@ export default {
       window_height: 700,
       countDown: 10,
       modal: false,
+      score : 0,
     };
   },
   components: {
@@ -69,10 +70,11 @@ export default {
     },
     chanege(x) {
       this.position_x = Math.floor(Math.random() * 800 + 100);
-      this.position_y = Math.floor(Math.random() * 300 + 50);
+      this.position_y = Math.floor(Math.random() * 300 + 100);
       if (this.position_x >= 300 && this.position_x <= 700) {
         this.chanege(x);
       }
+      this.score += 100;
       this.countDown = 10;
     },
     countDownTimer() {
@@ -88,11 +90,25 @@ export default {
       sketch.translate(this.window_width, 0);
       sketch.scale(-1, 1);
       sketch.image(this.video, 0, 0, this.window_width, this.window_height);
+
+      //장애물 
       sketch.rect(this.position_x, this.position_y, 100, 100);
       sketch.translate(this.window_width, 0);
       sketch.scale(-1, 1);
+
+      //점수판
+      sketch.textSize(50);
+      sketch.textStyle(sketch.BOLD);
+      sketch.fill(255, 0, 0);
+      sketch.text("점수 : " + this.score, 40,60);
+
+      //카운트 다운 
       sketch.textSize(100);
-      sketch.text(this.countDown, 450, 100);
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(0, 255, 255);
+      sketch.text(this.countDown, 460, 100);
+
+      //전체 Canvas 반전
       sketch.translate(this.window_width, 0);
       sketch.scale(-1, 1);
 
@@ -134,8 +150,6 @@ export default {
         for (let i = 0; i < that.skeleton.length; i++) {
           let a = that.skeleton[i][0];
           let b = that.skeleton[i][1];
-          sketch.strokeWeight(2);
-          sketch.stroke(255);
           sketch.line(a.position.x, a.position.y, b.position.x, b.position.y);
         }
       } else {
@@ -143,7 +157,8 @@ export default {
         sketch.rect(this.position_x, this.position_y, 100, 100);
         sketch.translate(this.window_width, 0);
         sketch.scale(-1, 1);
-        sketch.text(this.countDown, 450, 100);
+        
+        sketch.text(this.countDown, 460, 100);
       }
     },
     closeModal() {
@@ -153,6 +168,7 @@ export default {
     
 
     doClose(){
+      this.score = 0;
       this.countDown = 10;
       this.countDownTimer();
       this.closeModal();
