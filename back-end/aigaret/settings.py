@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,7 +42,7 @@ INSTALLED_APPS = [
 
     # DRF
     'rest_framework',
-    'rest_framework.authtoken',
+    # 'rest_framework.authtoken',
 
     # rest_auth + allauth
     'rest_auth',
@@ -148,18 +149,39 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'accounts.User'
 
+REST_AUTH_SERIALIZERS = {     
+    'USER_DETAILS_SERIALIZER':'accounts.serializers.UserSerializer' 
+}
+
 # django sites app settion
 SITE_ID = 1
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8081',
-)
+# CORS_ORIGIN_WHITELIST = (
+#     'http://localhost:8081',
+# )
+
+
 
 #DRF auth settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ]
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
 }
+
+#로그인 시 email 사용하고 싶지 않을 때 설정
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# 로그인 전에 JWT를 사용하고 싶을 때 설정
+REST_USE_JWT = True
+
+#로그아웃 설정
+ACCOUNT_LOGOUT_ON_GET = True
