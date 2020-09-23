@@ -30,4 +30,7 @@ urlpatterns = [
     #jwt
     path("rest-auth/", include('rest_auth.urls')),
     path("rest-auth/signup/", include('rest_auth.registration.urls')),
+    
+    # games
+    path('games/', include('games.urls')),
 ]
