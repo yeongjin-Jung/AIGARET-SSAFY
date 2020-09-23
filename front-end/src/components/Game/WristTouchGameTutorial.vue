@@ -1,13 +1,12 @@
 <template>
   <transition name="modal" appear>
-    <div class="modal modal-overlay" @click.self="$emit('close')">
-      <div class="modal-window" style="width : 50vw; height: 60vh; background-color : rgba(0,0,0,0); ">
-        <div class="modal-content" style="max-width : 100%;">
+    <div class="modal modal-overlay" @click.self="$emit('close')" >
+      <div class="modal-window" style="width : 80vw; height: 80vh; background-color : rgba(255,255,255,1); ">
+        <div class="modal-content" style="max-width : 100%; height: 70vh;">
           <slot/>
         </div>
-        <footer class="modal-footer">
+        <footer class="modal-footer"  style="height: 10vh;">
           <slot name="footer" >
-            <button @click="$emit('close')" style="background-color : yellow; height:7vh; width: 9vw; font-size :4vh; ">끝내기</button>
           </slot>
         </footer>
       </div>
@@ -71,8 +70,22 @@
   }
 }
 
-button{
-    margin-left : 2vw;
-    margin-right : 2vw;
+
+.modal-enter-active {
+  animation: modal-in .5s;
+}
+.modal-leave-active {
+  animation: modal-in .5s reverse;
+}
+@keyframes modal-in {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

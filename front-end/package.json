@@ -12,6 +12,7 @@
     "canvas": "^2.6.1",
     "core-js": "^3.6.5",
     "face-api.js": "^0.22.2",
+    "hooper": "^0.3.4",
     "jquery": "^3.5.1",
     "ml5": "^0.5.0",
     "vee-validate": "^3.3.11",

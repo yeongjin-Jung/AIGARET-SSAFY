@@ -18,7 +18,7 @@
       <span></span>
       <span></span>
     </div>
-    <p>Loading</p>
+    <p>Loading...</p>
   </div>
 </template>
 
@@ -35,7 +35,7 @@ p {
   font-weight: 600;
   font-size: 40px;
   text-transform: uppercase;
-  left: 50%;
+  left: 45%;
   top: 58%;
   margin-left: -20px;
   color : yellow;
