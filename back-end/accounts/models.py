@@ -9,7 +9,7 @@ class UserManager(BaseUserManager):
         try:
             user = self.model(
                 username=username,
-                name='fool',
+                name=name,
                 age=age,
             )
             print('name', name)

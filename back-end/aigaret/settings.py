@@ -26,7 +26,7 @@ SECRET_KEY = '+l4cmcpmvp#6d&*g@6tre61yck*s4=zd!s(5i_jo3zoxs*5=$4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -105,6 +105,9 @@ DATABASES = {
         'PASSWORD' : 'aigaret123',
         'HOST' : 'j3b203.p.ssafy.io',
         'PORT' : '3306',
+        # 'PASSWORD' : '111111',
+        # 'HOST' : '127.0.0.1',
+        # 'PORT' : '3306',
     }
 }
 
@@ -185,3 +188,11 @@ REST_USE_JWT = True
 
 #로그아웃 설정
 ACCOUNT_LOGOUT_ON_GET = True
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=28),
+}
