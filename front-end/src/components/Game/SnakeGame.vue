@@ -1,15 +1,93 @@
 <template>
-  <div style="width :  100vw; height: 99%">
-    <h4>스네이크 게임</h4>
+  <div style="width: 100vw; height: 85vh; text-align: center">
+    <v-btn
+      @click="Tutorial = !Tutorial"
+      text
+      style="
+        position: absolute;
+        left: 1vw;
+        height: 7vh;
+        width: 8vw;
+        background: yellow;
+      "
+    >
+      <p style="font-weight: 1000; font-size: 2.5vh; margin-top: 2vh">
+        게임조작법
+      </p>
+    </v-btn>
+    <p style="font-size: 5vh; font-weight: 700">스네이크 게임</p>
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+
+    <GameFinishModal @close="closeModal" v-if="modal">
+      <!-- default 슬롯 콘텐츠 -->
+      <p
+        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+      >
+        Game Over
+      </p>
+      <!-- /default -->
+      <!-- /footer -->
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doClose"
+          style="
+            background-color: red;
+            height: 8vh;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+          "
+        >
+          다시시작
+        </button>
+      </template>
+    </GameFinishModal>
+
+    <SnakeGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+      <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
+      <hooper style="margin-top: -3vh">
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+
+        <hooper-pagination slot="hooper-addons"></hooper-pagination>
+      </hooper>
+
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doCloseTutorial"
+          style="
+            background-color: red;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+          "
+        >
+          닫기
+        </button>
+      </template>
+    </SnakeGameTutorial>
+    <Loading v-if="loading"></Loading>
   </div>
 </template>
 
 <script>
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
-import { Snake } from "../../api/game/snake/snake";
 import $ from "jquery";
+import GameFinishModal from "./GameFinishModal";
+import { Snake } from "../../api/game/snake/snake";
+import SnakeGameTutorial from "./SnakeGameTutorial";
+import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
+import Loading from "./loding";
+import "../../assets/hooper.css";
 export default {
   name: "SnakeGame",
   data: function () {
@@ -35,20 +113,37 @@ export default {
       videoHeight: 400,
 
       upPosition_x: 250,
-      upPosition_y: 100,
+      upPosition_y: 80,
       downPosition_x: 250,
-      downPosition_y: 200,
-      leftPosition_x: 300,
+      downPosition_y: 220,
+      leftPosition_x: 350,
       leftPosition_y: 150,
-      rightPosition_x: 200,
+      rightPosition_x: 150,
       rightPosition_y: 150,
 
       leftBuffer: null,
       rightBuffer: null,
+
+      //컴포넌트 관련
+      modal: false,
+      Tutorial: false,
+      loading: false,
+      gameStart: false,
+      firstStart: true,
+      gamestatus: false,
+
+      countDown: 20,
+      score: 0,
     };
   },
   components: {
     "vue-p5": VueP5,
+    GameFinishModal,
+    SnakeGameTutorial,
+    Loading,
+    Hooper,
+    Slide,
+    HooperPagination,
   },
   methods: {
     setup(sketch) {
@@ -75,14 +170,7 @@ export default {
       });
 
       sketch.background(0);
-      //   const options = { numLabels: 4 };
-      //   this.classifier = this.mobilenet.classification(
-      //     this.video,
-      //     options,
-      //     this.videoReady()
-      //   );
 
-      //game code starts
       this.s = new Snake(
         sketch,
         this.scl,
@@ -90,7 +178,7 @@ export default {
         this.height,
         this.food
       );
-      sketch.frameRate(10);
+
       this.pickLocation(sketch);
       //game code ends
 
@@ -99,10 +187,9 @@ export default {
         "text-align": "center",
         position: "absolute",
         left: "1vw",
-        top: "15vh",
+        top: "12vh",
       });
-      $("#defaultCanvas0").css({ width: "80vw", height: "70vh" });
-      // $("video").css({ width: "300vw;", height: "72vh" });
+      $("#defaultCanvas0").css({ width: "85vw", height: "75vh" });
     },
 
     modelReady() {
@@ -110,6 +197,15 @@ export default {
     },
     videoReady() {
       console.log("webcam load... finished");
+    },
+
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
     },
 
     pickLocation(sketch) {
@@ -137,10 +233,14 @@ export default {
     },
     drawSnake(sketch) {
       var that = this;
-      this.s.update(sketch);
+      if (sketch.frameCount % 20 == 0) {
+        this.s.update(sketch);
+      }
       this.s.show(sketch);
 
       if (this.s.eat(this.food)) {
+        that.score += 100;
+        that.countDown = 20;
         that.pickLocation(sketch);
       }
       //snake
@@ -163,70 +263,64 @@ export default {
       );
 
       this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(250, 100, 50, 50);
+      this.rightBuffer.rect(250, 80, 50, 50);
       this.rightBuffer.textSize(40);
       this.rightBuffer.translate(this.videoWidth, 0);
       this.rightBuffer.scale(-1, 1);
       this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
       this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("상", 305, 140);
+      this.rightBuffer.text("상", 305, 120);
 
       this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(300, 200, 50, 50);
+      this.rightBuffer.rect(300, 220, 50, 50);
       this.rightBuffer.textSize(40);
       this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
       this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("하", 305, 240);
+      this.rightBuffer.text("하", 305, 260);
 
       this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(250, 150, 50, 50);
+      this.rightBuffer.rect(200, 150, 50, 50);
       this.rightBuffer.textSize(40);
       this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
       this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("좌", 255, 190);
+      this.rightBuffer.text("좌", 205, 190);
 
       this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(350, 150, 50, 50);
+      this.rightBuffer.rect(400, 150, 50, 50);
       this.rightBuffer.textSize(40);
       this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
       this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("우", 355, 190);
+      this.rightBuffer.text("우", 405, 190);
 
       this.rightBuffer.translate(this.videoWidth, 0);
       this.rightBuffer.scale(-1, 1);
 
-      // this.rightBuffer.rect(300, 150, 50, 50);
-      // this.rightBuffer.rect(250, 200, 50, 50);
       var that = this;
-      if (this.pose != null) {
+      if (this.pose != null && this.gamestatus == true) {
+        this.loading = false;
         // if (this.pose != null && this.gamestatus == true) {
-        // this.loading = false;
-        // //장애물
-        // sketch.rect(this.position_x, this.position_y, 100, 100);
-        // sketch.translate(this.window_width, 0);
-        // sketch.scale(-1, 1);
+        //점수판
+        this.rightBuffer.translate(this.videoWidth, 0);
+        this.rightBuffer.scale(-1, 1);
+        this.rightBuffer.textSize(30);
+        this.rightBuffer.textStyle(sketch.BOLD);
+        this.rightBuffer.fill(255, 0, 0);
+        this.rightBuffer.text("점수 : " + this.score, 30, 40);
 
-        // //점수판
-        // sketch.textSize(50);
-        // sketch.textStyle(sketch.BOLD);
-        // sketch.fill(255, 0, 0);
-        // sketch.text("점수 : " + this.score, 40, 60);
+        //카운트 다운
+        this.rightBuffer.textSize(50);
+        this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
+        this.rightBuffer.fill(0, 255, 255);
+        this.rightBuffer.text(this.countDown, 280, 50);
 
-        // //카운트 다운
-        // sketch.textSize(100);
-        // sketch.textStyle(sketch.NORMAL);
-        // sketch.fill(0, 255, 255);
-        // sketch.text(this.countDown, 455, 100);
+        if (this.countDown == 0) {
+          this.modal = true;
+          this.score = 0;
+          this.gamestatus = false;
+        }
 
-        //전체 Canvas 반전
-        // sketch.translate(this.window_width, 0);
-        // sketch.scale(-1, 1);
-
-        // if (this.countDown == 0) {
-        //   this.modal = true;
-        //   this.score = 0;
-        //   this.gamestatus = false;
-        // }
+        this.rightBuffer.translate(this.videoWidth, 0);
+        this.rightBuffer.scale(-1, 1);
 
         if (this.pose.score > 0.2 && this.pose != null) {
           let eyeR = that.pose.rightEye;
@@ -304,10 +398,37 @@ export default {
           );
         }
       } else {
-        // this.loading = true;
+        this.loading = true;
         console.log("로딩중");
       }
     },
+    closeModal() {
+      this.modal = false;
+    },
+
+    CloseTutorial() {
+      this.Tutorial = false;
+    },
+    doClose() {
+      this.score = 0;
+      this.countDown = 20;
+      this.countDownTimer();
+      this.closeModal();
+      this.gamestatus = true;
+    },
+
+    doCloseTutorial() {
+      this.Tutorial = false;
+      this.gameStart = true;
+      if (this.firstStart == true) {
+        this.countDownTimer();
+      }
+      this.gamestatus = true;
+      this.firstStart = false;
+    },
+  },
+  created() {
+    this.Tutorial = true;
   },
 };
 </script>

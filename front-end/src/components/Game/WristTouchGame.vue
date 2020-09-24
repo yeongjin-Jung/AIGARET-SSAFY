@@ -115,7 +115,7 @@ export default {
         top: "7vh",
       });
 
-      $("#defaultCanvas0").css({ width: "60vw", height: "85vh" });
+      $("#defaultCanvas0").css({ width: "60vw", height: "75vh" });
     },
     modelReady() {
       console.log("Model Loaded");
