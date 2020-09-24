@@ -132,7 +132,7 @@ export default {
       firstStart: true,
       gamestatus: false,
 
-      countDown: 20,
+      countDown: 25,
       score: 0,
     };
   },
@@ -233,14 +233,14 @@ export default {
     },
     drawSnake(sketch) {
       var that = this;
-      if (sketch.frameCount % 20 == 0) {
+      if (sketch.frameCount % 27 == 0) {
         this.s.update(sketch);
       }
       this.s.show(sketch);
 
       if (this.s.eat(this.food)) {
         that.score += 100;
-        that.countDown = 20;
+        that.countDown = 25;
         that.pickLocation(sketch);
       }
       //snake
