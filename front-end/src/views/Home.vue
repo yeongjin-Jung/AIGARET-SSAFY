@@ -1,13 +1,13 @@
 <template>
   <v-container fluid class="text-center">
-    <!-- <v-container class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
+    <!-- <v-container fluid class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
     <!-- <v-row align="center" justify="center"> -->
     <!-- <v-sheet class="mx-auto" elevation="8" max-width="800"> -->
      
-    <p style="font-size: 5vh; font-weight: 600; position: relative; width : 40vw;  top: 30px;">
-      <MARQUEE scrollamount="15" height="100%" style="width : 30vw;">게임 제목을 입력해 주세요</MARQUEE>
+    <div style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+      <MARQUEE scrollamount="15" style="width : 30vw;">게임 제목을 입력해 주세요</MARQUEE>
       <!-- 크기 조절 -->
-    </p>
+    </div>
     <v-slide-group v-model="model" show-arrows center-active>
       <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
         <v-col cols="2">
@@ -54,7 +54,7 @@
         <!-- <div style="font-size: 20px; font-weight: 600;">
           <MARQUEE scrollamount="15" width="500px">게임 제목을 입력해 주세요</MARQUEE>
         </div> -->
-        <GameIntro />
+        <GameIntro :gameNum="model+1" />
         <!-- </v-row> -->
       </v-sheet>
     </v-expand-transition>
