@@ -1,7 +1,9 @@
 <template>
   <v-app style="background: #FCFCFF;">
+    <Nav />
+
+    <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
     <v-main id="mainApp">
-      <Nav />
       <v-container fluid class="fill-height">
         <router-view />
       </v-container>
@@ -17,7 +19,6 @@ import Footer from '@/components/Layout/Footer'
 
 export default {
   name: "App",
-
   components: {
     Nav,
     Footer
@@ -34,7 +35,7 @@ export default {
 #mainApp{
   background-image: url("assets/bluemoon.png");
   background-size : cover;
-  height: 100vh;
+  // height: 85vh; 컴포넌트화로 무의미해진듯, 삭제예정
 }
 
 img{
