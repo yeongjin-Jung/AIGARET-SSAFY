@@ -103,10 +103,10 @@ export default {
         }
       });
 
-      this.train = sketch.createImg(
-        "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
-      );
-      this.train.hide();
+      // this.train = sketch.createImg(
+      //   "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
+      // );
+      // this.train.hide();
 
       $("#defaultCanvas0").parent().css({
         width: "100vw",
