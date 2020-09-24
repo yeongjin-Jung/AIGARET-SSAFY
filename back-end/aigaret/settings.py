@@ -105,6 +105,9 @@ DATABASES = {
         'PASSWORD' : 'aigaret123',
         'HOST' : 'j3b203.p.ssafy.io',
         'PORT' : '3306',
+        # 'PASSWORD' : '111111',
+        # 'HOST' : '127.0.0.1',
+        # 'PORT' : '3306',
     }
 }
 
