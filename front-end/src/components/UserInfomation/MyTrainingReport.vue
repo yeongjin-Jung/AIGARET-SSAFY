@@ -52,7 +52,7 @@
             </v-menu>
           </v-toolbar>
         </v-sheet>
-        <v-sheet width="100%" height="400">
+        <v-sheet width="100%" height="50vh">
           <v-calendar
             ref="calendar"
             v-model="focus"
@@ -108,12 +108,12 @@
           </v-menu>
         </v-sheet>
 
-        <div class="text-center" style="border: black solid 1px; width: 100%">
+        <v-sheet width="100%" class="text-center">
           <p>9월 10일</p>
           <p>총 운동시간 50분 12초  총 스코어 240점</p>
           <p>사과게임 20분 5초 스코어 130점</p>
           <p>수박게임 30분 7초 스코어 110점</p>
-        </div>
+        </v-sheet>
       </v-row>
     </v-col>
   </v-row>

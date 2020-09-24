@@ -6,6 +6,7 @@
     <v-btn id="noPoseSave">노점프포즈</v-btn>
     <v-btn id="poseTrain">포즈학습</v-btn>
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+    <div class="loader">Loading...</div>
   </div>
 </template>
 
