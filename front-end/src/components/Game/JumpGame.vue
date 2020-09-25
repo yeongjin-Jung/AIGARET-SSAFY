@@ -1,10 +1,134 @@
 <template>
-  <div style="width: 100vw; height:95vh; text-align: center;">
-    <v-btn id="gameStart" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">게임시작</v-btn>
-    <v-btn id="poseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">점프포즈</v-btn>
-    <v-btn id="noPoseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">노점프포즈</v-btn>
-    <v-btn id="poseTrain" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">포즈학습</v-btn>
+  <div
+    style="
+      width: 100vw;
+      height: 79vh;
+      position: absolute;
+      top: 0.2vh;
+      text-align: center;
+    "
+  >
+    <v-btn
+      id="gameStart"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >게임시작</v-btn
+    >
+    <v-btn
+      id="poseSave"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >점프포즈</v-btn
+    >
+    <v-btn
+      id="noPoseSave"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >노점프포즈</v-btn
+    >
+    <v-btn
+      id="poseTrain"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >포즈학습</v-btn
+    >
+    <v-btn
+      @click="Tutorial = !Tutorial"
+      text
+      style="
+        position: absolute;
+        top: 2vh;
+        left: 1vw;
+        height: 5vh;
+        font-size: 2vh;
+        width: 8vw;
+        background: yellow;
+      "
+      >게임조작법</v-btn
+    >
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+
+    <GameFinishModal @close="closeModal" v-if="modal">
+      <!-- default 슬롯 콘텐츠 -->
+      <p
+        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+      >
+        Game Over
+      </p>
+      <!-- /default -->
+      <!-- /footer -->
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doClose"
+          style="
+            background-color: red;
+            height: 8vh;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+          "
+        >
+          다시시작
+        </button>
+      </template>
+    </GameFinishModal>
+    <JumpGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+      <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
+      <hooper style="margin-top: -3vh">
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+
+        <hooper-pagination slot="hooper-addons"></hooper-pagination>
+      </hooper>
+
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doCloseTutorial"
+          style="
+            background-color: red;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+          "
+        >
+          닫기
+        </button>
+      </template>
+    </JumpGameTutorial>
+
+    <Loading v-if="loading"></Loading>
   </div>
 </template>
 
@@ -16,6 +140,11 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
+import JumpGameTutorial from "./JumpGameTutorial";
+import GameFinishModal from "./GameFinishModal";
+import Loading from "./loding";
+import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
+import "../../assets/hooper.css";
 import $ from "jquery";
 export default {
   name: "JumpGame",
@@ -39,7 +168,7 @@ export default {
       videoCanvas: null,
       canvasWidth: 1150,
       canvasHeight: 800,
-      videoWidth: 1100,
+      videoWidth: 1200,
       videoHeight: 800,
 
       //preload
@@ -63,18 +192,29 @@ export default {
       //train
       brain: null,
       poseSave: null,
-      noPoseSave : null,
+      noPoseSave: null,
       trainButton: null,
       state: "waiting",
 
       //game
-      gameState: false,
-
+      modal: false,
+      score: 0,
+      loading: false,
+      Tutorial: false,
+      gameStart: false,
+      firstStart: true,
+      gamestatus: false,
       confidence: null,
     };
   },
   components: {
     "vue-p5": VueP5,
+    Hooper,
+    Slide,
+    HooperPagination,
+    GameFinishModal,
+    Loading,
+    JumpGameTutorial,
   },
   methods: {
     setup(sketch) {
@@ -123,7 +263,6 @@ export default {
       });
 
       $("#defaultCanvas0").css({ width: "90vw", height: "75vh" });
-
     },
 
     modelLoaded() {
@@ -183,8 +322,7 @@ export default {
         console.log(loss);
       }
     },
-
-    jump(sketch) {
+    restartGame(){
       if (this.restart) {
         this.restart = false;
         this.score = 0;
@@ -193,6 +331,16 @@ export default {
         this.trains = [];
         this.sketchObj.loop();
       }
+    },
+    jump(sketch) {
+      // if (this.restart) {
+      //   this.restart = false;
+      //   this.score = 0;
+      //   this.scrollBg = 0;
+      //   this.scroll = 10;
+      //   this.trains = [];
+      //   this.sketchObj.loop();
+      // }
       if (event.key == " ") {
         this.unicorn.jump();
         return false;
@@ -207,11 +355,9 @@ export default {
       // sketch.translate(this.bg.width, 0);
       // sketch.scale(-1, 1);
 
-
-      if(this.confidence >= 0.99 && this.label =="jump"){
+      if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
       }
- 
 
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
       sketch.image(
@@ -276,6 +422,7 @@ export default {
               sketch.height / 2
             );
 
+            that.modal = true;
             that.restart = true;
           }
         }
@@ -291,8 +438,32 @@ export default {
         this.unicorn.move();
       }
     },
+    closeModal() {
+      this.modal = false;
+    },
+    CloseTutorial() {
+      this.Tutorial = false;
+    },
+
+    doClose() {
+      this.score = 0;
+      this.closeModal();
+      this.gamestatus = true;
+      this.restartGame();
+    },
+    doCloseTutorial() {
+      this.Tutorial = false;
+      this.gameStart = true;
+      // if (this.firstStart == true) {
+      //   this.countDownTimer();
+      // }
+      this.gamestatus = true;
+      this.firstStart = false;
+    },
   },
+
   created() {
+    this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
   },
 };
