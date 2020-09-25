@@ -45,7 +45,25 @@ export default new Vuex.Store({
         commit('SET_TOKEN', res.headers)
       })
       .catch()
-    }
+    },
+
+    changePassword({ state, commit }, userInfo) {
+      const data = {
+        'id': state.id,
+        'password': userInfo.password,
+        'newPassword': userInfo.newPassword
+      }
+
+      axios.post(SERVER.URL + SERVER.ROUTES.changePassword, data)
+      .then(res => {
+        console.log('비밀번호 변경 완료!')
+      })
+      .catch()
+    },
+
+
+
+
   },
 
   modules: {
