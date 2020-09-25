@@ -1,17 +1,16 @@
 <template>
-  <div style="width :  100vw; height: 99%">
-    <h1>aaaaa</h1>
-    <v-btn id="gameStart">게임시작</v-btn>
-    <v-btn id="poseSave">점프포즈</v-btn>
-    <v-btn id="noPoseSave">노점프포즈</v-btn>
-    <v-btn id="poseTrain">포즈학습</v-btn>
+  <div style="width: 100vw; height:95vh; text-align: center;">
+    <v-btn id="gameStart" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">게임시작</v-btn>
+    <v-btn id="poseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">점프포즈</v-btn>
+    <v-btn id="noPoseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">노점프포즈</v-btn>
+    <v-btn id="poseTrain" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">포즈학습</v-btn>
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
-    <div class="loader">Loading...</div>
   </div>
 </template>
 
 <script>
 import VueP5 from "vue-p5";
+
 // import p5_dom from "./p5_dom_min";
 // import p5_sound from "./p5_sound_min";
 import ml5 from "ml5";
@@ -116,9 +115,15 @@ export default {
 
       this.setupButton(sketch);
 
-      $("#defaultCanvas0")
-        .parent()
-        .css({ width: "100%", "text-align": "center" });
+      $("#defaultCanvas0").parent().css({
+        width: "100vw",
+        "text-align": "center",
+        position: "absolute",
+        top: "10vh",
+      });
+
+      $("#defaultCanvas0").css({ width: "90vw", height: "75vh" });
+
     },
 
     modelLoaded() {

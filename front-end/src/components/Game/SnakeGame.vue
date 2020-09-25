@@ -134,6 +134,8 @@ export default {
 
       countDown: 25,
       score: 0,
+      speed: 27,
+
     };
   },
   components: {
@@ -233,7 +235,7 @@ export default {
     },
     drawSnake(sketch) {
       var that = this;
-      if (sketch.frameCount % 27 == 0) {
+      if (sketch.frameCount % this.speed == 0) {
         this.s.update(sketch);
       }
       this.s.show(sketch);
@@ -241,6 +243,13 @@ export default {
       if (this.s.eat(this.food)) {
         that.score += 100;
         that.countDown = 25;
+        //Level2
+        if(that.score == 500){
+          that.speed = 22;
+        }
+        else if(that.score == 1000){
+          that.speed = 17;
+        }
         that.pickLocation(sketch);
       }
       //snake
