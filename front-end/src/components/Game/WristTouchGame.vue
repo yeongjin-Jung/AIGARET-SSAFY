@@ -178,7 +178,7 @@ export default {
           let eyeL = that.pose.leftEye;
           let d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
           sketch.fill(255, 0, 0);
-          sketch.ellipse(that.pose.nose.x, that.pose.nose.y, d);
+          // sketch.ellipse(that.pose.nose.x, that.pose.nose.y, d);
           sketch.fill(0, 0, 255);
 
           if (

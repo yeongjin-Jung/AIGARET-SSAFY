@@ -1,8 +1,8 @@
 <template>
   <v-container fluid class="text-center">
     <!-- <v-container fluid class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->     
-    <div style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
-      <MARQUEE scrollamount="15" style="width : 30vw;">게임 제목을 입력해 주세요</MARQUEE>
+    <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+      <MARQUEE scrollamount="15" style="width : 30vw;">{{ gameInfo[model].game_name }}</MARQUEE>
     </div>
     <v-slide-group v-model="model" show-arrows center-active>
       <v-slide-item v-for="(item, i) in items" :key="i" v-slot:default="{ active, toggle }">
@@ -101,7 +101,7 @@ export default {
       },
     ],
     transparent: "rgba(255, 255, 255, 0)",
-    gameInfo: null,
+    gameInfo: {},
   }),
   methods: {
     getGameInfo() {
