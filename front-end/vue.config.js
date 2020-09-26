@@ -3,7 +3,7 @@ module.exports = {
     'vuetify'
   ],
   lintOnSave : false,
-  'devServer': {
-    'public': 'aigaret.ga'
-  }
+  // 'devServer': {
+  //   'public': 'aigaret.ga'
+  // }
 }

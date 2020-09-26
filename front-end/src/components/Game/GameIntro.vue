@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-block mx-auto" style="width: 100%; height:48vh;">
+  <div class="d-inline-block mx-auto" style="width: 100%; height:45vh;">
     <v-container fluid style="max-height: 100%;">
       <v-row style="height:42.5vh;" justify="center">
         <v-col cols="6">
@@ -24,9 +24,6 @@
 </template>
 
 <script>
-import SERVER from '../../api/server.js';
-import axios from 'axios';
-
 export default {
   name: "GameIntro",
   components: {

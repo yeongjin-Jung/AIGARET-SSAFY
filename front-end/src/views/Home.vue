@@ -38,7 +38,7 @@
     </v-slide-group>
     
     <v-expand-transition >
-      <v-sheet v-if="model != null"  style="height: 55vh; background-color: rgba(0,0,0,0);" tile >
+      <v-sheet v-if="model != null"  style="height: 50vh; background-color: rgba(0,0,0,0);" tile >
         <p style="font-size: 4.5vh; font-weight:700; margin-bottom:0; font-family: CookieRun-Bold;">Selected {{ model+1 }}</p>
         <GameIntro :gameInfo="gameInfo[model]" />
       </v-sheet>
@@ -65,7 +65,7 @@ export default {
         title: "New Releases",
         text: "It's New Release Friday",
         subtext: "Newly released songs. Updated daily",
-        img: "http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg",
+        img: "https://lorempixel.com/output/nightlife-q-c-640-480-5.jpg",
       },
       {
         title: "Rock",
@@ -78,13 +78,13 @@ export default {
         title: "Mellow Moods",
         text: "Ambient Bass",
         subtext: "Chill beats to mellow you out.",
-        img: "http://lorempixel.com/output/abstract-q-c-640-480-6.jpg",
+        img: "https://lorempixel.com/output/abstract-q-c-640-480-6.jpg",
       },
       {
         title: "New Releases",
         text: "It's New Release Friday",
         subtext: "Newly released songs. Updated daily.",
-        img: "http://lorempixel.com/output/nightlife-q-c-640-480-5.jpg",
+        img: "https://lorempixel.com/output/nightlife-q-c-640-480-5.jpg",
       },
       {
         title: "Rock",
@@ -97,7 +97,7 @@ export default {
         title: "Mellow Moods",
         text: "Ambient Bass",
         subtext: "Chill beats to mellow you out.",
-        img: "http://lorempixel.com/output/abstract-q-c-640-480-6.jpg",
+        img: "https://lorempixel.com/output/abstract-q-c-640-480-6.jpg",
       },
     ],
     transparent: "rgba(255, 255, 255, 0)",
