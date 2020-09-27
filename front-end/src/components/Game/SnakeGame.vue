@@ -258,12 +258,12 @@ export default {
       else if (this.label == "left") this.s.dir(-1, 0);
       else if (this.label == "right") this.s.dir(1, 0);
     },
-
+    //비디오 화면
     drawVideo(sketch) {
 
       sketch.translate(this.snakeCanvasWidth * 2 + this.videoWidth, 0);
       sketch.scale(-1, 1);
-
+      
       sketch.fill(255, 0, 255);
       sketch.rect(260 + this.snakeCanvasWidth, 110, 50, 50);
       sketch.textSize(40);
