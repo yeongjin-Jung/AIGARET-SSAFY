@@ -44,7 +44,7 @@
                   <v-text-field v-model="signupData.age" :error-messages="errors" label="나이" name="age"></v-text-field>
                 </ValidationProvider>
             <!-- <div style="width: 100%; margin: 0 10px; float: left; text-align: center"> -->
-              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured">회원가입</v-btn>
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
@@ -165,6 +165,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(['signup']),
+    
     movePage() {
       this.$router.push({name: "Login"})
     },
@@ -243,6 +245,11 @@ export default {
       }, 100)
     },
 
+    stopDetecting() {
+      if (this.timerId != null)
+        clearInterval(this.timerId)
+    },
+
     cancelChangingPicture() {
       this.isCaptured = false
       this.localStream.getTracks()[0].stop();
@@ -257,65 +264,6 @@ export default {
   },
 
   mounted() {
-    // console.log("Signup.vue mounted.")
-    // console.log("flag : " + this.flag)
-    // $("#video").bind("loadedmetadata", function () {
-    //     displaySize = { width: this.scrollWidth, height: this.scrollHeight };
-    //     console.log("hi")
-
-    //     async function detect() {
-    //       console.log("detect")
-    //       const MODEL_URL = "/models";
-
-    //       // await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-    //       // await faceapi.loadFaceLandmarkModel(MODEL_URL);
-    //       // await faceapi.loadFaceRecognitionModel(MODEL_URL);
-    //       await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-    //       await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-    //       await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
-
-    //       // let canvasTag = $("#canvas").get(0);
-
-    //       let facedetection = setInterval(async () => {
-    //         console.log("detecting...")
-    //         let fullFaceDescriptions = await faceapi
-    //           .detectAllFaces(video)
-    //           .withFaceLandmarks()
-    //           .withFaceDescriptors();
-    //         let canvasTag = $("#canvas").get(0);
-    //         faceapi.matchDimensions(canvasTag, displaySize);
-
-    //         const fullFaceDescription = faceapi.resizeResults(
-    //           fullFaceDescriptions,
-    //           displaySize
-    //         );
-
-    //         faceapi.draw.drawDetections(canvasTag, fullFaceDescriptions);
-    //         faceapi.draw.drawFaceLandmarks(canvasTag, fullFaceDescriptions)
-
-    //         // const maxDescriptorDistance = 0.6;
-    //         // const faceMatcher = new faceapi.FaceMatcher(
-    //         //   labeledFaceDescriptors,
-    //         //   maxDescriptorDistance
-    //         // );
-
-    //         // const results = fullFaceDescriptions.map((fd) =>
-    //         //   faceMatcher.findBestMatch(fd.descriptor)
-    //         // );
-
-    //         // results.forEach((bestMatch, i) => {
-    //         //   const box = fullFaceDescriptions[i].detection.box;
-    //         //   const text = bestMatch.toString();
-    //         //   const drawBox = new faceapi.draw.DrawBox(box, { label: text });
-    //         //   drawBox.draw(canvasTag);
-    //         // });
-    //       }, 1000);
-
-    //       console.log(displaySize);
-    //     } // end method detect
-
-    //     detect();
-    //   });
   },
 
   updated() {
