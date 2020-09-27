@@ -1,27 +1,43 @@
 <template>
   <v-app>
+    
     <Nav />
+    
+    <v-container fluid class="fill-height" id="container_login" v-if="!isLoggedIn">
+      <Login />
+    </v-container>
+    
     <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
-    <v-main id="mainApp">
+    <v-main id="mainApp" v-else> 
       <v-container fluid class="fill-height">
         <router-view />
         <Footer />
       </v-container>
     </v-main>
+
   </v-app>
 </template>
 
 <script>
 import Nav from '@/components/Layout/Nav'
 import Footer from '@/components/Layout/Footer'
+import Login from '@/components/Account/Login'
 
 export default {
-  name: 'App',
+  name: "App",
+  
   components: {
     Nav,
-    Footer
+    Footer,
+    Login
+  },
+
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    }
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -34,4 +50,11 @@ export default {
   background-image: url("assets/bluemoon.png");
   background-size : cover;
 }
+
+#container_login{
+  background-image: url("assets/bluemoon.png");
+  background-size : cover;
+  // height: 85vh; 컴포넌트화로 무의미해진듯, 삭제예정
+}
+
 </style>

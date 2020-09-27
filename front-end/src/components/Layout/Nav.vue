@@ -11,16 +11,23 @@
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 30px; display:inline; font-family: CookieRun-Bold;"
     >불타는 붕어빵</p>
     <v-spacer></v-spacer>
+    <p v-if="isLoggedIn">
+      {{ $store.state.id}}님 환영합니다.
+    </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"
     >{{this.date}}</p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:16px;"
     >{{this.dateTime}}</p>
+    <v-btn v-if="isLoggedIn" @click="logout()">
+      로그아웃
+    </v-btn>
   </v-system-bar>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'Nav',
 
@@ -32,8 +39,10 @@ export default {
   },
 
   methods: {
-    getNow: function () {
-      const today = new Date()
+    ...mapActions(['logout']),
+
+    getNow: function() {
+      const today = new Date();
 
       this.date =
         today.getFullYear() +
@@ -78,8 +87,14 @@ export default {
     }
   },
 
-  created () {
-    setInterval(this.getNow, 1000)
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn;
+    }
+  },
+
+  created() {
+    setInterval(this.getNow, 1000);
   }
 }
 </script>
