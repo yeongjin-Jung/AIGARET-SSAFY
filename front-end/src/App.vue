@@ -16,12 +16,12 @@ import Nav from '@/components/Layout/Nav'
 import Footer from '@/components/Layout/Footer'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Nav,
     Footer
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss">
@@ -35,4 +35,3 @@ export default {
   background-size : cover;
 }
 </style>
-

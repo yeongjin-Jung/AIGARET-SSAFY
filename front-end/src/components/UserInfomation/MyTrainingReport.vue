@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="text-center">
     <v-row class="fill-height">
-      
+
       <v-col cols="6">
         <div></div>
       </v-col>
@@ -13,7 +13,7 @@
               <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Today</v-btn>
 
               <v-spacer></v-spacer>
-              
+
               <v-btn fab text small color='grey darken-2' @click='prev'>
                 <v-icon small>mdi-chevron-left</v-icon>
               </v-btn>
@@ -21,7 +21,7 @@
               <v-btn fab text small color='grey darken-2' @click='next'>
                 <v-icon small>mdi-chevron-right</v-icon>
               </v-btn>
-              
+
               <v-spacer></v-spacer>
 
               <v-menu bottom right>
@@ -131,14 +131,14 @@ export default {
       month: 'Month',
       week: 'Week',
       day: 'Day',
-      '4day': '4 Days',
+      '4day': '4 Days'
     },
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
     events: [],
     colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+    names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party']
   }),
   mounted () {
     this.$refs.calendar.checkChange()
@@ -196,7 +196,7 @@ export default {
           start: first,
           end: second,
           color: this.colors[this.rnd(0, this.colors.length - 1)],
-          timed: !allDay,
+          timed: !allDay
         })
       }
 
@@ -204,7 +204,7 @@ export default {
     },
     rnd (a, b) {
       return Math.floor((b - a + 1) * Math.random()) + a
-    },
-  },
+    }
+  }
 }
 </script>

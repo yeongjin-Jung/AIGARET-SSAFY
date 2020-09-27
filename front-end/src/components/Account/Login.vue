@@ -6,7 +6,7 @@
           <v-row>
             <!-- 로그인 -->
             <v-col cols="5" height="100%">
-              
+
               <v-spacer></v-spacer>
 
               <v-form>
@@ -15,7 +15,7 @@
                 <v-text-field v-model="loginData.id" dark filled background-color="rgb(52, 63, 87)" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData)"></v-text-field>
                 <v-text-field v-model="loginData.password" dark filled background-color="rgb(52, 63, 87)" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData)"></v-text-field>
               </v-form>
-              
+
               <div class="float-left">
                 <v-spacer></v-spacer>
                   <v-btn id="btn-login-id" class="mr-3" @click="login(loginData)">아이디로 로그인</v-btn>
@@ -23,7 +23,7 @@
                   <!-- <v-btn id="btn-login-face" class="mr-3" @click="signupDialog = true">회원가입</v-btn> -->
                   <Signup />
               </div>
-            
+
             </v-col>
 
             <v-spacer></v-spacer>
@@ -37,8 +37,6 @@
             </v-col>
           </v-row>
       <!-- </div> -->
-
-      
 
       <!-- <div style="width: 533px; margin: 20px auto;">
         <div style="display:inline-block; width: 250px; font-size: 16px; color: rgb(255, 255, 255); text-align: center; line-height: 2.5em; border-radius: 4px; background-color: #53cde2;">로그인</div>
@@ -61,7 +59,7 @@
                     :error-messages="errors"
                     label="ID"
                     name="id"
-                    
+
                     prepend-icon="mdi-account"
                   ></v-text-field>
                 </ValidationProvider>
@@ -86,7 +84,7 @@
           </v-card>
         </ValidationObserver>
       </v-dialog>
-      
+
       </div> -->
 
     </v-container>
@@ -95,15 +93,15 @@
 
 <script>
 import { ValidationObserver, ValidationProvider, setInteractionMode, extend } from 'vee-validate'
-import { required, email } from 'vee-validate/dist/rules';
+import { required, email } from 'vee-validate/dist/rules'
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex'
 
 import Signup from '@/components/Account/Signup'
 
 extend('required', {
   ...required,
-  message: '{_field_} 값은 반드시 입력해야 합니다.',
+  message: '{_field_} 값은 반드시 입력해야 합니다.'
 })
 
 export default {
@@ -119,11 +117,11 @@ export default {
     return {
       signupDialog: false,
       video: document.getElementById('video'),
-      localStream: "",
+      localStream: '',
       faceapi: null,
       loginData: {
-        id: "",
-        password: ""
+        id: '',
+        password: ''
       }
     }
   },
@@ -141,15 +139,15 @@ export default {
       )
     },
 
-    stopVideo(val) {
-      video.pause();
-      this.localStream.getTracks()[0].stop();
+    stopVideo (val) {
+      video.pause()
+      this.localStream.getTracks()[0].stop()
     },
 
-    signup() {
+    signup () {
       this.stopVideo(video)
-      this.$router.push({name: "Signup"})
-    },
+      this.$router.push({ name: 'Signup' })
+    }
   },
 
   mounted () {

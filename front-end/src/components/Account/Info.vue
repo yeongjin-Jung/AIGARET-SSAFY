@@ -2,7 +2,7 @@
   <v-container fluid class="text-center">
     <div>
       <div id="outer" class="row">
-        
+
         <div id="inner_left" class="col-md-4" style="background-color: transparent; height: 400px; display: flex; justify-content: center; flex-wrap: wrap;">
 
           <!-- 사진! -->
@@ -111,23 +111,23 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 
-import $ from "jquery";
-import * as faceapi from "face-api.js"
+import $ from 'jquery'
+import * as faceapi from 'face-api.js'
 
-import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from "vee-validate";
-import { required, email, max, min, regex, confirmed} from "vee-validate/dist/rules";
+import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
+import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
-extend("required", {
+extend('required', {
   ...required,
-  message: "{_field_} 값은 반드시 입력해야 합니다."
-});
+  message: '{_field_} 값은 반드시 입력해야 합니다.'
+})
 
-extend("confirmed", {
+extend('confirmed', {
   ...confirmed,
-  message: "비밀번호가 같지 않습니다."
-});
+  message: '비밀번호가 같지 않습니다.'
+})
 
 export default {
   components: {
@@ -135,93 +135,91 @@ export default {
     ValidationProvider
   },
 
-  data() {
+  data () {
     return {
-      dialog_my_info: "",
-      dialog_change_password: "",
-      dialog_change_image: "",
+      dialog_my_info: '',
+      dialog_change_password: '',
+      dialog_change_image: '',
 
-      video: document.getElementById("video"),
-      canvas : document.getElementById("canvas"),
-      localStream: "",
+      video: document.getElementById('video'),
+      canvas: document.getElementById('canvas'),
+      localStream: '',
 
       userInfo: {
-        password: "",
-        newPassword: "",
-        newPasswordConfirm: ""
+        password: '',
+        newPassword: '',
+        newPasswordConfirm: ''
       },
 
       videoFlag: false,
       timerId: null,
 
       isCaptured: false
-    };
+    }
   },
 
   methods: {
-    ...mapActions(["changePassword"]),
+    ...mapActions(['changePassword']),
 
     // home() {
     //   this.$router.push({ path: "/" });
     // },
 
-    videoStart() {
+    videoStart () {
       this.videoFlag = true
 
       navigator.getUserMedia(
         { video: {} },
         stream => {
-          video.srcObject = stream;
-          this.localStream = stream;
+          video.srcObject = stream
+          this.localStream = stream
         },
         err => console.error(err)
-      );
+      )
     },
 
-     videoPauseAndCapture() {
+    videoPauseAndCapture () {
       this.isCaptured = true
-      let video = this.video
-      let canvas = this.canvas
+      const video = this.video
+      const canvas = this.canvas
 
-      $("#video").get(0).pause();
+      $('#video').get(0).pause()
       var ctx = canvas.getContext('2d')
-      
-      if (this.timerId != null)
-        clearInterval(this.timerId)
 
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      if (this.timerId != null) { clearInterval(this.timerId) }
+
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
       // console.log(canvas.toDataURL())
 
-      let base64Encoded = canvas.toDataURL()
+      const base64Encoded = canvas.toDataURL()
       console.log(base64Encoded)
     },
 
-    videoResume() {
+    videoResume () {
       this.isCaptured = false
 
-      if (this.timerId != null)
-        clearInterval(this.timerId)
+      if (this.timerId != null) { clearInterval(this.timerId) }
 
-      $("#video").get(0).play();
+      $('#video').get(0).play()
     },
 
-    async faceDetect() {
-      console.log("this.video.width", this.video.width)
-      console.log("this.video.height", this.video.height)
+    async faceDetect () {
+      console.log('this.video.width', this.video.width)
+      console.log('this.video.height', this.video.height)
 
-      let video = this.video
-      let canvas = this.canvas
+      const video = this.video
+      const canvas = this.canvas
 
       const displaySize = { width: video.width, height: video.height }
       faceapi.matchDimensions(canvas, displaySize)
-      
-      await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-      await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-      await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+
+      await faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
+      await faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+      await faceapi.nets.faceRecognitionNet.loadFromUri('/models')
       await faceapi.nets.faceExpressionNet.loadFromUri('/models')
-      
+
       this.timerId = setInterval(async () => {
-        console.log("계속 도는 중.")
+        console.log('계속 도는 중.')
         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
@@ -231,48 +229,46 @@ export default {
       }, 100)
     },
 
-    changePicture() {
+    changePicture () {
       // 멈춰있는 사진 백에 전송.
     },
 
-    cancelChangingPicture() {
+    cancelChangingPicture () {
       this.isCaptured = false
-      this.localStream.getTracks()[0].stop();
-      if (this.timerId != null)
-        clearInterval(this.timerId)
+      this.localStream.getTracks()[0].stop()
+      if (this.timerId != null) { clearInterval(this.timerId) }
       setTimeout(() => {
-        this.dialog_change_image = false;
-      }, 500);
+        this.dialog_change_image = false
+      }, 500)
 
-      this.videoFlag = false;
+      this.videoFlag = false
     }
   },
 
-  mounted() {
-    console.log("Info.vue mounted.")
-    console.log("this.video", this.video)
-    console.log("this.canvas", this.canvas)
+  mounted () {
+    console.log('Info.vue mounted.')
+    console.log('this.video', this.video)
+    console.log('this.canvas', this.canvas)
   },
 
-  updated() {
-    console.log("Info.vue updated.")
-    console.log("updated - videoFlag : ", this.videoFlag)
+  updated () {
+    console.log('Info.vue updated.')
+    console.log('updated - videoFlag : ', this.videoFlag)
 
-    if(this.videoFlag == true) {
-      this.video = document.getElementById("video")
-      this.canvas = document.getElementById("canvas")
+    if (this.videoFlag == true) {
+      this.video = document.getElementById('video')
+      this.canvas = document.getElementById('canvas')
 
       this.faceDetect()
-      
     } else {
       this.video = null
       this.canvas = null
 
-      console.log("video tag : ", this.video)
-      console.log("canvas tag : ", this.canvas)
+      console.log('video tag : ', this.video)
+      console.log('canvas tag : ', this.canvas)
     }
   }
-};
+}
 </script>
 
 <style>

@@ -14,7 +14,6 @@
   </transition>
 </template>
 
-
 <style lang="stylus" scoped>
 .modal {
   &.modal-overlay {
@@ -50,12 +49,10 @@
 .modal-enter-active, .modal-leave-active {
   transition: opacity 0.4s;
 
- 
   .modal-window {
     transition: opacity 0.4s, transform 0.4s;
   }
 }
-
 
 .modal-leave-active {
   transition: opacity 0.6s ease 0.4s;
@@ -69,7 +66,6 @@
     transform: translateY(-20px);
   }
 }
-
 
 .modal-enter-active {
   animation: modal-in .5s;

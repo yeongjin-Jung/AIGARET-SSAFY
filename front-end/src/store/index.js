@@ -13,56 +13,53 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    SET_USER_ID(state, id) {
+    SET_USER_ID (state, id) {
       state.id = id
     }
   },
 
   actions: {
-    signup({ commit }, signupData) {
+    signup ({ commit }, signupData) {
       const data = {
-        'id': signupData.id,
-        'password': signupData.password,
-        'name': signupData.name,
-        'age': signupData.age
+        id: signupData.id,
+        password: signupData.password,
+        name: signupData.name,
+        age: signupData.age
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.signup, data)
-      .then(res => {
-      })
-      .catch(err => console.log(err))
+        .then(res => {
+        })
+        .catch(err => console.log(err))
     },
 
-    login({ commit }, loginData) {
+    login ({ commit }, loginData) {
       const data = {
-        'id': loginData.id,
-        "password": loginData.password
+        id: loginData.id,
+        password: loginData.password
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.login, data)
-      .then(res => {
-        commit('SET_USER_ID', loginData.id)
-        commit('SET_TOKEN', res.headers)
-      })
-      .catch()
+        .then(res => {
+          commit('SET_USER_ID', loginData.id)
+          commit('SET_TOKEN', res.headers)
+        })
+        .catch()
     },
 
-    changePassword({ state, commit }, userInfo) {
+    changePassword ({ state, commit }, userInfo) {
       const data = {
-        'id': state.id,
-        'password': userInfo.password,
-        'newPassword': userInfo.newPassword
+        id: state.id,
+        password: userInfo.password,
+        newPassword: userInfo.newPassword
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.changePassword, data)
-      .then(res => {
-        console.log('비밀번호 변경 완료!')
-      })
-      .catch()
-    },
-
-
-
+        .then(res => {
+          console.log('비밀번호 변경 완료!')
+        })
+        .catch()
+    }
 
   },
 

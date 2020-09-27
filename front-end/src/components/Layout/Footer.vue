@@ -12,31 +12,31 @@
 
 <script>
 export default {
-  name: "Footer",
+  name: 'Footer',
 
-  data() {
+  data () {
     return {
       activeBtn: 1,
       icons: [
         {
-          title: "Profile",
-          img: "mdi-card-account-details",
-          url: "info"
+          title: 'Profile',
+          img: 'mdi-card-account-details',
+          url: 'info'
         },
         {
-          title: "Report",
-          img: "mdi-history",
-          url: "report"
+          title: 'Report',
+          img: 'mdi-history',
+          url: 'report'
         },
         {
-          title: "Settings",
-          img: "mdi-application-cog",
-          url: "/"
-        },
+          title: 'Settings',
+          img: 'mdi-application-cog',
+          url: '/'
+        }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style>

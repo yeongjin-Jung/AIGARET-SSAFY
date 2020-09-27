@@ -171,7 +171,7 @@ export default {
       videoWidth: 1200,
       videoHeight: 800,
 
-      //preload
+      // preload
       music: null,
       ding: null,
       whistle: null,
@@ -179,7 +179,7 @@ export default {
       train: null,
       jumper: null,
 
-      //posenet
+      // posenet
       featureExtractor: null,
       classifier: null,
       targetLabel: "jump",
@@ -189,14 +189,14 @@ export default {
       unicorn: null,
       key: null,
 
-      //train
+      // train
       brain: null,
       poseSave: null,
       noPoseSave: null,
       trainButton: null,
       state: "waiting",
 
-      //game
+      // game
       modal: false,
       score: 0,
       loading: false,
@@ -205,6 +205,9 @@ export default {
       firstStart: true,
       gamestatus: false,
       confidence: null,
+
+      //
+      removeCanvas: false,
     };
   },
   components: {
@@ -262,7 +265,7 @@ export default {
         top: "10vh",
       });
 
-      $("#defaultCanvas0").css({ width: "90vw", height: "75vh" });
+      $("#defaultCanvas0").css({ width: "90vw", height: "70vh" });
     },
 
     modelLoaded() {
@@ -286,7 +289,7 @@ export default {
 
     setupButton(sketch) {
       var that = this;
-      //left button
+      // left button
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
         that.classifier.addImage("jump");
@@ -302,7 +305,7 @@ export default {
         that.gameState = true;
       });
 
-      //train button
+      // train button
       this.trainButton = sketch.select("#poseTrain");
       this.trainButton.mousePressed(function () {
         that.classifier.train(that.whileTraining);
@@ -322,7 +325,7 @@ export default {
         console.log(loss);
       }
     },
-    restartGame(){
+    restartGame() {
       if (this.restart) {
         this.restart = false;
         this.score = 0;
@@ -404,7 +407,7 @@ export default {
         sketch.textFont("monospace");
         sketch.text(`Score: ${this.score}`, 15, 60);
 
-        for (let t of this.trains) {
+        for (const t of this.trains) {
           t.move();
           t.show();
 
@@ -417,7 +420,7 @@ export default {
             sketch.fill(255);
             sketch.textSize(56);
             sketch.text(
-              `Game Over! Press any key to restart`,
+              "Game Over! Press any key to restart",
               80,
               sketch.height / 2
             );

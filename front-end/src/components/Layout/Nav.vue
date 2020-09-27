@@ -22,66 +22,66 @@
 
 <script>
 export default {
-  name: "Nav",
+  name: 'Nav',
 
-  data() {
+  data () {
     return {
       date: null,
-      dateTime: null,
-    };
+      dateTime: null
+    }
   },
 
   methods: {
-    getNow: function() {
-      const today = new Date();
+    getNow: function () {
+      const today = new Date()
 
       this.date =
         today.getFullYear() +
-        "-" +
+        '-' +
         (today.getMonth() + 1) +
-        "-" +
-        today.getDate();
+        '-' +
+        today.getDate()
 
-      var hour = 0;
-      var minute = 0;
+      var hour = 0
+      var minute = 0
       if (today.getHours() > 12) {
-        hour = today.getHours() - 12;
+        hour = today.getHours() - 12
         if (today.getMinutes() < 10) {
-          minute = "0" + today.getMinutes();
+          minute = '0' + today.getMinutes()
         } else {
-          minute = today.getMinutes();
+          minute = today.getMinutes()
         }
-        const time = hour + ":" + minute;
-        const dateTime = time + " pm";
-        this.dateTime = dateTime;
+        const time = hour + ':' + minute
+        const dateTime = time + ' pm'
+        this.dateTime = dateTime
       } else if (today.getHours() < 12) {
-        hour = today.getHours();
+        hour = today.getHours()
         if (today.getMinutes() < 10) {
-          minute = "0" + today.getMinutes();
+          minute = '0' + today.getMinutes()
         } else {
-          minute = today.getMinutes();
+          minute = today.getMinutes()
         }
-        const time = hour + ":" + minute;
-        const dateTime = time + " am";
-        this.dateTime = dateTime;
+        const time = hour + ':' + minute
+        const dateTime = time + ' am'
+        this.dateTime = dateTime
       } else {
-        hour = today.getHours();
+        hour = today.getHours()
         if (today.getMinutes() < 10) {
-          minute = "0" + today.getMinutes();
+          minute = '0' + today.getMinutes()
         } else {
-          minute = today.getMinutes();
+          minute = today.getMinutes()
         }
-        const time = hour + ":" + minute;
-        const dateTime = time + " pm";
-        this.dateTime = dateTime;
+        const time = hour + ':' + minute
+        const dateTime = time + ' pm'
+        this.dateTime = dateTime
       }
     }
   },
 
-  created() {
-    setInterval(this.getNow, 1000);
+  created () {
+    setInterval(this.getNow, 1000)
   }
-};
+}
 </script>
 
 <style>

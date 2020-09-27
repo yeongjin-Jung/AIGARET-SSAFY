@@ -6,7 +6,7 @@
           <iframe :src="`https://youtube.com/embed/${gameInfo.game_video}`" width="70%" height="100%" allowfullscreen></iframe>
         </v-col>
 
-        <v-col cols="6"> 
+        <v-col cols="6">
           <v-row class="flex-column ma-0"  style="max-width: 100%; max-height: 70%; display: inline-block; vertical-align: middle; background-color: rgba(254,254,255,0.5);">
             <div style="font-size: 3vh;">{{ gameInfo.game_description }}</div>
           </v-row>
@@ -25,12 +25,12 @@
 
 <script>
 export default {
-  name: "GameIntro",
+  name: 'GameIntro',
   components: {
     //
   },
   props: {
     gameInfo: Object
-  },
-};
+  }
+}
 </script>
