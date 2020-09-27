@@ -19,8 +19,9 @@
               <div class="float-left">
                 <v-spacer></v-spacer>
                   <v-btn id="btn-login-id" class="mr-3" @click="login(loginData)">아이디로 로그인</v-btn>
-                  <v-btn id="btn-login-face" class="mr-3" @click="loginWithFace()">얼굴인식으로 로그인</v-btn>
+                  <!-- <v-btn id="btn-login-face" class="mr-3" @click="loginWithFace()">얼굴인식으로 로그인</v-btn> -->
                   <!-- <v-btn id="btn-login-face" class="mr-3" @click="signupDialog = true">회원가입</v-btn> -->
+                  <FaceLogin />
                   <Signup />
               </div>
             
@@ -60,6 +61,7 @@ import { required, email } from 'vee-validate/dist/rules';
 import { mapState, mapActions } from 'vuex';
 
 import Signup from '@/components/Account/Signup'
+import FaceLogin from '@/components/Account/FaceLogin'
 
 extend('required', {
   ...required,
@@ -72,7 +74,8 @@ export default {
   components: {
     ValidationProvider,
     ValidationObserver,
-    Signup
+    Signup,
+    FaceLogin
   },
 
   data () {
