@@ -83,7 +83,7 @@
 
 <script>
 import $ from 'jquery'
-import * as faceapi from 'face-api.js'
+import * as faceapi from './face-api-min'
 
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'

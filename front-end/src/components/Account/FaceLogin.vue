@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import * as faceapi from "face-api.js"
+import * as faceapi from "./face-api-min"
 
 export default {
   name: "FaceLogin",
