@@ -1,8 +1,8 @@
 FROM barkingcode/aigaret-server:base
 MAINTAINER barkingcode@gmail.com
 
-COPY front-end/dist /var/www/aigaret/
-COPY back-end /home/aigaret/
+COPY front-end/dist /var/www/aigaret/dist
+COPY back-end /home/aigaret/back-end
 COPY run.sh run.sh
 
 ENTRYPOINT ["./run.sh"]
