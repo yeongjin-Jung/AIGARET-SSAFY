@@ -9,7 +9,7 @@
     />
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 15px; display:inline; font-family: CookieRun-Bold;"
-    >불타는 붕어빵</p>
+    >AIGARET</p>
     <v-spacer></v-spacer>
     <p v-if="isLoggedIn">
       {{ $store.state.id}}님 환영합니다.
@@ -20,14 +20,10 @@
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:16px;"
     >{{this.dateTime}}</p>
-    <v-btn v-if="isLoggedIn" @click="logout()">
-      로그아웃
-    </v-btn>
   </v-system-bar>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 export default {
   name: 'Nav',
 
@@ -39,8 +35,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['logout']),
-
     getNow: function() {
       const today = new Date();
 

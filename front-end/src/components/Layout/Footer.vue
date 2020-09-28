@@ -2,15 +2,23 @@
   <v-container v-if="this.$route.name == 'Home'" fluid class="text-center">
     <v-row no-gutters align="center" justify="center">
       <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center">
-        <router-link :to="icon.url" style="text-decoration: none;">
+        
+        <v-btn v-if="index == 2" fab color="#edf9fc" @click="logout()" style="text-decoration: none;">
+          <v-icon>mdi-login</v-icon>
+        </v-btn>
+
+        <router-link v-else :to="icon.url" style="text-decoration: none;">
           <v-btn fab color="#edf9fc"><v-icon>{{ icon.img }}</v-icon></v-btn>
         </router-link>
+
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Footer',
 
@@ -24,17 +32,27 @@ export default {
           url: 'info'
         },
         {
-          title: 'Report',
-          img: 'mdi-history',
-          url: 'report'
+          title: 'Rank',
+          img: 'rank',
+          url: 'rank'
         },
-        {
-          title: 'Settings',
-          img: 'mdi-application-cog',
-          url: '/'
-        }
+        // {
+        //   title: 'Report',
+        //   img: 'mdi-history',
+        //   url: 'report'
+        // },
+        // {
+        //   title: 'Settings',
+        //   img: 'mdi-application-cog',
+        //   url: '/'
+        // },
+        {}
       ]
     }
+  },
+
+  methods: {
+    ...mapActions(['logout']),
   }
 }
 </script>
