@@ -260,10 +260,9 @@ export default {
     },
     //비디오 화면
     drawVideo(sketch) {
-
       sketch.translate(this.snakeCanvasWidth * 2 + this.videoWidth, 0);
       sketch.scale(-1, 1);
-      
+
       sketch.fill(255, 0, 255);
       sketch.rect(260 + this.snakeCanvasWidth, 110, 50, 50);
       sketch.textSize(40);
@@ -312,6 +311,13 @@ export default {
           this.modal = true;
           this.score = 0;
           this.gamestatus = false;
+          this.s = new Snake(
+            sketch,
+            this.scl,
+            this.snakeCanvasWidth,
+            this.height,
+            this.food
+          );
         }
 
         sketch.translate(this.videoWidth, 0);
@@ -322,51 +328,63 @@ export default {
           const eyeL = that.pose.leftEye;
           const d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
           sketch.fill(255, 0, 0);
-          sketch.ellipse(that.pose.nose.x-this.snakeCanvasWidth, that.pose.nose.y +15, d - 25);
+          sketch.ellipse(
+            that.pose.nose.x - this.snakeCanvasWidth,
+            that.pose.nose.y + 15,
+            d - 25
+          );
           sketch.fill(0, 0, 255);
 
           if (
-            (that.pose.nose.x-this.snakeCanvasWidth > that.upPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.upPosition_x + 50 &&
-              that.pose.nose.y +15 > that.upPosition_y &&
-              that.pose.nose.y +15 < that.upPosition_y + 50) ||
-            (that.pose.nose.x-this.snakeCanvasWidth > that.upPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.upPosition_x + 50 &&
-              that.pose.nose.y +15> that.upPosition_y &&
-              that.pose.nose.y +15< that.upPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.upPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.upPosition_y &&
+              that.pose.nose.y + 15 < that.upPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.upPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.upPosition_y &&
+              that.pose.nose.y + 15 < that.upPosition_y + 50)
           ) {
             this.label = "top";
           } else if (
-            (that.pose.nose.x-this.snakeCanvasWidth> that.downPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.downPosition_x + 50 &&
-              that.pose.nose.y +15 > that.downPosition_y &&
-              that.pose.nose.y +15< that.downPosition_y + 50) ||
-            (that.pose.nose.x-this.snakeCanvasWidth > that.downPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.downPosition_x + 50 &&
-              that.pose.nose.y +15> that.downPosition_y &&
-              that.pose.nose.y +15< that.downPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.downPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.downPosition_y &&
+              that.pose.nose.y + 15 < that.downPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.downPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.downPosition_y &&
+              that.pose.nose.y + 15 < that.downPosition_y + 50)
           ) {
             this.label = "down";
           } else if (
-            (that.pose.nose.x-this.snakeCanvasWidth > that.leftPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.leftPosition_x + 50 &&
-              that.pose.nose.y +15 > that.leftPosition_y &&
+            (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.leftPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.leftPosition_y &&
               that.pose.nose.y + 15 < that.leftPosition_y + 50) ||
-            (that.pose.nose.x-this.snakeCanvasWidth > that.leftPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.leftPosition_x + 50 &&
-              that.pose.nose.y +15 > that.leftPosition_y &&
+            (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.leftPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.leftPosition_y &&
               that.pose.nose.y + 15 < that.leftPosition_y + 50)
           ) {
             this.label = "left";
           } else if (
-            (that.pose.nose.x-this.snakeCanvasWidth > that.rightPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.rightPosition_x + 50 &&
-             that.pose.nose.y +15 > that.rightPosition_y &&
-              that.pose.nose.y +15 < that.rightPosition_y + 50) ||
-            (that.pose.nose.x-this.snakeCanvasWidth > that.rightPosition_x &&
-              that.pose.nose.x-this.snakeCanvasWidth < that.rightPosition_x + 50 &&
-              that.pose.nose.y +15> that.rightPosition_y &&
-              that.pose.nose.y +15 < that.rightPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.rightPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.rightPosition_y &&
+              that.pose.nose.y + 15 < that.rightPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.rightPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.rightPosition_y &&
+              that.pose.nose.y + 15 < that.rightPosition_y + 50)
           ) {
             this.label = "right";
           }
@@ -375,11 +393,8 @@ export default {
         }
       } else {
         this.loading = true;
-        console.log("로딩중");
       }
-     
-    }
-    ,
+    },
     closeModal() {
       this.modal = false;
     },

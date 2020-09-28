@@ -1,11 +1,12 @@
 <template>
   <div
     style="
-      width: 100vw;
+      width: 98.5vw;
       height: 79vh;
       position: absolute;
       top: 0.2vh;
       text-align: center;
+      left: 0px;
     "
   >
     <v-btn
@@ -92,9 +93,27 @@
             font-size: 4vh;
             font-weight: 600;
             color: yellow;
+            margin-left: 10px;
+            margin-right: 10px;
           "
         >
           다시시작
+        </button>
+        <button
+          @click="doReTrain"
+          style="
+            background-color: red;
+            height: 8vh;
+            border-radius: 12px;
+            width: 13vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+            margin-left: 10px;
+            margin-right: 10px;
+          "
+        >
+          다시학습하기
         </button>
       </template>
     </GameFinishModal>
@@ -157,7 +176,7 @@ export default {
       label: "",
 
       score: null,
-      scroll: 18,
+      scroll: 15,
       scrollBg: 0,
       trains: [],
       unicorn: null,
@@ -170,6 +189,7 @@ export default {
       canvasHeight: 800,
       videoWidth: 1200,
       videoHeight: 800,
+      countDown : 5,
 
       // preload
       music: null,
@@ -195,7 +215,9 @@ export default {
       noPoseSave: null,
       trainButton: null,
       state: "waiting",
-
+      jumpPoseCollecting: false,
+      NojumpPoseCollecting : false,
+      reCollecting : false,
       // game
       modal: false,
       score: 0,
@@ -203,7 +225,7 @@ export default {
       Tutorial: false,
       gameStart: false,
       firstStart: true,
-      gamestatus: false,
+
       confidence: null,
 
       //
@@ -259,13 +281,14 @@ export default {
       this.setupButton(sketch);
 
       $("#defaultCanvas0").parent().css({
-        width: "100vw",
+        width: "98.4vw",
         "text-align": "center",
         position: "absolute",
         top: "10vh",
+        left: 0,
       });
 
-      $("#defaultCanvas0").css({ width: "90vw", height: "70vh" });
+      $("#defaultCanvas0").css({ width: "99vw", height: "78vh" });
     },
 
     modelLoaded() {
@@ -292,12 +315,28 @@ export default {
       // left button
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
-        that.classifier.addImage("jump");
+        setTimeout(function () {
+          that.classifier.addImage("jump");
+          that.jumpPoseCollecting = true;
+
+          setTimeout(function () {
+            that.jumpPoseCollecting = false;
+            console.log("점프사진 수집완료");
+          }, 5000);
+        }, 100);
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-        that.classifier.addImage("noJump");
+      setTimeout(function () {
+          that.classifier.addImage("noJump");
+          that.NojumpPoseCollecting = true;
+
+          setTimeout(function () {
+            that.NojumpPoseCollecting = false;
+            console.log("슬라이드사진 수집완료");
+          }, 5000);
+        }, 100);
       });
 
       this.gameStart = sketch.select("#gameStart");
@@ -330,9 +369,10 @@ export default {
         this.restart = false;
         this.score = 0;
         this.scrollBg = 0;
-        this.scroll = 10;
+        this.scroll = 15;
         this.trains = [];
-        this.sketchObj.loop();
+        this.gameState = true;
+        // this.sketchObj.loop();
       }
     },
     jump(sketch) {
@@ -351,18 +391,14 @@ export default {
     },
     draw(sketch) {
       var that = this;
-      // sketch.translate(this.video.width, 0);
-      // sketch.scale(-1, 1);
-      // sketch.image(this.video, 0, 0, this.video.width, this.video.height);
-
-      // sketch.translate(this.bg.width, 0);
-      // sketch.scale(-1, 1);
 
       if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
       }
 
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
+      sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
+      sketch.scale(-1, 1);
       sketch.image(
         this.video,
         this.canvasWidth,
@@ -370,6 +406,22 @@ export default {
         this.videoWidth,
         sketch.height
       );
+
+      sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
+      sketch.scale(-1, 1);
+      if (this.jumpPoseCollecting == true) {
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("점프사진 수집중", 1450, 100);
+      }
+
+      if (this.NojumpPoseCollecting == true) {
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("슬라이드사진 수집중", 1350, 100);
+      }
 
       if (this.gameState) {
         sketch.image(
@@ -395,14 +447,13 @@ export default {
             )
           );
         }
-        // if(this.score % 100 == 0 && this.score != 0){
-        //   s
-        // }
+
         if (sketch.frameCount % 5 == 0) {
           this.score++;
         }
 
         sketch.fill(255);
+        sketch.textStyle(sketch.NORMAL);
         sketch.textSize(60);
         sketch.textFont("monospace");
         sketch.text(`Score: ${this.score}`, 15, 60);
@@ -412,30 +463,16 @@ export default {
           t.show();
 
           if (this.unicorn.collide(t)) {
-            sketch.noLoop();
+            // sketch.noLoop();
             // music.stop();
             // let sound = sketch.random(failSounds);
             // sound.play();
 
-            sketch.fill(255);
-            sketch.textSize(56);
-            sketch.text(
-              "Game Over! Press any key to restart",
-              80,
-              sketch.height / 2
-            );
-
             that.modal = true;
             that.restart = true;
+            that.gameState = false;
           }
         }
-
-        // if (this.confidence >= 0.9) {
-        //   // sketch.text("jump", this.videoWidt / 2, this.videoHeight / 2);
-        //   // sketch.rect(100,100,100,100);
-
-        //   console.log("확인")
-        // }
 
         this.unicorn.show();
         this.unicorn.move();
@@ -451,17 +488,37 @@ export default {
     doClose() {
       this.score = 0;
       this.closeModal();
-      this.gamestatus = true;
+
       this.restartGame();
     },
+
+    doReTrain() {
+      this.closeModal();
+      this.restart = false;
+      this.score = 0;
+      this.scrollBg = 0;
+      this.scroll = 15;
+      this.trains = [];
+      this.gameState = false;
+
+    },
+
     doCloseTutorial() {
       this.Tutorial = false;
       this.gameStart = true;
       // if (this.firstStart == true) {
       //   this.countDownTimer();
       // }
-      this.gamestatus = true;
       this.firstStart = false;
+    },
+
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
     },
   },
 
@@ -469,6 +526,9 @@ export default {
     this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
   },
+  destroyed(){
+    console.log("끄기");
+  }
 };
 </script>
 

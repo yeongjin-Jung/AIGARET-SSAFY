@@ -13,7 +13,7 @@
         <ValidationObserver ref="observer" v-slot="{ invalid }">
           <v-card width="448px" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
 
-            <v-card-title class="justify-center" style="background-color: #005792; color: white">회원가입</v-card-title>
+            <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
 
             <v-card-text>
               <v-form class="ma-4">
@@ -63,7 +63,7 @@
         </div>
 
         <div class="my-2" style="display: flex; justify-content: center;">
-          <h3 style="padding: 15px auto; font-size: 22px">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
+          <h3 style="padding: 15px auto; font-size: 22px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
         </div>
 
         <div class="my-2" style="display: flex; justify-content: center;">

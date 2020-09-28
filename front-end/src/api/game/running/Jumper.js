@@ -3,7 +3,7 @@ function Jumper (sketch, height, jumper) {
   this.x = 50
   this.y = height - this.r
   this.vy = 0
-  this.gravity = 1.5
+  this.gravity = 1.3
 
   this.move = function () {
     this.y += this.vy
