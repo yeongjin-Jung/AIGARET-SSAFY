@@ -8,6 +8,7 @@
     </v-container>
     
     <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
+    
     <v-main id="mainApp" v-else style="padding: ;" > 
       <v-container fluid class="fill-height" style="position:absolute; top:0px; padding:0px;">
         <router-view />
@@ -44,6 +45,21 @@ export default {
 @font-face {
   font-family: CookieRun-Bold;
   src: url("assets/CookieRun-Bold.ttf");
+}
+
+@font-face {
+  font-family: CookieRun-Regular;
+  src: url("assets/CookieRun-Regular.ttf");
+}
+
+@font-face {
+  font-family: NanumBarunGothic;
+  src: url("assets/NanumBarunGothic.ttf");
+}
+
+@font-face {
+  font-family: NanumBarunGothic-Bold;
+  src: url("assets/NanumBarunGothicBold.ttf");
 }
 
 #mainApp {

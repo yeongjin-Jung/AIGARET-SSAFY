@@ -3,12 +3,12 @@
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
 
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" class="mr-2" style="width: 92.88px; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()">회원가입</v-btn>
+      <v-btn v-bind="attrs" v-on="on" class="mr-2" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer" class="row" style="background-color: #fcfeff; justify-content: center;">
+    <div id="outer" class="row" style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center;">
 
-      <div id="div_left" class="col-md-6" style="margin: 0 auto; text-align:center">
+      <div id="div_left" class="col-md-6" style="margin:auto; text-align:center">
 
         <ValidationObserver ref="observer" v-slot="{ invalid }">
           <v-card width="448px" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
@@ -19,7 +19,7 @@
               <v-form class="ma-4">
                 <ValidationObserver>
                   <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
-                    <v-text-field id="id" v-model="signupData.id" :error-messages="errors" label="아이디" required>
+                    <v-text-field id="id" v-model="signupData.id" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
                         <v-btn outlined small rounded>중복확인</v-btn>
                       </template>
@@ -29,19 +29,19 @@
 
                 <!-- <v-alert dense outlined type="error">이미 가입된 아이디입니다.</v-alert> -->
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 8, regex: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/ }">
-                  <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password"></v-text-field>
+                  <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="PasswordConfirm" rules="required|confirmed:confirmation">
-                  <v-text-field v-model="signupData.passwordConfirm" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password"></v-text-field>
+                  <v-text-field v-model="signupData.passwordConfirm" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Name" rules="required|max:10">
-                  <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required></v-text-field>
+                  <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Age" rules="required">
-                  <v-text-field v-model="signupData.age" :error-messages="errors" label="나이" name="age"></v-text-field>
+                  <v-text-field v-model="signupData.age" :error-messages="errors" label="나이" name="age" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
             <!-- <div style="width: 100%; margin: 0 10px; float: left; text-align: center"> -->
               <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
@@ -55,15 +55,16 @@
       </div>
 
       <!-- 오른쪽 웹캠 div -->
+      
       <div id="div_right" class="col-md-6" style="background: #fcfeff; text-align: center">
 
-        <div class="my-2" style="display: flex; justify-content: center; align-items: center; background: yellow; ">
+        <div class="my-2" style="display: flex; justify-content: center; align-items: center; ">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
           <canvas id="canvas" class="overlay" width="400" height="300"></canvas>
         </div>
 
         <div class="my-2" style="display: flex; justify-content: center;">
-          <h3 style="padding: 15px auto; font-size: 22px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
+          <h3 style="padding: 15px auto; font-size: 22px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 <br>화면 가운데 위치시켜주세요.</h3>
         </div>
 
         <div class="my-2" style="display: flex; justify-content: center;">
@@ -282,7 +283,7 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap'); */
 
 #btn-signup {
   display: inline-block;
