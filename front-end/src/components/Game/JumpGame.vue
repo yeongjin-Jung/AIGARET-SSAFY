@@ -71,7 +71,7 @@
       "
       >게임조작법</v-btn
     >
-    <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+    <vue-p5 @setup="setup" @draw="draw" ></vue-p5>
 
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
@@ -256,7 +256,7 @@ export default {
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
       );
       this.jumper = sketch.createImg(
-        "https://supermariorun.com/assets/img/hero/hero_chara_mario_update_pc.png"
+        "require('./apple.png')"
       );
       this.train.hide();
       this.bg.hide();

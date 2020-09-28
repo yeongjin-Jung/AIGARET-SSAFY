@@ -8,8 +8,8 @@
     </v-container>
     
     <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
-    <v-main id="mainApp" v-else> 
-      <v-container fluid class="fill-height">
+    <v-main id="mainApp" v-else style="padding: ;" > 
+      <v-container fluid class="fill-height" style="position:absolute; top:0px; padding:0px;">
         <router-view />
         <Footer />
       </v-container>
@@ -49,11 +49,13 @@ export default {
 #mainApp {
   background-image: url("assets/bluemoon.png");
   background-size : cover;
+
 }
 
 #container_login{
   background-image: url("assets/bluemoon.png");
   background-size : cover;
+
   // height: 85vh; 컴포넌트화로 무의미해진듯, 삭제예정
 }
 

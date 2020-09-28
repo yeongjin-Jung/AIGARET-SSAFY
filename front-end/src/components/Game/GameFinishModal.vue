@@ -1,7 +1,7 @@
 <template>
   <transition name="modal" appear>
     <div class="modal modal-overlay" @click.self="$emit('close')">
-      <div class="modal-window" style="width : 50vw; height: 60vh; background-color : rgba(0,0,0,0); ">
+      <div class="modal-window" style="width : 98vw; height: 100vh; background-color : rgba(0,0,0,0); ">
         <div class="modal-content" style="max-width : 100%;">
           <slot/>
         </div>

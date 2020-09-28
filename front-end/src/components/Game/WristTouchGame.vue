@@ -1,14 +1,14 @@
 <template>
-  <div style="width:100vw; height:95vh; text-align : center;">
+  <div style="width:98vw; height:94.7vh; position:absolute; top:5vh; text-align : center;">
     <!-- <h4>손목터치게임</h4> -->
     <div style="text-align: center; width : 70vw; height: 70vh;  margin-top : 10vh;"></div>
-    <vue-p5 v-if="gameStart" @setup="setup" @draw="draw"></vue-p5>
-    <v-btn @click="Tutorial = !Tutorial" text style="position:absolute; top:2vh;; left:1vw; margin-top:7vh; height: 7vh; width:8vw; background:yellow; ">
+    <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+    <!-- <v-btn @click="Tutorial = !Tutorial" text style="position:absolute; top:2vh;; left:1vw; margin-top:7vh; height: 7vh; width:8vw; background:yellow; ">
       <p style="font-weight:1000; font-size: 2.5vh;  margin-top: 2vh;">게임조작법</p>
-    </v-btn>
-    <GameFinishModal @close="closeModal" v-if="modal">
+    </v-btn> -->
+    <GameFinishModal @close="closeModal" v-if="modal" >
       <!-- default 슬롯 콘텐츠 -->
-      <p style="font-size : 17vh; color : white; font-weight:500; margin-top:7vh;">Game Over</p>
+      <p style="font-size : 17vh; color : white; font-weight:500; margin-top:30vh;">Game Over</p>
       <!-- /default -->
       <!-- /footer -->
       <template slot="footer" style="background-color : rgba(0,0,0,1);">
@@ -18,7 +18,7 @@
         >다시시작</button>
       </template>
     </GameFinishModal>
-    <WristTouchGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+    <!-- <WristTouchGameTutorial @close="doCloseTutorial" v-if="Tutorial">
       <p style="font-size : 7vh; color : black; font-weight:800; ">게임조작법</p>
       <hooper style="margin-top: -3vh;">
         <slide></slide>
@@ -37,7 +37,7 @@
           style="background-color : red;  border-radius: 12px;  width:10vw; font-size : 4vh; font-weight: 600; color:yellow;"
         >닫기</button>
       </template>
-    </WristTouchGameTutorial>
+    </WristTouchGameTutorial> -->
 
     <Loading v-if="loading"></Loading>
   </div>
@@ -48,7 +48,7 @@ import VueP5 from 'vue-p5'
 import ml5 from 'ml5'
 import $ from 'jquery'
 import GameFinishModal from './GameFinishModal'
-import WristTouchGameTutorial from './WristTouchGameTutorial'
+// import WristTouchGameTutorial from './WristTouchGameTutorial'
 import Loading from './loding'
 import { Hooper, Slide, Pagination as HooperPagination } from 'hooper'
 
@@ -74,14 +74,16 @@ export default {
       Tutorial: false,
       gameStart: false,
       firstStart: true,
-      gamestatus: false
+      gamestatus: false,
+      sketch : null,
+      img : null,
     }
   },
   components: {
     VueP5,
     GameFinishModal,
     Loading,
-    WristTouchGameTutorial,
+    // WristTouchGameTutorial,
     Hooper,
     Slide,
     HooperPagination
@@ -89,7 +91,12 @@ export default {
   methods: {
     setup (sketch) {
       // sketch.remove();
+
+      this.sketch = sketch;
       sketch.createCanvas(this.window_width, this.window_height)
+      this.img = sketch.loadImage('apple.png');
+
+      console.log(this.img);
       sketch.background(0)
       this.video = sketch.createCapture(sketch.VIDEO)
 
@@ -110,13 +117,14 @@ export default {
       // this.train.hide();
 
       $('#defaultCanvas0').parent().css({
-        width: '100vw',
+        width: '98vw',
         'text-align': 'center',
         position: 'absolute',
-        top: '7vh'
+        top: '0',
+        height : "94.8vh"
       })
 
-      $('#defaultCanvas0').css({ width: '50vw', height: '80vh' })
+      $('#defaultCanvas0').css({ width: '64vw', height: '94.8vh' })
     },
     modelReady () {
       console.log('Model Loaded')
@@ -142,7 +150,7 @@ export default {
     draw (sketch) {
       sketch.translate(this.window_width, 0)
       sketch.scale(-1, 1)
-      sketch.image(this.video, 0, 0, this.window_width, this.window_height)
+      sketch.image(this.video, 0, 0, this.window_width+1, this.window_height+1)
 
       var that = this
       if (this.pose != null && this.gamestatus == true) {
@@ -171,7 +179,8 @@ export default {
         if (this.countDown == 0) {
           this.modal = true
           this.score = 0
-          this.gamestatus = false
+          this.gamestatus = false;
+          this.loading = true;
         }
 
         if (this.pose.score > 0.25 && this.pose != null) {
@@ -225,36 +234,45 @@ export default {
           sketch.text(this.countDown, 455, 100)
         }
       } else {
-        this.loading = true
+        this.loading = true;
         console.log('로딩중')
       }
     },
     closeModal () {
       this.modal = false
     },
-    CloseTutorial () {
-      this.Tutorial = false
-    },
+    // CloseTutorial () {
+    //   this.Tutorial = false
+    // },
 
     doClose () {
-      this.score = 0
-      this.countDown = 10
-      this.countDownTimer()
-      this.closeModal()
-      this.gamestatus = true
+      this.score = 0;
+      this.countDown = 10;
+      this.countDownTimer();
+      this.closeModal();
+      this.gamestatus = true;
     },
-    doCloseTutorial () {
-      this.Tutorial = false
-      this.gameStart = true
-      if (this.firstStart == true) {
-        this.countDownTimer()
-      }
-      this.gamestatus = true
-      this.firstStart = false
-    }
+    // doCloseTutorial () {
+    //   this.Tutorial = false
+    //   this.gameStart = true
+    //   if (this.firstStart == true) {
+    //     this.countDownTimer()
+    //   }
+    //   this.gamestatus = true
+    //   this.firstStart = false
+    // }
   },
   created () {
     this.Tutorial = true
+    this.countDownTimer();
+    this.gamestatus = true;
+  },
+  destroyed(){
+    this.sketch.remove();
+    this.sketch.noLoop();
+    this.sketch.clear();
+    console.log(this.sketch);
+
   }
 }
 </script>

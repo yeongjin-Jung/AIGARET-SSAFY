@@ -1,17 +1,17 @@
 <template>
-  <v-system-bar app color="orange" style="height: 5vh">
+  <v-system-bar app color="orange" style="height: 5vh; position:absolute; top:0px;">
     <router-link to="/" style="text-decoration: none;">
-      <v-btn icon style="margin-left:20px;"><v-icon x-large>mdi-home</v-icon></v-btn>
+      <v-btn icon style="margin-left:20px;"><v-icon style="font-size : 4.5vh;" >mdi-home</v-icon></v-btn>
     </router-link>
-    <img
+    <!-- <img
       src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"
-      style="margin-left: 40px; width: 3%; height: 90%;"
-    />
+      style="margin-left: 40px; width: 2vw; height: 3vh;"
+    /> -->
     <p
-      style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 15px; display:inline; font-family: CookieRun-Bold;"
-    >불타는 붕어빵</p>
+      style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 30px; display:inline; font-family: CookieRun-Bold;"
+    >AIgarlet</p>
     <v-spacer></v-spacer>
-    <p v-if="isLoggedIn">
+    <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
       {{ $store.state.id}}님 환영합니다.
     </p>
     <p
@@ -20,9 +20,9 @@
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:16px;"
     >{{this.dateTime}}</p>
-    <v-btn v-if="isLoggedIn" @click="logout()">
+    <!-- <v-btn v-if="isLoggedIn" @click="logout()" style="font-size : 4vh; height:4vh;">
       로그아웃
-    </v-btn>
+    </v-btn> -->
   </v-system-bar>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div style="position: absolute; top:0; height: 100vh; width:100vw;">
+  <div style="position: absolute; top:0; height: 95vh; width:100vw;">
     <div class="body">
       <span>
         <span></span>
