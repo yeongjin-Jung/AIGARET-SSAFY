@@ -2,5 +2,8 @@ module.exports = {
   transpileDependencies: [
     'vuetify'
   ],
-  lintOnSave : false
+  lintOnSave: false
+  // 'devServer': {
+  //   'public': 'aigaret.ga'
+  // }
 }

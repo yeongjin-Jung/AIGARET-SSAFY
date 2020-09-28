@@ -1,10 +1,153 @@
 <template>
-  <div style="width: 100vw; height:95vh; text-align: center;">
-    <v-btn id="gameStart" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">게임시작</v-btn>
-    <v-btn id="poseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">점프포즈</v-btn>
-    <v-btn id="noPoseSave" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">노점프포즈</v-btn>
-    <v-btn id="poseTrain" style="margin-left:1vw; margin-right:1vw; margin-top:2vh; height: 4vh; width:6vw; font-size:2vh;">포즈학습</v-btn>
+  <div
+    style="
+      width: 98.5vw;
+      height: 79vh;
+      position: absolute;
+      top: 0.2vh;
+      text-align: center;
+      left: 0px;
+    "
+  >
+    <v-btn
+      id="gameStart"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >게임시작</v-btn
+    >
+    <v-btn
+      id="poseSave"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >점프포즈</v-btn
+    >
+    <v-btn
+      id="noPoseSave"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >노점프포즈</v-btn
+    >
+    <v-btn
+      id="poseTrain"
+      style="
+        margin-left: 1vw;
+        margin-right: 1vw;
+        margin-top: 2vh;
+        height: 4vh;
+        width: 6vw;
+        font-size: 2vh;
+      "
+      >포즈학습</v-btn
+    >
+    <v-btn
+      @click="Tutorial = !Tutorial"
+      text
+      style="
+        position: absolute;
+        top: 2vh;
+        left: 1vw;
+        height: 5vh;
+        font-size: 2vh;
+        width: 8vw;
+        background: yellow;
+      "
+      >게임조작법</v-btn
+    >
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+
+    <GameFinishModal @close="closeModal" v-if="modal">
+      <!-- default 슬롯 콘텐츠 -->
+      <p
+        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+      >
+        Game Over
+      </p>
+      <!-- /default -->
+      <!-- /footer -->
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doClose"
+          style="
+            background-color: red;
+            height: 8vh;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+            margin-left: 10px;
+            margin-right: 10px;
+          "
+        >
+          다시시작
+        </button>
+        <button
+          @click="doReTrain"
+          style="
+            background-color: red;
+            height: 8vh;
+            border-radius: 12px;
+            width: 13vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+            margin-left: 10px;
+            margin-right: 10px;
+          "
+        >
+          다시학습하기
+        </button>
+      </template>
+    </GameFinishModal>
+    <JumpGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+      <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
+      <hooper style="margin-top: -3vh">
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+        <slide></slide>
+
+        <hooper-pagination slot="hooper-addons"></hooper-pagination>
+      </hooper>
+
+      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
+        <button
+          @click="doCloseTutorial"
+          style="
+            background-color: red;
+            border-radius: 12px;
+            width: 10vw;
+            font-size: 4vh;
+            font-weight: 600;
+            color: yellow;
+          "
+        >
+          닫기
+        </button>
+      </template>
+    </JumpGameTutorial>
+
+    <Loading v-if="loading"></Loading>
   </div>
 </template>
 
@@ -16,6 +159,11 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
+import JumpGameTutorial from "./JumpGameTutorial";
+import GameFinishModal from "./GameFinishModal";
+import Loading from "./loding";
+import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
+import "../../assets/hooper.css";
 import $ from "jquery";
 export default {
   name: "JumpGame",
@@ -28,7 +176,7 @@ export default {
       label: "",
 
       score: null,
-      scroll: 18,
+      scroll: 15,
       scrollBg: 0,
       trains: [],
       unicorn: null,
@@ -39,10 +187,11 @@ export default {
       videoCanvas: null,
       canvasWidth: 1150,
       canvasHeight: 800,
-      videoWidth: 1100,
+      videoWidth: 1200,
       videoHeight: 800,
+      countDown : 5,
 
-      //preload
+      // preload
       music: null,
       ding: null,
       whistle: null,
@@ -50,7 +199,7 @@ export default {
       train: null,
       jumper: null,
 
-      //posenet
+      // posenet
       featureExtractor: null,
       classifier: null,
       targetLabel: "jump",
@@ -60,21 +209,37 @@ export default {
       unicorn: null,
       key: null,
 
-      //train
+      // train
       brain: null,
       poseSave: null,
-      noPoseSave : null,
+      noPoseSave: null,
       trainButton: null,
       state: "waiting",
-
-      //game
-      gameState: false,
+      jumpPoseCollecting: false,
+      NojumpPoseCollecting : false,
+      reCollecting : false,
+      // game
+      modal: false,
+      score: 0,
+      loading: false,
+      Tutorial: false,
+      gameStart: false,
+      firstStart: true,
 
       confidence: null,
+
+      //
+      removeCanvas: false,
     };
   },
   components: {
     "vue-p5": VueP5,
+    Hooper,
+    Slide,
+    HooperPagination,
+    GameFinishModal,
+    Loading,
+    JumpGameTutorial,
   },
   methods: {
     setup(sketch) {
@@ -116,14 +281,14 @@ export default {
       this.setupButton(sketch);
 
       $("#defaultCanvas0").parent().css({
-        width: "100vw",
+        width: "98.4vw",
         "text-align": "center",
         position: "absolute",
         top: "10vh",
+        left: 0,
       });
 
-      $("#defaultCanvas0").css({ width: "90vw", height: "75vh" });
-
+      $("#defaultCanvas0").css({ width: "99vw", height: "78vh" });
     },
 
     modelLoaded() {
@@ -147,15 +312,31 @@ export default {
 
     setupButton(sketch) {
       var that = this;
-      //left button
+      // left button
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
-        that.classifier.addImage("jump");
+        setTimeout(function () {
+          that.classifier.addImage("jump");
+          that.jumpPoseCollecting = true;
+
+          setTimeout(function () {
+            that.jumpPoseCollecting = false;
+            console.log("점프사진 수집완료");
+          }, 5000);
+        }, 100);
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-        that.classifier.addImage("noJump");
+      setTimeout(function () {
+          that.classifier.addImage("noJump");
+          that.NojumpPoseCollecting = true;
+
+          setTimeout(function () {
+            that.NojumpPoseCollecting = false;
+            console.log("슬라이드사진 수집완료");
+          }, 5000);
+        }, 100);
       });
 
       this.gameStart = sketch.select("#gameStart");
@@ -163,7 +344,7 @@ export default {
         that.gameState = true;
       });
 
-      //train button
+      // train button
       this.trainButton = sketch.select("#poseTrain");
       this.trainButton.mousePressed(function () {
         that.classifier.train(that.whileTraining);
@@ -183,16 +364,26 @@ export default {
         console.log(loss);
       }
     },
-
-    jump(sketch) {
+    restartGame() {
       if (this.restart) {
         this.restart = false;
         this.score = 0;
         this.scrollBg = 0;
-        this.scroll = 10;
+        this.scroll = 15;
         this.trains = [];
-        this.sketchObj.loop();
+        this.gameState = true;
+        // this.sketchObj.loop();
       }
+    },
+    jump(sketch) {
+      // if (this.restart) {
+      //   this.restart = false;
+      //   this.score = 0;
+      //   this.scrollBg = 0;
+      //   this.scroll = 10;
+      //   this.trains = [];
+      //   this.sketchObj.loop();
+      // }
       if (event.key == " ") {
         this.unicorn.jump();
         return false;
@@ -200,20 +391,14 @@ export default {
     },
     draw(sketch) {
       var that = this;
-      // sketch.translate(this.video.width, 0);
-      // sketch.scale(-1, 1);
-      // sketch.image(this.video, 0, 0, this.video.width, this.video.height);
 
-      // sketch.translate(this.bg.width, 0);
-      // sketch.scale(-1, 1);
-
-
-      if(this.confidence >= 0.99 && this.label =="jump"){
+      if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
       }
- 
 
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
+      sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
+      sketch.scale(-1, 1);
       sketch.image(
         this.video,
         this.canvasWidth,
@@ -221,6 +406,22 @@ export default {
         this.videoWidth,
         sketch.height
       );
+
+      sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
+      sketch.scale(-1, 1);
+      if (this.jumpPoseCollecting == true) {
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("점프사진 수집중", 1450, 100);
+      }
+
+      if (this.NojumpPoseCollecting == true) {
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("슬라이드사진 수집중", 1350, 100);
+      }
 
       if (this.gameState) {
         sketch.image(
@@ -246,55 +447,88 @@ export default {
             )
           );
         }
-        // if(this.score % 100 == 0 && this.score != 0){
-        //   s
-        // }
+
         if (sketch.frameCount % 5 == 0) {
           this.score++;
         }
 
         sketch.fill(255);
+        sketch.textStyle(sketch.NORMAL);
         sketch.textSize(60);
         sketch.textFont("monospace");
         sketch.text(`Score: ${this.score}`, 15, 60);
 
-        for (let t of this.trains) {
+        for (const t of this.trains) {
           t.move();
           t.show();
 
           if (this.unicorn.collide(t)) {
-            sketch.noLoop();
+            // sketch.noLoop();
             // music.stop();
             // let sound = sketch.random(failSounds);
             // sound.play();
 
-            sketch.fill(255);
-            sketch.textSize(56);
-            sketch.text(
-              `Game Over! Press any key to restart`,
-              80,
-              sketch.height / 2
-            );
-
+            that.modal = true;
             that.restart = true;
+            that.gameState = false;
           }
         }
-
-        // if (this.confidence >= 0.9) {
-        //   // sketch.text("jump", this.videoWidt / 2, this.videoHeight / 2);
-        //   // sketch.rect(100,100,100,100);
-
-        //   console.log("확인")
-        // }
 
         this.unicorn.show();
         this.unicorn.move();
       }
     },
+    closeModal() {
+      this.modal = false;
+    },
+    CloseTutorial() {
+      this.Tutorial = false;
+    },
+
+    doClose() {
+      this.score = 0;
+      this.closeModal();
+
+      this.restartGame();
+    },
+
+    doReTrain() {
+      this.closeModal();
+      this.restart = false;
+      this.score = 0;
+      this.scrollBg = 0;
+      this.scroll = 15;
+      this.trains = [];
+      this.gameState = false;
+
+    },
+
+    doCloseTutorial() {
+      this.Tutorial = false;
+      this.gameStart = true;
+      // if (this.firstStart == true) {
+      //   this.countDownTimer();
+      // }
+      this.firstStart = false;
+    },
+
+    countDownTimer() {
+      if (this.countDown > 0) {
+        setTimeout(() => {
+          this.countDown -= 1;
+          this.countDownTimer();
+        }, 1000);
+      }
+    },
   },
+
   created() {
+    this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
   },
+  destroyed(){
+    console.log("끄기");
+  }
 };
 </script>
 

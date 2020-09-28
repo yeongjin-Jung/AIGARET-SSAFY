@@ -33,10 +33,10 @@ urlpatterns = [
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     #jwt
-    path("rest-auth/", include('rest_auth.urls')),
+    path("api/rest-auth/", include('rest_auth.urls')),
     # path("rest-auth/signup/", include('rest_auth.registration.urls')),
-    path("rest-auth/signup/", AuthRegister.as_view()),
+    path("api/rest-auth/signup/", AuthRegister.as_view()),
     
     # games
-    path('games/', include('games.urls')),
+    path('api/games/', include('games.urls')),
 ]

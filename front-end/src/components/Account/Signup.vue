@@ -1,17 +1,20 @@
 <template>
-  <v-dialog v-model="dialog" width="860px" height="1000px" persistent>
+  <v-dialog v-model="dialog" width="880" persistent>
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
-    
+
     <template v-slot:activator="{ on, attrs }">
-      <v-btn v-bind="attrs" v-on="on" class="mr-2" style="width: 92.88px; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clicked()">회원가입</v-btn>
+      <v-btn v-bind="attrs" v-on="on" class="mr-2" style="width: 92.88px; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()">회원가입</v-btn>
     </template>
 
-    <div id="container" style="background-color: #fcfeff; height: 530px;">
-      <div style="float:left; width:50%; margin: 0 auto; text-align:center">
-      
-        <ValidationObserver ref="observer">
+    <div id="outer" class="row" style="background-color: #fcfeff; justify-content: center;">
+
+      <div id="div_left" class="col-md-6" style="margin: 0 auto; text-align:center">
+
+        <ValidationObserver ref="observer" v-slot="{ invalid }">
           <v-card width="448px" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
-            <v-card-title class="justify-center" style="background-color: #005792; color: white">회원가입</v-card-title>
+
+            <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
+
             <v-card-text>
               <v-form class="ma-4">
                 <ValidationObserver>
@@ -37,74 +40,115 @@
                   <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Age" rules="required|confirmed:confirmation">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="Age" rules="required">
                   <v-text-field v-model="signupData.age" :error-messages="errors" label="나이" name="age"></v-text-field>
                 </ValidationProvider>
             <!-- <div style="width: 100%; margin: 0 10px; float: left; text-align: center"> -->
-              <v-btn color="primary" style="margin: 10px 10px">회원가입</v-btn>
-              <v-btn color="error" style="margin: 10px 10px" @click="close">돌아가기</v-btn>
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
+              <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
             </v-card-text>
           </v-card>
         </ValidationObserver>
-        
+
       </div>
 
-      <!-- <div style="background: black; float: left; width: 427px; height: 425px; text-align: center;"> -->
-      <div style="background: #fcfeff; height: 500px; text-align: center; float: left; vertical-align: middle;">
-        <div style="margin-top: 80px; text-algin: center;">
-          <video id="video2" height="300" autoplay muted></video>
-          <canvas id="canvas" class="overlay"></canvas>
-          <h3 style="padding: 15px auto; font-size: 22px">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
-          <v-btn class="mx-2" fab dark small color="primary" @click="pause">
+      <!-- 오른쪽 웹캠 div -->
+      <div id="div_right" class="col-md-6" style="background: #fcfeff; text-align: center">
+
+        <div class="my-2" style="display: flex; justify-content: center; align-items: center; background: yellow; ">
+          <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
+          <canvas id="canvas" class="overlay" width="400" height="300"></canvas>
+        </div>
+
+        <div class="my-2" style="display: flex; justify-content: center;">
+          <h3 style="padding: 15px auto; font-size: 22px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 화면 가운데 위치시켜주세요.</h3>
+        </div>
+
+        <div class="my-2" style="display: flex; justify-content: center;">
+          <v-btn class="mx-2" fab dark small color="primary" @click="videoPauseAndCapture">
             <v-icon dark>mdi-camera</v-icon>
           </v-btn>
-          <v-btn class="mx-2" fab dark small color="error" @click="play">
+          <v-btn class="mx-2" fab dark small color="error" @click="videoResume">
             <v-icon dark>mdi-refresh</v-icon>
           </v-btn>
         </div>
       </div>
 
     </div>
-    
 
   </v-dialog>
 </template>
 
 <script>
-import $ from "jquery"
-import * as faceapi from "face-api.js"
+import $ from 'jquery'
+import * as faceapi from './face-api-min'
 
-const canvas = require('canvas');
-
-import { required, email, max, min, regex, confirmed } from "vee-validate/dist/rules"
-import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from "vee-validate"
+import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
+import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
 import { mapActions } from 'vuex'
 
+const canvas = require('canvas')
+
+extend('required', {
+  ...required,
+  message: '{_field_} 값은 반드시 입력해야 합니다.'
+})
+
+extend('email', {
+  ...email,
+  message: '{_field_} 형식이 아닙니다.'
+})
+
+extend('regex', {
+  ...regex,
+  message: '비밀번호는 영문, 숫자, 특수기호를 모두 포함하여야 합니다.'
+})
+
+extend('max', {
+  ...max,
+  message: '{_field_} 값은 {length}자리 이하로 입력해주세요.'
+})
+
+extend('min', {
+  ...min,
+  message: '{_field_} 값은 최소 {length}자리 이상이어야 합니다.'
+})
+
+extend('confirmed', {
+  ...confirmed,
+  message: '비밀번호가 같지 않습니다.'
+})
+
 export default {
-  name: "Signup",
+  name: 'Signup',
 
   components: {
     ValidationProvider,
     ValidationObserver
   },
 
-  data() {
+  data () {
     return {
       dialog: false,
-      facedetection: "",
-      video2: document.getElementById("video2"),
-      localStream: "",
+      facedetection: '',
+      video: null,
+      canvas: null,
+      localStream: '',
 
       signupData: {
-        id: "",
-        password: "",
-        passwordConfirm: "",
-        name: "",
-        age: ""
-      }
+        id: '',
+        password: '',
+        passwordConfirm: '',
+        name: '',
+        age: ''
+      },
+
+      isCaptured: false,
+      timerId: null,
+      videoFLag: false
     }
   },
 
@@ -112,240 +156,142 @@ export default {
     flag: false
   },
 
-  watched() {
-    if(this.flag == true) {
+  watched () {
+    if (this.flag == true) {
       this.dialog = true
-    } else{
+    } else {
       this.dialog = false
     }
   },
 
   methods: {
+    ...mapActions(['signup']),
+    
     movePage() {
       this.$router.push({name: "Login"})
     },
-    
-    startVideo (val) {
-      navigator.getUserMedia(
-        {
-          video: true
-        },
 
+    videoStart () {
+      this.videoFlag = true
+
+      navigator.getUserMedia(
+        { video: {} },
         stream => {
-          // val.srcObject = stream;
-          var video = document.getElementById("video2")
-          console.log("video : ", video)
-          video.srcObject = stream;
-          video.onloadedmetadata = function(e) {
-           video.play();
-         };
+          video.srcObject = stream
           this.localStream = stream
         },
-
         err => console.error(err)
       )
     },
 
-    clicked() {
-      console.log("회원가입 버튼 클릭됨.")
-      // console.log("video", this.video2)
-      
-      // this.detectLandMarkes()
-      this.startVideo(this.video2)
+    videoPauseAndCapture () {
+      this.isCaptured = true
+      const video = this.video
+      const canvas = this.canvas
+
+      $('#video').get(0).pause()
+      // var canvas = document.getElementById('canvas')
+      var ctx = canvas.getContext('2d')
+
+      // if (this.timerId != null) {
+      //   clearInterval(this.timerId)
+      // }
+
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+      // console.log(canvas.toDataURL())
+
+      const base64Encoded = canvas.toDataURL()
+      console.log(base64Encoded)
     },
 
-    detectLandMarkes() {
-      const { Canvas, Image, ImageData } = canvas;
+    videoResume () {
+      this.isCaptured = false
 
-      // faceapi.env.monkeyPatch({ Canvas, Image, ImageData })
-      faceapi.env.monkeyPatch({
-        Canvas: HTMLCanvasElement,
-        Image: HTMLImageElement,
-        ImageData: ImageData,
-        Video: HTMLVideoElement,
-        createCanvasElement: () => document.createElement("canvas"),
-        createImageElement: () => document.createElement("img"),
-      });
+      // if (this.timerId != null)
+      //   clearInterval(this.timerId)
 
-      // let video = document.getElementById("video2");
-      // console.log("video : ", video)
-      let currentStream;
-      let displaySize;
-
-      var that = this
-      navigator.getUserMedia(
-      {
-        video: true
-      },
-
-      stream => {
-        // val.srcObject = stream;
-        var video = document.getElementById("video2")
-        var videoEl = $("#video2");
-
-        var left = videoEl.offset().left;
-        var top = videoEl.offset().top;
-        
-        var canvas = $("#canvas")
-
-        var canvas_left = canvas.offset().left;
-
-        $("#canvas").css("left", left)
-        $("#canvas").css("top", top)
-
-        video.srcObject = stream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-          displaySize = { width: this.scrollWidth, height: this.scrollHeight };
-          console.log("displaySize: ", displaySize)
-          console.log("hi")
-
-          async function detect() {
-            console.log("detect")
-            const MODEL_URL = "/models";
-
-            await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-            await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-            await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
-
-              console.log("setInterval()")
-              let fullFaceDescriptions = await faceapi
-                .detectAllFaces(video)
-                .withFaceLandmarks()
-                .withFaceDescriptors();
-              let canvasTag = $("#canvas").get(0);
-              faceapi.matchDimensions(canvasTag, displaySize);
-
-              const fullFaceDescription = faceapi.resizeResults(
-                fullFaceDescriptions,
-                displaySize
-              );
-
-              faceapi.draw.drawDetections(canvasTag, fullFaceDescriptions);
-              faceapi.draw.drawFaceLandmarks(canvasTag, fullFaceDescriptions)
-
-              console.log(displaySize);
-          } // end method detect
-
-          detect()
-        };
-        this.localStream = stream
-
-        setTimeout(() => {
-          // this.localStream.getTracks()[0].pause()
-          video.pause()
-        }, 5000);
-      },
-
-      err => console.error(err)
-      )
-      
+      $('#video').get(0).play()
     },
 
-    pause() {
+    clickedSignupBtn () {
+      console.log('회원가입 버튼 클릭됨.')
+
+      this.videoStart()
+    },
+
+    async faceDetect () {
+      console.log('this.video.width', this.video.width)
+      console.log('this.video.height', this.video.height)
+
+      const video = this.video
+      const canvas = this.canvas
+
+      const displaySize = { width: video.width, height: video.height }
+      faceapi.matchDimensions(canvas, displaySize)
+
+      await faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
+      await faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+      await faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+      await faceapi.nets.faceExpressionNet.loadFromUri('/models')
+
+      this.timerId = setInterval(async () => {
+        console.log('계속 도는 중.')
+        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
+        const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+        faceapi.draw.drawDetections(canvas, resizedDetections)
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+      }, 100)
+    },
+
+    stopDetecting() {
+      if (this.timerId != null)
+        clearInterval(this.timerId)
+    },
+
+    cancelChangingPicture() {
+      this.isCaptured = false
       this.localStream.getTracks()[0].stop()
-
-      console.log(this.localStream.getTracks()[0])
-      
-      this.detectLandMarkes()
-
+      if (this.timerId != null) { clearInterval(this.timerId) }
       setTimeout(() => {
-        clearInterval(this.facedetection)
-        console.log("타이머 종료됨.")
-      }, 5000);
+        this.dialog = false
+      }, 500)
 
-      console.log(this.localStream.getTracks()[0])
-      this.localStream.getTracks()[0].stop()
-      
-    },
-
-    play() {
-      $("#video2").get(0).play()
-    },
-
-    close() {
-      video2.pause()
-      this.localStream.getTracks()[0].stop()
-      
-      this.dialog = false
+      this.videoFlag = false
     }
   },
 
   mounted() {
-    console.log("Signup.vue mounted.")
-    console.log("flag : " + this.flag)
-    $("#video2").bind("loadedmetadata", function () {
-        displaySize = { width: this.scrollWidth, height: this.scrollHeight };
-        console.log("hi")
+  },
 
-        async function detect() {
-          console.log("detect")
-          const MODEL_URL = "/models";
+  updated () {
+    console.log('Signup.vue updated.')
 
-          // await faceapi.loadSsdMobilenetv1Model(MODEL_URL);
-          // await faceapi.loadFaceLandmarkModel(MODEL_URL);
-          // await faceapi.loadFaceRecognitionModel(MODEL_URL);
-          await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-          await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-          await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+    if (this.videoFlag == true) {
+      this.video = document.getElementById('video')
+      this.canvas = document.getElementById('canvas')
 
-          // let canvasTag = $("#canvas").get(0);
-
-          let facedetection = setInterval(async () => {
-            console.log("detecting...")
-            let fullFaceDescriptions = await faceapi
-              .detectAllFaces(video)
-              .withFaceLandmarks()
-              .withFaceDescriptors();
-            let canvasTag = $("#canvas").get(0);
-            faceapi.matchDimensions(canvasTag, displaySize);
-
-            const fullFaceDescription = faceapi.resizeResults(
-              fullFaceDescriptions,
-              displaySize
-            );
-
-            faceapi.draw.drawDetections(canvasTag, fullFaceDescriptions);
-            faceapi.draw.drawFaceLandmarks(canvasTag, fullFaceDescriptions)
-
-            // const maxDescriptorDistance = 0.6;
-            // const faceMatcher = new faceapi.FaceMatcher(
-            //   labeledFaceDescriptors,
-            //   maxDescriptorDistance
-            // );
-
-            // const results = fullFaceDescriptions.map((fd) =>
-            //   faceMatcher.findBestMatch(fd.descriptor)
-            // );
-
-            // results.forEach((bestMatch, i) => {
-            //   const box = fullFaceDescriptions[i].detection.box;
-            //   const text = bestMatch.toString();
-            //   const drawBox = new faceapi.draw.DrawBox(box, { label: text });
-            //   drawBox.draw(canvasTag);
-            // });
-          }, 1000);
-
-          console.log(displaySize);
-        } // end method detect
-
-        detect();
-      });
+      this.faceDetect()
+    } else {
+      this.video = null
+      this.canvas = null
+    }
   }
-};
+}
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 
 #btn-signup {
-  display: inline-block; 
+  display: inline-block;
   width: 250px;
-  font-size: 16px; 
-  color: rgb(255, 255, 255); 
-  text-align: center; 
-  line-height: 2.5em; 
-  border-radius: 4px; 
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  line-height: 2.5em;
+  border-radius: 4px;
   background-color: rgb(52, 152, 219);
 }
 

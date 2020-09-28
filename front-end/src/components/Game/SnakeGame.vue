@@ -112,19 +112,19 @@ export default {
       videoWidth: 600,
       videoHeight: 400,
 
-      upPosition_x: 250,
-      upPosition_y: 80,
-      downPosition_x: 250,
-      downPosition_y: 220,
-      leftPosition_x: 350,
-      leftPosition_y: 150,
-      rightPosition_x: 150,
-      rightPosition_y: 150,
+      upPosition_x: -110,
+      upPosition_y: 110,
+      downPosition_x: -110,
+      downPosition_y: 230,
+      leftPosition_x: -40,
+      leftPosition_y: 170,
+      rightPosition_x: -180,
+      rightPosition_y: 170,
 
       leftBuffer: null,
       rightBuffer: null,
 
-      //컴포넌트 관련
+      // 컴포넌트 관련
       modal: false,
       Tutorial: false,
       loading: false,
@@ -135,7 +135,6 @@ export default {
       countDown: 25,
       score: 0,
       speed: 27,
-
     };
   },
   components: {
@@ -152,11 +151,11 @@ export default {
       this.sketch = sketch;
       sketch.createCanvas(this.snakeCanvasWidth + this.videoWidth, this.height);
 
-      this.leftBuffer = sketch.createGraphics(
-        this.snakeCanvasWidth,
-        this.height
-      );
-      this.rightBuffer = sketch.createGraphics(this.videoWidth, this.height);
+      // this.leftBuffer = sketch.createGraphics(
+      //   this.snakeCanvasWidth,
+      //   this.height
+      // );
+      // this.rightBuffer = sketch.createGraphics(this.videoWidth, this.height);
 
       this.video = sketch.createCapture(sketch.VIDEO);
       this.video.size(this.videoWidth, this.videoHeight);
@@ -182,7 +181,7 @@ export default {
       );
 
       this.pickLocation(sketch);
-      //game code ends
+      // game code ends
 
       $("#defaultCanvas0").parent().css({
         width: "100%",
@@ -219,19 +218,18 @@ export default {
       );
       this.foodx = this.food.x;
       this.foody = this.food.y;
-      //food.mult(scl);
+      // food.mult(scl);
     },
     draw(sketch) {
       sketch.background(0);
       sketch.fill(255);
 
       this.drawSnake(sketch);
-      this.drawVideo(sketch);
-      // Paint the off-screen buffers onto the main canvas
       sketch.translate(this.snakeCanvasWidth * 2 + this.videoWidth, 0);
       sketch.scale(-1, 1);
-      sketch.image(this.leftBuffer, 0, 0);
-      sketch.image(this.rightBuffer, this.snakeCanvasWidth, 0);
+      sketch.image(sketch, 0, 0);
+      sketch.image(this.video, this.snakeCanvasWidth, 0);
+      this.drawVideo(sketch);
     },
     drawSnake(sketch) {
       var that = this;
@@ -243,16 +241,15 @@ export default {
       if (this.s.eat(this.food)) {
         that.score += 100;
         that.countDown = 25;
-        //Level2
-        if(that.score == 500){
+        // Level2
+        if (that.score == 500) {
           that.speed = 22;
-        }
-        else if(that.score == 1000){
+        } else if (that.score == 1000) {
           that.speed = 17;
         }
         that.pickLocation(sketch);
       }
-      //snake
+      // snake
       sketch.fill(255, 0, 100);
       sketch.rect(20 * this.foodx, 20 * this.foody, this.scl, this.scl);
 
@@ -261,154 +258,141 @@ export default {
       else if (this.label == "left") this.s.dir(-1, 0);
       else if (this.label == "right") this.s.dir(1, 0);
     },
-
+    //비디오 화면
     drawVideo(sketch) {
-      this.rightBuffer.image(
-        this.video,
-        0,
-        0,
-        this.videoWidth,
-        this.videoHeight
-      );
+      sketch.translate(this.snakeCanvasWidth * 2 + this.videoWidth, 0);
+      sketch.scale(-1, 1);
 
-      this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(250, 80, 50, 50);
-      this.rightBuffer.textSize(40);
-      this.rightBuffer.translate(this.videoWidth, 0);
-      this.rightBuffer.scale(-1, 1);
-      this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
-      this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("상", 305, 120);
+      sketch.fill(255, 0, 255);
+      sketch.rect(260 + this.snakeCanvasWidth, 110, 50, 50);
+      sketch.textSize(40);
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(255, 255, 255);
+      sketch.text("상", 265 + this.snakeCanvasWidth, 150);
 
-      this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(300, 220, 50, 50);
-      this.rightBuffer.textSize(40);
-      this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
-      this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("하", 305, 260);
+      sketch.fill(255, 0, 255);
+      sketch.rect(260 + this.snakeCanvasWidth, 230, 50, 50);
+      sketch.textSize(40);
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(255, 255, 255);
+      sketch.text("하", 265 + this.snakeCanvasWidth, 270);
 
-      this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(200, 150, 50, 50);
-      this.rightBuffer.textSize(40);
-      this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
-      this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("좌", 205, 190);
+      sketch.fill(255, 0, 255);
+      sketch.rect(190 + this.snakeCanvasWidth, 170, 50, 50);
+      sketch.textSize(40);
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(255, 255, 255);
+      sketch.text("좌", 195 + this.snakeCanvasWidth, 210);
 
-      this.rightBuffer.fill(255, 0, 255);
-      this.rightBuffer.rect(400, 150, 50, 50);
-      this.rightBuffer.textSize(40);
-      this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
-      this.rightBuffer.fill(255, 255, 255);
-      this.rightBuffer.text("우", 405, 190);
-
-      this.rightBuffer.translate(this.videoWidth, 0);
-      this.rightBuffer.scale(-1, 1);
+      sketch.fill(255, 0, 255);
+      sketch.rect(330 + this.snakeCanvasWidth, 170, 50, 50);
+      sketch.textSize(40);
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(255, 255, 255);
+      sketch.text("우", 335 + this.snakeCanvasWidth, 210);
 
       var that = this;
       if (this.pose != null && this.gamestatus == true) {
         this.loading = false;
-        // if (this.pose != null && this.gamestatus == true) {
-        //점수판
-        this.rightBuffer.translate(this.videoWidth, 0);
-        this.rightBuffer.scale(-1, 1);
-        this.rightBuffer.textSize(30);
-        this.rightBuffer.textStyle(sketch.BOLD);
-        this.rightBuffer.fill(255, 0, 0);
-        this.rightBuffer.text("점수 : " + this.score, 30, 40);
 
-        //카운트 다운
-        this.rightBuffer.textSize(50);
-        this.rightBuffer.textStyle(this.rightBuffer.NORMAL);
-        this.rightBuffer.fill(0, 255, 255);
-        this.rightBuffer.text(this.countDown, 280, 50);
+        // 점수판
+        sketch.textSize(30);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("점수 : " + this.score, 30 + this.snakeCanvasWidth, 40);
+
+        // 카운트 다운
+        sketch.textSize(50);
+        sketch.textStyle(sketch.NORMAL);
+        sketch.fill(0, 255, 255);
+        sketch.text(this.countDown, 270 + this.snakeCanvasWidth, 50);
 
         if (this.countDown == 0) {
           this.modal = true;
           this.score = 0;
           this.gamestatus = false;
+          this.s = new Snake(
+            sketch,
+            this.scl,
+            this.snakeCanvasWidth,
+            this.height,
+            this.food
+          );
         }
 
-        this.rightBuffer.translate(this.videoWidth, 0);
-        this.rightBuffer.scale(-1, 1);
+        sketch.translate(this.videoWidth, 0);
+        sketch.scale(-1, 1);
 
         if (this.pose.score > 0.2 && this.pose != null) {
-          let eyeR = that.pose.rightEye;
-          let eyeL = that.pose.leftEye;
-          let d = this.rightBuffer.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
-          this.rightBuffer.fill(255, 0, 0);
-          this.rightBuffer.ellipse(that.pose.nose.x, that.pose.nose.y, d - 25);
-          this.rightBuffer.fill(0, 0, 255);
+          const eyeR = that.pose.rightEye;
+          const eyeL = that.pose.leftEye;
+          const d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
+          sketch.fill(255, 0, 0);
+          sketch.ellipse(
+            that.pose.nose.x - this.snakeCanvasWidth,
+            that.pose.nose.y + 15,
+            d - 25
+          );
+          sketch.fill(0, 0, 255);
 
           if (
-            (that.pose.nose.x > that.upPosition_x &&
-              that.pose.nose.x < that.upPosition_x + 50 &&
-              that.pose.nose.y > that.upPosition_y &&
-              that.pose.nose.y < that.upPosition_y + 50) ||
-            (that.pose.nose.x > that.upPosition_x &&
-              that.pose.nose.x < that.upPosition_x + 50 &&
-              that.pose.nose.y > that.upPosition_y &&
-              that.pose.nose.y < that.upPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.upPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.upPosition_y &&
+              that.pose.nose.y + 15 < that.upPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.upPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.upPosition_y &&
+              that.pose.nose.y + 15 < that.upPosition_y + 50)
           ) {
             this.label = "top";
           } else if (
-            (that.pose.nose.x > that.downPosition_x &&
-              that.pose.nose.x < that.downPosition_x + 50 &&
-              that.pose.nose.y > that.downPosition_y &&
-              that.pose.nose.y < that.downPosition_y + 50) ||
-            (that.pose.nose.x > that.downPosition_x &&
-              that.pose.nose.x < that.downPosition_x + 50 &&
-              that.pose.nose.y > that.downPosition_y &&
-              that.pose.nose.y < that.downPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.downPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.downPosition_y &&
+              that.pose.nose.y + 15 < that.downPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.downPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.downPosition_y &&
+              that.pose.nose.y + 15 < that.downPosition_y + 50)
           ) {
             this.label = "down";
           } else if (
-            (that.pose.nose.x > that.leftPosition_x &&
-              that.pose.nose.x < that.leftPosition_x + 50 &&
-              that.pose.nose.y > that.leftPosition_y &&
-              that.pose.nose.y < that.leftPosition_y + 50) ||
-            (that.pose.nose.x > that.leftPosition_x &&
-              that.pose.nose.x < that.leftPosition_x + 50 &&
-              that.pose.nose.y > that.leftPosition_y &&
-              that.pose.nose.y < that.leftPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.leftPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.leftPosition_y &&
+              that.pose.nose.y + 15 < that.leftPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.leftPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.leftPosition_y &&
+              that.pose.nose.y + 15 < that.leftPosition_y + 50)
           ) {
             this.label = "left";
           } else if (
-            (that.pose.nose.x > that.rightPosition_x &&
-              that.pose.nose.x < that.rightPosition_x + 50 &&
-              that.pose.nose.y > that.rightPosition_y &&
-              that.pose.nose.y < that.rightPosition_y + 50) ||
-            (that.pose.nose.x > that.rightPosition_x &&
-              that.pose.nose.x < that.rightPosition_x + 50 &&
-              that.pose.nose.y > that.rightPosition_y &&
-              that.pose.nose.y < that.rightPosition_y + 50)
+            (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.rightPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.rightPosition_y &&
+              that.pose.nose.y + 15 < that.rightPosition_y + 50) ||
+            (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
+              that.pose.nose.x - this.snakeCanvasWidth <
+                that.rightPosition_x + 50 &&
+              that.pose.nose.y + 15 > that.rightPosition_y &&
+              that.pose.nose.y + 15 < that.rightPosition_y + 50)
           ) {
             this.label = "right";
           }
-
-          // for (let i = 0; i < that.pose.keypoints.length; i++) {
-          //   let x = that.pose.keypoints[i].position.x;
-          //   let y = that.pose.keypoints[i].position.y;
-          //   this.rightBuffer.fill(0, 255, 0);
-          //   this.rightBuffer.ellipse(x, y, 16, 16);
-          // }
-
-          // for (let i = 0; i < that.skeleton.length; i++) {
-          //   let a = that.skeleton[i][0];
-          //   let b = that.skeleton[i][1];
-          //   this.rightBuffer.line(a.position.x, a.position.y, b.position.x, b.position.y);
-          // }
         } else {
-          this.rightBuffer.image(
-            this.video,
-            0,
-            0,
-            this.videoWidth,
-            this.videoHeight
-          );
+          sketch.image(this.video, -this.snakeCanvasWidth, 0);
         }
       } else {
         this.loading = true;
-        console.log("로딩중");
       }
     },
     closeModal() {

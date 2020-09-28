@@ -1,128 +1,175 @@
 <template>
   <v-container fluid class="text-center">
-    <!-- <v-row> -->
     <div>
       <div id="outer" class="row">
 
-        <div id="inner_left" class="col-md-4" style="background: #5277de; height: 400px; display: flex; justify-content: center; flex-wrap: wrap;">
-          <!-- <div style="width: 300px; height: 300px; background: #72ddf2; display: inline-block; text-align: center; padding-top: 145px; margin-bottom: 10px"> -->
-          
+        <div id="inner_left" class="col-md-4" style="background-color: transparent; height: 400px; display: flex; justify-content: center; flex-wrap: wrap;">
+
           <!-- 사진! -->
-          <div style="width: 400px; height: 300px; background: #72ddf2; text-align: center;">
+          <div style="width: 400px; height: 300px; background-color: transparent; text-align: center">
             <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img>
           </div>
-          
-          <div style="display: inline-block">
 
+          <div style="display: inline-block">
             <!-- 비밀번호 변경 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" color="red lighten-2" dark v-bind="attrs" v-on="on">
-                  <!-- 비밀번호 변경 -->
+                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" style="background: #53cde2">
                   <v-icon>mdi-account-edit</v-icon>
                 </v-btn>
               </template>
 
               <v-card>
-                <v-card-title class="headline grey lighten-2 justify-center">비밀번호 변경</v-card-title>
+                <ValidationObserver v-slot="{ invalid }">
+                  <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                    <p class="ma-2" style="color: white; font-family: CookieRun-Bold">비밀번호 변경</p>
+                  </v-card-title>
 
-                <v-card-text>
-                  <v-form class="ma-4">
-                    <v-text-field label="현재 비밀번호" name="password" type="password" required></v-text-field>
-                    <v-text-field label="변경할 비밀번호" name="changedPassword" type="password"></v-text-field>
-                    <v-text-field label="비밀번호 확인" name="changedPasswordConfirm" type="password"></v-text-field>
-                  </v-form>
-                </v-card-text>
+                  <v-card-text>
+                    <v-form class="ma-4">
+                      <v-text-field v-model="userInfo.password" label="현재 비밀번호" name="password" type="password" required style="font-family: CookieRun-Bold"></v-text-field>
 
-                <v-card-actions>
-                  <!-- <v-spacer></v-spacer> -->
-                  <!-- <v-btn color="primary" text @click="dialog_change_password = false">돌아가기</v-btn> -->
-                  <div style="width: 100%; margin: 0 10px; text-align: center">
-                      <v-btn color="primary" style="margin: 10px 10px">수정</v-btn>
-                      <v-btn color="error" style="margin: 10px 10px" @click="dialog_change_password = false">돌아가기</v-btn>
+                      <ValidationProvider mode="eager" v-slot="{ errors }" name="NewPassword" vid="confirmation">
+                        <v-text-field v-model="userInfo.newPassword" :error-messages="errors" label="변경할 비밀번호" name="newPassword" type="password" style="font-family: CookieRun-Bold"></v-text-field>
+                      </ValidationProvider>
+
+                      <ValidationProvider mode="eager" v-slot="{ errors }" name="NewPasswordConfirm" rules="required|confirmed:confirmation">
+                        <v-text-field v-model="userInfo.newPasswordConfirm" :error-messages="errors" label="비밀번호 확인" name="newPasswordConfirm" type="password" style="font-family: CookieRun-Bold"></v-text-field>
+                      </ValidationProvider>
+                    </v-form>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <div style="width: 100%; margin: 0 10px; text-align: center">
+                      <v-btn color="primary" style="margin: 10px 10px; font-family: CookieRun-Bold" @click="changePassword(userInfo)" :disabled="invalid" >변경</v-btn>
+                      <v-btn color="error" style="margin: 10px 10px font-family: CookieRun-Bold" @click="dialog_change_password = false">취소</v-btn>
                     </div>
-                </v-card-actions>
+                  </v-card-actions>
+                </ValidationObserver>
               </v-card>
             </v-dialog>
 
             <!-- 사진 변경 -->
             <v-dialog v-model="dialog_change_image" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" color="red lighten-2" dark v-bind="attrs" v-on="on" @click="videoStart()">
-                  <!-- 사진 변경 -->
+                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #005792">
                   <v-icon>mdi-camera-retake</v-icon>
                 </v-btn>
               </template>
 
               <v-card>
-                <v-card-title class="headline grey lighten-2 justify-center">사진 변경</v-card-title>
+                <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                  <p class="ma-2" style="color: white; font-family: CookieRun-Bold">사진 변경</p>
+                </v-card-title>
 
                 <v-card-text style="padding-bottom: 10px">
                   <div class="my-2" style="display: flex; justify-content: center; align-items: center">
-                    <video id="video" width="400" autoplay muted></video>
+                    <video id="video" width="400" height="300" autoplay muted></video>
+                    <canvas id="canvas" width="400" height="300" style="position: absolute"></canvas>
                   </div>
 
                   <div class="my-2" style="display: flex; justify-content: center;">
-                    <v-btn class="mx-2" fab>
+                    <v-btn class="mx-2" fab @click="videoPauseAndCapture">
                       <v-icon>mdi-camera</v-icon>
                     </v-btn>
-                    <v-btn class="mx-2" fab>
+                    <v-btn class="mx-2" fab @click="videoResume">
                       <v-icon>mdi-refresh</v-icon>
                     </v-btn>
                   </div>
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
 
                   <div class="my-2" style="display: flex; justify-content: center">
-                    <v-btn class="mx-2" color="error" @click="update">변경</v-btn>
-                    <v-btn class="mx-2" color="primary" @click="cancel">취소</v-btn>
+                    <v-btn class="mx-2" color="error" @click="changePicture" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
                   </div>
                 </v-card-text>
               </v-card>
             </v-dialog>
-            
           </div>
         </div>
-        
-        <div id="inner_right" class="col-md-8" style="background: #50d9cb; height: 400px">
-          <div class="ma-2" style="background: yellow;">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem">관리자(이름)</p>&emsp;
-            <p class="text-md-left font-weight-bold" style="font-size: 1rem; text-indent: 2rem">Administrator(아이디)</p>
+
+        <div id="inner_right" class="col-md-8" style="background-color: transparent; height: 400px">
+          <!-- 이름 및 아이디 -->
+          <div class="ma-2" style="background-color: transparent;">
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">관리자(이름)</p>&emsp;
+            <p class="text-md-left font-weight-bold" style="font-size: 1rem; text-indent: 2rem; font-family: CookieRun-Bold;">Administrator(아이디)</p>
           </div>
-          <div class="ma-2 pa-1" style="background: purple">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem;">진행 현황</p>
-            <v-progress-circular class="mx-10 my-2" color="green lighten-2" :size="100" :width="15" value="60">팔</v-progress-circular>
-            <v-progress-circular class="mx-10 my-2" color="blue lighten-2" :size="100" :width="15" value="30">다리</v-progress-circular>
-            <v-progress-circular class="mx-10 my-2" color="pink lighten-2" :size="100" :width="15" value="80">몸</v-progress-circular>
+
+          <!-- 내 게임 진행 현황 -->
+          <div class="ma-2 pa-1" style="background-color: transparent;">
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">진행 현황</p>
+            <v-progress-circular class="mx-10 my-2" color="green lighten-2" :size="100" :width="15" value="60" style="font-family: CookieRun-Bold">팔</v-progress-circular>
+            <v-progress-circular class="mx-10 my-2" color="blue lighten-2" :size="100" :width="15" value="30" style="font-family: CookieRun-Bold">다리</v-progress-circular>
+            <v-progress-circular class="mx-10 my-2" color="pink lighten-2" :size="100" :width="15" value="80" style="font-family: CookieRun-Bold">몸</v-progress-circular>
           </div>
         </div>
       </div>
 
-    <!-- </v-row> -->
+      <!-- </v-row> -->
     </div>
   </v-container>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 import $ from 'jquery'
+import * as faceapi from 'face-api.js'
+
+import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
+import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
+
+extend('required', {
+  ...required,
+  message: '{_field_} 값은 반드시 입력해야 합니다.'
+})
+
+extend('confirmed', {
+  ...confirmed,
+  message: '비밀번호가 같지 않습니다.'
+})
 
 export default {
-  data() {
+  components: {
+    ValidationObserver,
+    ValidationProvider
+  },
+
+  data () {
     return {
-      dialog_my_info: "",
-      dialog_change_password: "",
-      dialog_change_image: "",
-      video: document.getElementById("video"),
-      localStream: ""
-    };
+      dialog_my_info: '',
+      dialog_change_password: '',
+      dialog_change_image: '',
+
+      video: document.getElementById('video'),
+      canvas: document.getElementById('canvas'),
+      localStream: '',
+
+      userInfo: {
+        password: '',
+        newPassword: '',
+        newPasswordConfirm: ''
+      },
+
+      videoFlag: false,
+      timerId: null,
+
+      isCaptured: false
+    }
   },
 
   methods: {
-    home() {
-      this.$router.push({ path: "/" });
-    },
+    ...mapActions(['changePassword']),
 
-    videoStart() {
-      navigator.getUserMedia({ video: {} },
+    // home() {
+    //   this.$router.push({ path: "/" });
+    // },
+
+    videoStart () {
+      this.videoFlag = true
+
+      navigator.getUserMedia(
+        { video: {} },
         stream => {
           video.srcObject = stream
           this.localStream = stream
@@ -131,113 +178,97 @@ export default {
       )
     },
 
-    detectLandMarkes() {
-      const { Canvas, Image, ImageData } = canvas;
+    videoPauseAndCapture () {
+      this.isCaptured = true
+      const video = this.video
+      const canvas = this.canvas
 
-      // faceapi.env.monkeyPatch({ Canvas, Image, ImageData })
-      faceapi.env.monkeyPatch({
-        Canvas: HTMLCanvasElement,
-        Image: HTMLImageElement,
-        ImageData: ImageData,
-        Video: HTMLVideoElement,
-        createCanvasElement: () => document.createElement("canvas"),
-        createImageElement: () => document.createElement("img"),
-      });
+      $('#video').get(0).pause()
+      var ctx = canvas.getContext('2d')
 
-      // let video = document.getElementById("video2");
-      // console.log("video : ", video)
-      let currentStream;
-      let displaySize;
+      if (this.timerId != null) { clearInterval(this.timerId) }
 
-      var that = this
-      navigator.getUserMedia(
-      {
-        video: true
-      },
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+      // console.log(canvas.toDataURL())
 
-      stream => {
-        // val.srcObject = stream;
-        var video = document.getElementById("video")
-        var videoEl = $("#video");
-
-        var left = videoEl.offset().left;
-        var top = videoEl.offset().top;
-        
-        var canvas = $("#canvas")
-
-        var canvas_left = canvas.offset().left;
-
-        $("#canvas").css("left", left)
-        $("#canvas").css("top", top)
-
-        video.srcObject = stream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-          displaySize = { width: this.scrollWidth, height: this.scrollHeight };
-          console.log("displaySize: ", displaySize)
-          console.log("hi")
-
-          async function detect() {
-            console.log("detect")
-            const MODEL_URL = "/models";
-
-            await faceapi.nets.ssdMobilenetv1.loadFromUri("/models");
-            await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-            await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
-
-              console.log("setInterval()")
-              let fullFaceDescriptions = await faceapi
-                .detectAllFaces(video)
-                .withFaceLandmarks()
-                .withFaceDescriptors();
-              let canvasTag = $("#canvas").get(0);
-              faceapi.matchDimensions(canvasTag, displaySize);
-
-              const fullFaceDescription = faceapi.resizeResults(
-                fullFaceDescriptions,
-                displaySize
-              );
-
-              faceapi.draw.drawDetections(canvasTag, fullFaceDescriptions);
-              faceapi.draw.drawFaceLandmarks(canvasTag, fullFaceDescriptions)
-
-              console.log(displaySize);
-          } // end method detect
-
-          detect()
-        };
-        this.localStream = stream
-
-        setTimeout(() => {
-          // this.localStream.getTracks()[0].pause()
-          video.pause()
-        }, 5000);
-      },
-
-      err => console.error(err)
-      )
-      
+      const base64Encoded = canvas.toDataURL()
+      console.log(base64Encoded)
     },
 
-    update() {
+    videoResume () {
+      this.isCaptured = false
+
+      if (this.timerId != null) { clearInterval(this.timerId) }
+
+      $('#video').get(0).play()
+    },
+
+    async faceDetect () {
+      console.log('this.video.width', this.video.width)
+      console.log('this.video.height', this.video.height)
+
+      const video = this.video
+      const canvas = this.canvas
+
+      const displaySize = { width: video.width, height: video.height }
+      faceapi.matchDimensions(canvas, displaySize)
+
+      await faceapi.nets.ssdMobilenetv1.loadFromUri('/models')
+      await faceapi.nets.faceLandmark68Net.loadFromUri('/models')
+      await faceapi.nets.faceRecognitionNet.loadFromUri('/models')
+      await faceapi.nets.faceExpressionNet.loadFromUri('/models')
+
+      this.timerId = setInterval(async () => {
+        console.log('계속 도는 중.')
+        const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
+        const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+        faceapi.draw.drawDetections(canvas, resizedDetections)
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+      }, 100)
+    },
+
+    changePicture () {
       // 멈춰있는 사진 백에 전송.
-            
     },
 
-    cancel() {
-      $("#video").get(0).pause()
-      $("#video").get(0).currentTime = 0;
-      
-      console.log("this.localStream : ", this.localStream)
+    cancelChangingPicture () {
+      this.isCaptured = false
       this.localStream.getTracks()[0].stop()
-
+      if (this.timerId != null) { clearInterval(this.timerId) }
       setTimeout(() => {
         this.dialog_change_image = false
-      }, 1000);
+      }, 500)
+
+      this.videoFlag = false
     }
-    
   },
-};
+
+  mounted () {
+    console.log('Info.vue mounted.')
+    console.log('this.video', this.video)
+    console.log('this.canvas', this.canvas)
+  },
+
+  updated () {
+    console.log('Info.vue updated.')
+    console.log('updated - videoFlag : ', this.videoFlag)
+
+    if (this.videoFlag == true) {
+      this.video = document.getElementById('video')
+      this.canvas = document.getElementById('canvas')
+
+      this.faceDetect()
+    } else {
+      this.video = null
+      this.canvas = null
+
+      console.log('video tag : ', this.video)
+      console.log('canvas tag : ', this.canvas)
+    }
+  }
+}
 </script>
 
 <style>
