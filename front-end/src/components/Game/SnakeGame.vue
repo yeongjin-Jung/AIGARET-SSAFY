@@ -45,7 +45,7 @@
       </template>
     </GameFinishModal>
 
-    <SnakeGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+    <!-- <SnakeGameTutorial @close="doCloseTutorial" v-if="Tutorial">
       <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
       <hooper style="margin-top: -3vh">
         <slide></slide>
@@ -73,7 +73,7 @@
           닫기
         </button>
       </template>
-    </SnakeGameTutorial>
+    </SnakeGameTutorial> -->
     <Loading v-if="loading"></Loading>
   </div>
 </template>

@@ -76,7 +76,6 @@ export default {
       firstStart: true,
       gamestatus: false,
       sketch : null,
-      img : null,
     }
   },
   components: {
@@ -94,9 +93,6 @@ export default {
 
       this.sketch = sketch;
       sketch.createCanvas(this.window_width, this.window_height)
-      this.img = sketch.loadImage('apple.png');
-
-      console.log(this.img);
       sketch.background(0)
       this.video = sketch.createCapture(sketch.VIDEO)
 
@@ -135,7 +131,7 @@ export default {
       if (this.position_x >= 300 && this.position_x <= 700) {
         this.chanege(x)
       }
-      this.score += 100
+      this.score += 10
       this.countDown = 10
     },
     countDownTimer () {

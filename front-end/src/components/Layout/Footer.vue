@@ -1,14 +1,14 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center">
+  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center" style="position:absolute; bottom:3vh;">
     <v-row no-gutters align="center" justify="center">
       <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center">
         
-        <v-btn v-if="index == 2" fab color="#edf9fc" @click="logout()" style="text-decoration: none;">
-          <v-icon>mdi-login</v-icon>
+        <v-btn v-if="index == 2" fab color="#edf9fc" @click="logout()" style="text-decoration: none; height:12vh; width:6vw;" >
+          <v-icon style="font-size: 4vh;">mdi-login</v-icon>
         </v-btn>
 
-        <router-link v-else :to="icon.url" style="text-decoration: none;">
-          <v-btn fab color="#edf9fc"><v-icon>{{ icon.img }}</v-icon></v-btn>
+        <router-link v-else :to="icon.url" style="text-decoration: none; ">
+          <v-btn fab color="#edf9fc" style="height:12vh; width:6vw;"><v-icon style="font-size: 4vh;"  >{{ icon.img }}</v-icon></v-btn>
         </router-link>
 
       </v-col>
