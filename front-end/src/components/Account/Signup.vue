@@ -21,13 +21,14 @@
                   <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
                     <v-text-field id="id" v-model="signupData.id" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
-                        <v-btn outlined small rounded>중복확인</v-btn>
+                        <v-btn outlined small rounded @click="checkIdDuplicate(signupData.id)">중복확인</v-btn>
                       </template>
                     </v-text-field>
                   </ValidationProvider>
                 </ValidationObserver>
+                
+                <v-alert dense outlined type="error" v-if="isIdDuplicated">이미 가입된 아이디입니다.</v-alert>
 
-                <!-- <v-alert dense outlined type="error">이미 가입된 아이디입니다.</v-alert> -->
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 8, regex: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/ }">
                   <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
@@ -144,7 +145,8 @@ export default {
         password: '',
         passwordConfirm: '',
         name: '',
-        age: ''
+        age: '',
+        img: ''
       },
 
       isCaptured: false,
@@ -163,6 +165,10 @@ export default {
     } else {
       this.dialog = false
     }
+  },
+  
+  computed: {
+    ...mapState(['isIdDuplicated'])
   },
 
   methods: {
@@ -202,7 +208,8 @@ export default {
       // console.log(canvas.toDataURL())
 
       const base64Encoded = canvas.toDataURL()
-      console.log(base64Encoded)
+      // console.log(base64Encoded)
+      this.$store.commit('SET_IMG', base64Encoded)
     },
 
     videoResume () {

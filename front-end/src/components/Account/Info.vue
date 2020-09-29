@@ -7,7 +7,8 @@
 
           <!-- 사진! -->
           <div style="width: 400px; height: 300px; background-color: transparent; text-align: center">
-            <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img>
+            <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
+            <v-img :src="img" width="400px" height="300px"></v-img>
           </div>
 
           <div style="display: inline-block">
@@ -154,7 +155,9 @@ export default {
       videoFlag: false,
       timerId: null,
 
-      isCaptured: false
+      isCaptured: false,
+
+      img: this.$store.state.img
     }
   },
 
@@ -249,6 +252,7 @@ export default {
     console.log('Info.vue mounted.')
     console.log('this.video', this.video)
     console.log('this.canvas', this.canvas)
+    console.log("this.img : ", this.img)
   },
 
   updated () {
