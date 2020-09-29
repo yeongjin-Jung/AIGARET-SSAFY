@@ -4,16 +4,16 @@
       <!-- <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center"> -->
         
         <router-link  :to="info" style="text-decoration: none; margin-left:20px; margin-right:20px;">
-          <v-btn id="info" elevation="0" style="height:14vh; width:7vw;"></v-btn>
+          <v-btn id="info" elevation="0" style="height:15vh; width:7vw;"></v-btn>
         </router-link>
 
 
         <router-link  :to="rank" style="text-decoration: none; margin-left:20px; margin-right:20px;">
-          <v-btn id="rank" elevation="0" style="height:14vh; width:7vw;"></v-btn>
+          <v-btn id="rank" elevation="0" style="height:15.5vh; width:7.5vw;"></v-btn>
         </router-link>
 
 
-        <v-btn id="logout" elevation="0"  @click="logout()" style="text-decoration: none; height:14vh; width:7vw; margin-left:19px; margin-right:20px;" >
+        <v-btn id="logout" elevation="0"  @click="logout()" style="text-decoration: none; height:15vh; width:7vw; margin-left:19px; margin-right:20px;" >
           <!-- <v-icon style="font-size: 3.5vh;">mdi-login</v-icon> -->
         </v-btn>
 
@@ -47,19 +47,19 @@ export default {
 <style>
 
 #logout {
-background-image: url("../../assets/menuButton/logout.png");
+background-image: url("../../assets/menuButton/logout-red.png");
 background-size : cover;
 background-color: rgba( 255, 255, 255, 0 );
 }
 
 #info {
-background-image: url("../../assets/menuButton/info.png");
+background-image: url("../../assets/menuButton/info-blue.png");
 background-size : cover;
 background-color: rgba( 255, 255, 255, 0 );
 }
 
 #rank {
-background-image: url("../../assets/menuButton/rank.png");
+background-image: url("../../assets/menuButton/rank-green.png");
 background-size : cover;
 background-color: rgba( 255, 255, 255, 0 );
 }
