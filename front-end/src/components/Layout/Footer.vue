@@ -1,25 +1,17 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center" style="padding: ; position:absolute; bottom:5vh;">
-    <v-row no-gutters align="center" justify="center" style="height: 12vh;">
-      <!-- <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center"> -->
+  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 3vh;">
+    <v-row justify="center">
         
-        <router-link  :to="info" style="text-decoration: none; margin-left:20px; margin-right:20px;">
-          <v-btn id="info" elevation="0" style="height:15vh; width:7vw;"></v-btn>
+        <router-link to="/info" style="text-decoration: none; margin-left:20px; margin-right:20px;">
+          <v-btn id="info" elevation="0" style="height:14vh; width:7vw;"></v-btn>
         </router-link>
 
-
-        <router-link  :to="rank" style="text-decoration: none; margin-left:20px; margin-right:20px;">
-          <v-btn id="rank" elevation="0" style="height:15.5vh; width:7.5vw;"></v-btn>
+        <router-link to="/rank" style="text-decoration: none; margin-left:20px; margin-right:20px;">
+          <v-btn id="rank" elevation="0" style="height:14vh; width:7vw;"></v-btn>
         </router-link>
 
+        <v-btn id="logout" elevation="0" @click="logout()" style="height:14vh; width:7vw; margin-left:19px; margin-right:20px;" ></v-btn>
 
-        <v-btn id="logout" elevation="0"  @click="logout()" style="text-decoration: none; height:15vh; width:7vw; margin-left:19px; margin-right:20px;" >
-          <!-- <v-icon style="font-size: 3.5vh;">mdi-login</v-icon> -->
-        </v-btn>
-
-        
-        
-      <!-- </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -32,9 +24,7 @@ export default {
   
   data () {
     return {
-      activeBtn: 1,
-      info : 'info',
-      rank : 'rank',
+      //
     }
   },
 
@@ -45,7 +35,6 @@ export default {
 </script>
 
 <style>
-
 #logout {
 background-image: url("../../assets/menuButton/logout-red.png");
 background-size : cover;

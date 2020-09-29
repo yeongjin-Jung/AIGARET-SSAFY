@@ -1,12 +1,8 @@
 <template>
   <v-system-bar app color="orange" style="height: 5vh;">
-    <!-- <router-link to="/" style="text-decoration: none;">
-      <v-btn icon style="margin-left:20px;"><v-icon style="font-size : 4.5vh;" >mdi-home</v-icon></v-btn>
-    </router-link> -->
-    <!-- <img
-      src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"
-      style="margin-left: 40px; width: 2vw; height: 3vh;"
-    /> -->
+    <router-link to="/" style="text-decoration: none;">
+      <v-btn icon style="margin-left: 10px;"><v-icon style="font-size: 4.5vh;" >mdi-home</v-icon></v-btn>
+    </router-link>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 10px; display:inline; font-family: CookieRun-Bold;"
     >AIGARET</p>
