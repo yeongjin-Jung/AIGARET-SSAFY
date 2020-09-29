@@ -45,9 +45,14 @@ export default new Vuex.Store({
     },
 
     LOGOUT(state) {
-      state.id = null
-      state.accessToken = null
-      state.userInfo = null
+      state.id = ''
+      state.accessToken = ''
+
+      state.userInfo.id = ''
+      state.userInfo.username = ''
+      state.userInfo.name = ''
+      state.userInfo.age = ''
+
 
       localStorage.removeItem('id')
       localStorage.removeItem('accessToken')
