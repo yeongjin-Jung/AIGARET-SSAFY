@@ -1,17 +1,17 @@
 <template>
-  <v-dialog v-model="dialog" width="880" persistent>
+  <v-dialog v-model="dialog" width="880" height="900" persistent>
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
 
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" class="mr-2" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer" class="row" style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center;">
+    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height:530px;">
 
-      <div id="div_left" class="col-md-6" style="margin:auto; text-align:center">
+      <div id="div_left" style="margin:auto; text-align:center">
 
         <ValidationObserver ref="observer" v-slot="{ invalid }">
-          <v-card width="448px" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
+          <v-card width="50%" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
 
             <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
 
@@ -56,22 +56,22 @@
 
       <!-- 오른쪽 웹캠 div -->
       
-      <div id="div_right" class="col-md-6" style="background: #fcfeff; text-align: center">
+      <div id="div_right" style="background: #fcfeff; text-align: center; height:100%; padding-top:30px;">
 
-        <div class="my-2" style="display: flex; justify-content: center; align-items: center; ">
+        <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
           <canvas id="canvas" class="overlay" width="400" height="300"></canvas>
         </div>
 
         <div class="my-2" style="display: flex; justify-content: center;">
-          <h3 style="padding: 15px auto; font-size: 22px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 <br>화면 가운데 위치시켜주세요.</h3>
+          <p style="padding: 15px auto; font-size: 27px; font-family: CookieRun-Bold;">얼굴이 잘 인식되도록 <br>화면 가운데 위치시켜주세요.</p>
         </div>
 
-        <div class="my-2" style="display: flex; justify-content: center;">
-          <v-btn class="mx-2" fab dark small color="primary" @click="videoPauseAndCapture">
-            <v-icon dark>mdi-camera</v-icon>
+        <div class="my-2" style="display: flex; justify-content: center; ">
+          <v-btn class="mx-2" fab dark  color="primary" @click="videoPauseAndCapture">
+            <v-icon dark >mdi-camera</v-icon>
           </v-btn>
-          <v-btn class="mx-2" fab dark small color="error" @click="videoResume">
+          <v-btn class="mx-2" fab dark  color="error" @click="videoResume">
             <v-icon dark>mdi-refresh</v-icon>
           </v-btn>
         </div>
