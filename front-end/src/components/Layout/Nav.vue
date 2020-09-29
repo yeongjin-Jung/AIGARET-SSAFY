@@ -1,18 +1,18 @@
 <template>
-  <v-system-bar app color="orange" style="height: 5vh; position:absolute; top:0px;">
-    <router-link to="/" style="text-decoration: none;">
+  <v-system-bar app color="orange" style="height: 5vh;">
+    <!-- <router-link to="/" style="text-decoration: none;">
       <v-btn icon style="margin-left:20px;"><v-icon style="font-size : 4.5vh;" >mdi-home</v-icon></v-btn>
-    </router-link>
+    </router-link> -->
     <!-- <img
       src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"
       style="margin-left: 40px; width: 2vw; height: 3vh;"
     /> -->
     <p
-      style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 15px; display:inline; font-family: CookieRun-Bold;"
+      style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 10px; display:inline; font-family: CookieRun-Bold;"
     >AIGARET</p>
     <v-spacer></v-spacer>
     <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
-      {{ $store.state.id}}님 환영합니다.
+      {{ $store.state.id }}님 환영합니다.
     </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"

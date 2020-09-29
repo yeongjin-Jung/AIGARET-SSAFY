@@ -3,19 +3,15 @@
     
     <Nav />
     
-    <v-container fluid class="fill-height" id="container_login" v-if="!isLoggedIn">
-      <Login />
-    </v-container>
+    <Login v-if="!isLoggedIn" id="background_cover" />
     
-    <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
-    
-    <v-main id="mainApp" v-else style="padding: ;" > 
-      <v-container fluid class="fill-height" style="position:absolute; top:0px; padding:0px;">
+    <v-main v-if="isLoggedIn" id="background_cover"> 
+      <v-container fluid class="fill-height">
         <router-view />
         <Footer />
       </v-container>
     </v-main>
-
+    
   </v-app>
 </template>
 
@@ -62,17 +58,8 @@ export default {
   src: url("assets/NanumBarunGothicBold.ttf");
 }
 
-#mainApp {
+#background_cover {
   background-image: url("assets/bluemoon.png");
   background-size : cover;
-
 }
-
-#container_login{
-  background-image: url("assets/bluemoon.png");
-  background-size : cover;
-
-  // height: 85vh; 컴포넌트화로 무의미해진듯, 삭제예정
-}
-
 </style>

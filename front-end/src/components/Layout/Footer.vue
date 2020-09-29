@@ -1,17 +1,14 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center" style="position:absolute; bottom:3vh;">
-    <v-row no-gutters align="center" justify="center">
-      <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center">
-        
-        <v-btn v-if="index == 2" fab color="#edf9fc" @click="logout()" style="text-decoration: none; height:10vh; width:5vw;" >
-          <v-icon style="font-size: 3.5vh;">mdi-login</v-icon>
+  <v-container fluid style="position: absolute; bottom: 3vh;">
+    <v-row justify="center">
+      <router-link v-for="(icon, index) in icons" :key="index" :to="icon.url" style="text-decoration: none;">
+        <v-btn fab color="#edf9fc" class="mx-4" style="height: 9vh; width: 4.5vw;">
+          <v-icon size="5vh">{{ icon.img }}</v-icon>
         </v-btn>
-
-        <router-link v-else :to="icon.url" style="text-decoration: none; ">
-          <v-btn fab color="#edf9fc" style="height:10vh; width:5vw;"><v-icon style="font-size: 3.5vh;"  >{{ icon.img }}</v-icon></v-btn>
-        </router-link>
-
-      </v-col>
+      </router-link>
+      <v-btn fab color="#edf9fc" class="mx-4" style="height: 9vh; width: 4.5vw;" @click="logout()">
+        <v-icon size="5vh">mdi-logout</v-icon>
+      </v-btn>
     </v-row>
   </v-container>
 </template>
@@ -21,11 +18,15 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'Footer',
-
+  
   data () {
     return {
-      activeBtn: 1,
       icons: [
+        {
+          title: 'Home',
+          img: 'mdi-home',
+          url: '/'
+        },
         {
           title: 'Profile',
           img: 'mdi-card-account-details',
@@ -33,20 +34,9 @@ export default {
         },
         {
           title: 'Rank',
-          img: 'rank',
+          img: 'mdi-trophy',
           url: 'rank'
         },
-        // {
-        //   title: 'Report',
-        //   img: 'mdi-history',
-        //   url: 'report'
-        // },
-        // {
-        //   title: 'Settings',
-        //   img: 'mdi-application-cog',
-        //   url: '/'
-        // },
-        {}
       ]
     }
   },
