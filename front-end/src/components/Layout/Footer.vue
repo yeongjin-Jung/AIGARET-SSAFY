@@ -1,17 +1,25 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center" style="position:absolute; bottom:3vh;">
-    <v-row no-gutters align="center" justify="center">
-      <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center">
+  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center" style="padding: ; position:absolute; bottom:5vh;">
+    <v-row no-gutters align="center" justify="center" style="height: 12vh;">
+      <!-- <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center"> -->
         
-        <v-btn v-if="index == 2" fab color="#edf9fc" @click="logout()" style="text-decoration: none; height:10vh; width:5vw;" >
-          <v-icon style="font-size: 3.5vh;">mdi-login</v-icon>
-        </v-btn>
-
-        <router-link v-else :to="icon.url" style="text-decoration: none; ">
-          <v-btn fab color="#edf9fc" style="height:10vh; width:5vw;"><v-icon style="font-size: 3.5vh;"  >{{ icon.img }}</v-icon></v-btn>
+        <router-link  :to="info" style="text-decoration: none; margin-left:20px; margin-right:20px;">
+          <v-btn id="info" elevation="0" style="height:14vh; width:7vw;"></v-btn>
         </router-link>
 
-      </v-col>
+
+        <router-link  :to="rank" style="text-decoration: none; margin-left:20px; margin-right:20px;">
+          <v-btn id="rank" elevation="0" style="height:14vh; width:7vw;"></v-btn>
+        </router-link>
+
+
+        <v-btn id="logout" elevation="0"  @click="logout()" style="text-decoration: none; height:14vh; width:7vw; margin-left:19px; margin-right:20px;" >
+          <!-- <v-icon style="font-size: 3.5vh;">mdi-login</v-icon> -->
+        </v-btn>
+
+        
+        
+      <!-- </v-col> -->
     </v-row>
   </v-container>
 </template>
@@ -25,29 +33,8 @@ export default {
   data () {
     return {
       activeBtn: 1,
-      icons: [
-        {
-          title: 'Profile',
-          img: 'mdi-card-account-details',
-          url: 'info'
-        },
-        {
-          title: 'Rank',
-          img: 'rank',
-          url: 'rank'
-        },
-        // {
-        //   title: 'Report',
-        //   img: 'mdi-history',
-        //   url: 'report'
-        // },
-        // {
-        //   title: 'Settings',
-        //   img: 'mdi-application-cog',
-        //   url: '/'
-        // },
-        {}
-      ]
+      info : 'info',
+      rank : 'rank',
     }
   },
 
@@ -58,4 +45,22 @@ export default {
 </script>
 
 <style>
+
+#logout {
+background-image: url("../../assets/menuButton/logout.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
+
+#info {
+background-image: url("../../assets/menuButton/info.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
+
+#rank {
+background-image: url("../../assets/menuButton/rank.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
 </style>
