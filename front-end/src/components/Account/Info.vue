@@ -3,16 +3,19 @@
     <div>
       <div id="outer" class="row">
 
-        <div id="inner_left" class="col-md-4" style="background-color: transparent; height: 400px; display: flex; justify-content: center; flex-wrap: wrap;">
+        <!-- 왼쪽 div 영역(div_inner_left) -->
+        <div id="div_inner_left" class="col-md-4" style="background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
 
-          <!-- 사진! -->
-          <div style="width: 400px; height: 300px; background-color: transparent; text-align: center">
+          <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
+          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center">
             <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
-            <v-img :src="img" width="400px" height="300px"></v-img>
+            <v-img :src="img" width="400px" height="300px" style="background: red"></v-img>
           </div>
 
-          <div style="display: inline-block">
-            <!-- 비밀번호 변경 -->
+          <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경과 사진 변경 버튼이 있음. -->
+          <div id="div_inner_left_second" style="">
+            
+            <!-- 1. 비밀번호 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="ma-2" dark v-bind="attrs" v-on="on" style="background: #53cde2">
@@ -50,7 +53,7 @@
               </v-card>
             </v-dialog>
 
-            <!-- 사진 변경 -->
+            <!-- 2. 사진 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_image" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="ma-2" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #005792">
@@ -87,17 +90,41 @@
               </v-card>
             </v-dialog>
           </div>
+
+          <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더 위치. -->
+          <div id="div_inner_left_third" style="width: 400px; height: 300px; background: yellow">
+            <v-calendar
+              ref="calendar"
+              v-model="focus"
+              color="primary"
+              :events="events"
+              :event-color="getEventColor"
+              :type="type"
+              @click:event="showEvent"
+              @click:more="viewDay"
+              @click:date="viewDay"
+              @change="updateRange"
+            ></v-calendar>
+          </div>
         </div>
 
-        <div id="inner_right" class="col-md-8" style="background-color: transparent; height: 400px">
-          <!-- 이름 및 아이디 -->
-          <div class="ma-2" style="background-color: transparent;">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">관리자(이름)</p>&emsp;
-            <p class="text-md-left font-weight-bold" style="font-size: 1rem; text-indent: 2rem; font-family: CookieRun-Bold;">Administrator(아이디)</p>
+        <!-- 오른쪽 div 영역(div_inner_left) -->
+        <div id="div_inner_right" class="col-md-8" style="background-color: transparent;">
+          
+          <!-- 1. 모든 게임에 대한 종합 데이터 -->
+          <div id="div_inner_right_first" class="ma-2" style="background: transparent">
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">모든 게임 종합 데이터</p>&emsp;
+            <BarChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
+            <PieChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
           </div>
 
-          <!-- 내 게임 진행 현황 -->
-          <div class="ma-2 pa-1" style="background-color: transparent;">
+          <!-- 2. 각 게임별 일주일 데이터 -->
+          <div id="div_inner_right_second" class="ma-2 pa-1" style="background: yellow;">
+            <div>
+              <v-btn>손목</v-btn>
+              <v-btn>스네이크</v-btn>
+              <v-btn>점프</v-btn>
+            </div>
             <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">진행 현황</p>
             <v-progress-circular class="mx-10 my-2" color="green lighten-2" :size="100" :width="15" value="60" style="font-family: CookieRun-Bold">팔</v-progress-circular>
             <v-progress-circular class="mx-10 my-2" color="blue lighten-2" :size="100" :width="15" value="30" style="font-family: CookieRun-Bold">다리</v-progress-circular>
@@ -120,6 +147,9 @@ import * as faceapi from 'face-api.js'
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
+import BarChart from '@/components/Account/BarChart'
+import PieChart from '@/components/Account/PieChart'
+
 extend('required', {
   ...required,
   message: '{_field_} 값은 반드시 입력해야 합니다.'
@@ -133,7 +163,10 @@ extend('confirmed', {
 export default {
   components: {
     ValidationObserver,
-    ValidationProvider
+    ValidationProvider,
+
+    BarChart,
+    PieChart
   },
 
   data () {
