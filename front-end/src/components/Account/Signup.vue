@@ -143,7 +143,8 @@ export default {
         password: '',
         passwordConfirm: '',
         name: '',
-        age: ''
+        age: '',
+        img: ''
       },
 
       isCaptured: false,
@@ -201,7 +202,8 @@ export default {
       // console.log(canvas.toDataURL())
 
       const base64Encoded = canvas.toDataURL()
-      console.log(base64Encoded)
+      // console.log(base64Encoded)
+      this.$store.commit('SET_IMG', base64Encoded)
     },
 
     videoResume () {
