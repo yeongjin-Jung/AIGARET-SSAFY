@@ -9,10 +9,31 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     id: localStorage.getItem('id'),
-    accessToken: localStorage.getItem('accessToken')
+    accessToken: localStorage.getItem('accessToken'),
+    userInfo: {
+      'id': '',
+      'username': '',
+      'name': '',
+      'age': '',
+      'img': ''
+    },
+    img: '',
+    isIdDuplicated: false,
   },
 
   mutations: {
+    SET_ID_DUPLICATED(state, res) {
+      state.isIdDuplicated = res
+    },
+
+    SET_USER_INFO(state, userInfo) {
+      state.userInfo.id = userInfo.id
+      state.userInfo.username = userInfo.username
+      state.userInfo.name = userInfo.name
+      state.userInfo.age = userInfo.age
+      state.userInfo.img = userInfo.img
+    },
+
     SET_USER_ID (state, id) {
       state.id = id
       localStorage.setItem('id', id)
@@ -21,19 +42,21 @@ export default new Vuex.Store({
     SET_TOKEN(state, token) {
       state.accessToken = token
       localStorage.setItem('accessToken', token)
-      // if (!!!token.authorization) {
-      //   state.authorization = token.authorization
-      //   localStorage.setItem('authorization', token)
-      // }
     },
 
     LOGOUT(state) {
       state.id = null
       state.accessToken = null
+      state.userInfo = null
 
       localStorage.removeItem('id')
       localStorage.removeItem('accessToken')
-    }
+    },
+
+    SET_IMG(state, base64Encoded) {
+      state.img = base64Encoded
+    },
+
   },
 
   getters: {
@@ -50,6 +73,19 @@ export default new Vuex.Store({
   },
 
   actions: {
+    checkIdDuplicate({ commit }, id) {
+      axios.post(SERVER.URL + SERVER.ROUTES.checkIdDuplicate, id)
+      .then(res => {
+        console.log("res : ", res)
+
+        if(res == true)
+          commit(SET_ID_DUPLICATED, true)
+        else
+          commit(SET_ID_DUPLICATED, false)
+      })
+      .catch()
+    },
+
     signup({ commit, dispatch }, signupData) {
       const data = {
         'username': signupData.id,
@@ -57,6 +93,7 @@ export default new Vuex.Store({
         'age': signupData.age,
         'password': signupData.password,
         'confirm_password': signupData.passwordConfirm,
+        'img': signupData.img
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.signup, data)
@@ -85,6 +122,7 @@ export default new Vuex.Store({
         console.log("로그인 아이디 : ", res.data.user.username)
         console.log("받아온 토큰 : ", res.data.token)
 
+        commit('SET_USER_INFO', res.data.user)
         commit('SET_USER_ID', res.data.user.username)
         commit('SET_TOKEN', res.data.token)
       })
@@ -101,15 +139,30 @@ export default new Vuex.Store({
       const data = {
         id: state.id,
         password: userInfo.password,
-        newPassword: userInfo.newPassword
+        new_password: userInfo.newPassword
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.changePassword, data)
       .then(res => {
         console.log('비밀번호 변경 완료!')
+        alert("변경된 비밀번호로 로그인 해주세요.")
+        commit('LOGOUT')
       })
       .catch()
     },
+
+    changeImage(new_image) {
+      const data = {
+        id: state.id,
+        new_image: new_image
+      }
+
+      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data)
+      .then(res => {
+
+      })
+      .catch()
+    }
   },
 
   modules: {

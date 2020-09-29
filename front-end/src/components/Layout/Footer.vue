@@ -29,7 +29,7 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'Footer',
-
+  
   data () {
     return {
       activeBtn: 1,
