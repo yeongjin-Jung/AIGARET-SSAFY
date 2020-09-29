@@ -17,10 +17,15 @@ export default new Vuex.Store({
       'age': '',
       'img': ''
     },
-    img: ''
+    img: '',
+    isIdDuplicated: false,
   },
 
   mutations: {
+    SET_ID_DUPLICATED(state, res) {
+      state.isIdDuplicated = res
+    },
+
     SET_USER_INFO(state, userInfo) {
       state.userInfo.id = userInfo.id
       state.userInfo.username = userInfo.username
@@ -50,7 +55,8 @@ export default new Vuex.Store({
 
     SET_IMG(state, base64Encoded) {
       state.img = base64Encoded
-    }
+    },
+
   },
 
   getters: {
@@ -67,6 +73,19 @@ export default new Vuex.Store({
   },
 
   actions: {
+    checkIdDuplicate({ commit }, id) {
+      axios.post(SERVER.URL + SERVER.ROUTES.checkIdDuplicate, id)
+      .then(res => {
+        console.log("res : ", res)
+
+        if(res == true)
+          commit(SET_ID_DUPLICATED, true)
+        else
+          commit(SET_ID_DUPLICATED, false)
+      })
+      .catch()
+    },
+
     signup({ commit, dispatch }, signupData) {
       const data = {
         'username': signupData.id,
