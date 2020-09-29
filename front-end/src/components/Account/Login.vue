@@ -1,6 +1,6 @@
 <template>
-  <v-main id="container" class="fill-height">
-    <v-container style="height: 100%; width:40%; margin-top : -5vh;" class="fill-height">
+  <!-- <v-main id="container" class="fill-height"> -->
+    <v-container fluid class="fill-height">
 
       <!-- <div class="fill-height" style="margin: auto;"> -->
           <v-row style="text-align: center; width:30%;">
@@ -12,8 +12,8 @@
               <v-form>
                 <p style="text-align: center; font-size:10vh; font-family: CookieRun-Bold;">AIGARET</p>
                 <p style="text-align: center; font-size:4vh; font-family: CookieRun-Regular; font-weight: 500;">AI Game Rehabilitation Trainer</p>
-                <v-text-field v-model="loginData.username" dark filled background-color="rgb(52, 63, 87)" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData)"></v-text-field>
-                <v-text-field v-model="loginData.password" dark filled background-color="rgb(52, 63, 87)" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData)"></v-text-field>
+                <v-text-field v-model="loginData.username" dark filled background-color="#005792" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData)"></v-text-field>
+                <v-text-field v-model="loginData.password" dark filled background-color="#005792" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData)"></v-text-field>
               </v-form>
 
               <div>
@@ -51,7 +51,7 @@
           </v-row>
 
     </v-container>
-  </v-main>
+  <!-- </v-main> -->
 </template>
 
 <script>
@@ -60,8 +60,8 @@ import { required, email } from 'vee-validate/dist/rules'
 
 import { mapState, mapActions } from 'vuex'
 
-import Signup from '@/components/Account/Signup'
-import FaceLogin from '@/components/Account/FaceLogin'
+import Signup from './Signup'
+import FaceLogin from './FaceLogin'
 
 extend('required', {
   ...required,
