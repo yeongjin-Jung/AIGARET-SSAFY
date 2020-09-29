@@ -90,7 +90,7 @@ import * as faceapi from './face-api-min'
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 const canvas = require('canvas')
 
