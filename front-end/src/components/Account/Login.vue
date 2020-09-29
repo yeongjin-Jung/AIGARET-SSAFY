@@ -51,7 +51,7 @@
           </v-row>
 
     </v-container>
-  <!-- </v-main> -->
+  </v-main>
 </template>
 
 <script>
