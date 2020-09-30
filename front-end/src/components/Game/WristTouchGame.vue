@@ -1,5 +1,5 @@
 <template>
-  <div style="width:98vw; height:94.7vh; position:absolute; top:5vh; text-align : center;">
+  <div style="width:98vw; height:94.7vh; position:absolute; top:0px; text-align : center;">
     <!-- <h4>손목터치게임</h4> -->
     <div style="text-align: center; width : 70vw; height: 70vh;  margin-top : 10vh;"></div>
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
