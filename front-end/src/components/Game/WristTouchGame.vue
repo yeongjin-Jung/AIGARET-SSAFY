@@ -13,7 +13,7 @@
       <!-- /footer -->
       <template slot="footer" style="background-color : rgba(0,0,0,1);">
         <button
-          @click="doClose"
+          @click="doClose(); sendGameData(); restart()"
           style="background-color : red; height :8vh; border-radius: 12px;  width:10vw; font-size : 4vh; font-weight: 600; color:yellow;"
         >다시시작</button>
       </template>
@@ -44,6 +44,9 @@
 </template>
 
 <script>
+import SERVER from '@/api/server.js'
+import axios from 'axios'
+
 import VueP5 from 'vue-p5'
 import ml5 from 'ml5'
 import $ from 'jquery'
@@ -76,6 +79,10 @@ export default {
       firstStart: true,
       gamestatus: false,
       sketch : null,
+
+      start_time: null,
+      end_time: null,
+      game_score: 0,
     }
   },
   components: {
@@ -173,6 +180,8 @@ export default {
         sketch.scale(-1, 1)
 
         if (this.countDown == 0) {
+          this.end_time = this.timeNow()
+          this.game_score = this.score
           this.modal = true
           this.score = 0
           this.gamestatus = false;
@@ -257,18 +266,44 @@ export default {
     //   this.gamestatus = true
     //   this.firstStart = false
     // }
+    timeNow () {
+      return new Date().toString('ko-KR')
+    },
+    restart () {
+      this.start_time = this.timeNow()
+    },
+    sendGameData () {
+      const testd = {
+        // userId: Number,
+        gameNo: this.$route.query.gameNo,
+        startTime: this.start_time,
+        endTime: this.end_time,
+        gameScore: this.game_score,
+      }
+      // console.log(testd)
+      // axios.post(SERVER.URL + '?', testd).catch((err) => console.log(err));
+      // axios.post(SERVER.URL + '?', {
+      //   gameNo: this.$route.query.gameNo,
+      //   startTime: this.start_time,
+      //   endTime: this.end_time,
+      //   gameScore: this.game_score,
+      // }).catch((err) => console.log(err));
+    }
   },
   created () {
     this.Tutorial = true
     this.countDownTimer();
     this.gamestatus = true;
   },
+  mounted () {
+    this.start_time = this.timeNow()
+     console.log(this.$store.state.userInfo)
+  },
   destroyed(){
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
     console.log(this.sketch);
-
   }
 }
 </script>
