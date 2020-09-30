@@ -267,21 +267,23 @@ export default {
     //   this.firstStart = false
     // }
     timeNow () {
-      return new Date().toString('ko-KR')
+      var date = new Date().toISOString()
+      var time = new Date().toString('ko-KR')
+      return date.slice(0, 10) + ' ' + time.slice(16, 24)
     },
     restart () {
       this.start_time = this.timeNow()
     },
     sendGameData () {
       const testd = {
-        // userId: Number,
+        userId: this.$store.state.userInfo.userid,
         gameNo: this.$route.query.gameNo,
         startTime: this.start_time,
         endTime: this.end_time,
         gameScore: this.game_score,
       }
       console.log(testd)
-      // axios.post(SERVER.URL + '?', testd).catch((err) => console.log(err));
+      // axios.post(SERVER.URL + SERVER.ROUTES.sendData, testd).catch((err) => console.log(err));
       // axios.post(SERVER.URL + '?', {
       //   gameNo: this.$route.query.gameNo,
       //   startTime: this.start_time,
@@ -297,6 +299,7 @@ export default {
   },
   mounted () {
     this.start_time = this.timeNow()
+    // console.log(this.timeNow())
     // console.log(this.$store.state.userInfo)
   },
   destroyed(){
