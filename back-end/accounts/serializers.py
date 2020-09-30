@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'age', 'password', 'confirm_password', ]
+        fields = ['id', 'username', 'name', 'age', 'goal_time', 'profile_image', 'password', 'confirm_password', ]
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
@@ -24,3 +24,12 @@ class UserSerializer(serializers.ModelSerializer):
                     "The passwords have to be the same"
                 )
         return data
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)

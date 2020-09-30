@@ -5,12 +5,14 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(self, username, name, age, password=None, **extra_fields):
+    def create_user(self, username, name, age, goal_time=0, profile_image="", password=None, **extra_fields):
         try:
             user = self.model(
                 username=username,
                 name=name,
                 age=age,
+                goal_time=goal_time,
+                profile_image=profile_image
             )
             print('name', name)
             extra_fields.setdefault('is_staff', False) 
@@ -23,7 +25,7 @@ class UserManager(BaseUserManager):
             print('에러', name)
             print(e)
 
-    def create_superuser(self, username, age=0, name='superuser', password=None, **extra_fields):
+    def create_superuser(self, username, age=0, goal_time=0, profile_image="", name='superuser', password=None, **extra_fields):
         try:
             superuser = self.create_user(
                 username=username,
@@ -44,7 +46,8 @@ class User(AbstractBaseUser):
     username = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=20)
     age = models.IntegerField(null=True)
-    exercise_cycle = models.CharField(max_length=20, null=True, blank=True)
+    goal_time = models.IntegerField(null=True, blank=True)
+    profile_image = models.TextField(null=True, blank=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -52,7 +55,7 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['name', 'age', 'exercise_cycle']
+    REQUIRED_FIELDS = ['name', 'age', ]
 
     def has_perm(self, perm, obj=None):
         return True

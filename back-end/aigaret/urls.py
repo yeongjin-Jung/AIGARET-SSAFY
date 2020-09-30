@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from accounts.views import AuthRegister
+from accounts.views import AuthRegister, ChangePasswordView
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
@@ -36,6 +36,8 @@ urlpatterns = [
     path("api/rest-auth/", include('rest_auth.urls')),
     # path("rest-auth/signup/", include('rest_auth.registration.urls')),
     path("api/rest-auth/signup/", AuthRegister.as_view()),
+    
+    path("api/changepassword/", ChangePasswordView.as_view()),
     
     # games
     path('api/games/', include('games.urls')),
