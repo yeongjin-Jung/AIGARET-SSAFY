@@ -7,7 +7,6 @@
 
           <!-- 사진! -->
           <div style="width: 400px; height: 300px; background-color: transparent; text-align: center">
-            <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
             <v-img :src="img" width="400px" height="300px"></v-img>
           </div>
 
@@ -27,23 +26,23 @@
                   </v-card-title>
 
                   <v-card-text>
-                    <v-form class="ma-4">
-                      <v-text-field v-model="userInfo.password" label="현재 비밀번호" name="password" type="password" required style="font-family: CookieRun-Bold"></v-text-field>
+                    <v-form class="ma-4" ref="form" @submit.prevent>
+                      <v-text-field v-model="userInfo.old_password" label="현재 비밀번호" name="password" type="password" required style="font-family: CookieRun-Bold"></v-text-field>
 
-                      <ValidationProvider mode="eager" v-slot="{ errors }" name="NewPassword" vid="confirmation">
-                        <v-text-field v-model="userInfo.newPassword" :error-messages="errors" label="변경할 비밀번호" name="newPassword" type="password" style="font-family: CookieRun-Bold"></v-text-field>
+                      <ValidationProvider mode="eager" v-slot="{ errors }" name="NewPassword" vid="confirmation" :rules="{ required: true, min: 4 }">
+                        <v-text-field v-model="userInfo.new_password" :error-messages="errors" label="변경할 비밀번호" name="newPassword" type="password" style="font-family: CookieRun-Bold"></v-text-field>
                       </ValidationProvider>
 
                       <ValidationProvider mode="eager" v-slot="{ errors }" name="NewPasswordConfirm" rules="required|confirmed:confirmation">
-                        <v-text-field v-model="userInfo.newPasswordConfirm" :error-messages="errors" label="비밀번호 확인" name="newPasswordConfirm" type="password" style="font-family: CookieRun-Bold"></v-text-field>
+                        <v-text-field v-model="userInfo.new_passwordConfirm" :error-messages="errors" label="비밀번호 확인" name="newPasswordConfirm" type="password" style="font-family: CookieRun-Bold" @keypress.enter="changePassword(userInfo); clearForm()"></v-text-field>
                       </ValidationProvider>
                     </v-form>
                   </v-card-text>
 
-                  <v-card-actions>
+                  <v-card-actions>  
                     <div style="width: 100%; margin: 0 10px; text-align: center">
-                      <v-btn color="primary" style="margin: 10px 10px; font-family: CookieRun-Bold" @click="changePassword(userInfo)" :disabled="invalid" >변경</v-btn>
-                      <v-btn color="error" style="margin: 10px 10px font-family: CookieRun-Bold" @click="dialog_change_password = false">취소</v-btn>
+                      <v-btn color="primary" style="margin: 10px 10px; font-family: CookieRun-Bold" @click="changePassword(userInfo); clearForm()" :disabled="invalid" >변경</v-btn>
+                      <v-btn color="error" style="margin: 10px 10px font-family: CookieRun-Bold" @click="dialog_change_password = false; clearForm()">취소</v-btn>
                     </div>
                   </v-card-actions>
                 </ValidationObserver>
@@ -130,6 +129,11 @@ extend('confirmed', {
   message: '비밀번호가 같지 않습니다.'
 })
 
+extend('min', {
+  ...min,
+  message: '{_field_} 값은 최소 {length}자리 이상이어야 합니다.'
+})
+
 export default {
   components: {
     ValidationObserver,
@@ -147,9 +151,9 @@ export default {
       localStream: '',
 
       userInfo: {
-        password: '',
-        newPassword: '',
-        newPasswordConfirm: ''
+        old_password: '',
+        new_password: '',
+        new_passwordConfirm: ''
       },
 
       videoFlag: false,
@@ -157,16 +161,12 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.img
+      img: this.$store.state.userInfo.profile_image
     }
   },
 
   methods: {
     ...mapActions(['changePassword']),
-
-    // home() {
-    //   this.$router.push({ path: "/" });
-    // },
 
     videoStart () {
       this.videoFlag = true
@@ -195,7 +195,7 @@ export default {
       // console.log(canvas.toDataURL())
 
       const base64Encoded = canvas.toDataURL()
-      console.log(base64Encoded)
+      // console.log(base64Encoded)
     },
 
     videoResume () {
@@ -245,14 +245,18 @@ export default {
       }, 500)
 
       this.videoFlag = false
+    },
+
+    clearForm() {
+      this.$refs.form.reset()
     }
   },
 
   mounted () {
-    console.log('Info.vue mounted.')
-    console.log('this.video', this.video)
-    console.log('this.canvas', this.canvas)
-    console.log("this.img : ", this.img)
+    // console.log('Info.vue mounted.')
+    // console.log('this.video', this.video)
+    // console.log('this.canvas', this.canvas)
+    // console.log("this.img : ", this.img)
   },
 
   updated () {
@@ -270,6 +274,12 @@ export default {
 
       console.log('video tag : ', this.video)
       console.log('canvas tag : ', this.canvas)
+    }
+  },
+
+  computed: {
+    getUserProfileImage() {
+      return this.$store.getters.getUserProfileImage;
     }
   }
 }

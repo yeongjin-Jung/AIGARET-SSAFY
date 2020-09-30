@@ -8,7 +8,7 @@
     >AIGARET</p>
     <v-spacer></v-spacer>
     <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
-      {{ $store.state.id }}님 환영합니다.
+      {{ $store.state.userInfo.name }}님 환영합니다.
     </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"
