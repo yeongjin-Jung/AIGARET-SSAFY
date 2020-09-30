@@ -51,3 +51,13 @@ class ChangePasswordView(UpdateAPIView):
                 self.object.set_password(serializer.data.get("new_password"))
                 self.object.save()
                 return Response({"status": "success"}, status=status.HTTP_201_CREATED)
+
+class IdDuplicateCheckView(APIView):
+
+    permission_classes = (AllowAny,)
+
+    def post(self, request, format=None):
+        username = request.data.get('username')
+        if User.objects.filter(username=username).exists():
+            return Response({"status":"fail", "message":"The username already exists"})
+        return Response({"status":"success"})
