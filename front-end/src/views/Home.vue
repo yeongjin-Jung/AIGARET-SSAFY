@@ -97,6 +97,7 @@ export default {
   },
   mounted () {
     this.getGameInfo()
+    // console.log('user_pk:' + this.$store.state.userInfo.id)
   }
 }
 </script>
