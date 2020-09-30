@@ -1,6 +1,6 @@
 <template>
-  <div style="width: 100vw; height: 85vh; text-align: center">
-    <v-btn
+  <div style="width: 98vw; height: 95vh; position:absolute; top:0px; left:0px; text-align: center">
+    <!-- <v-btn
       @click="Tutorial = !Tutorial"
       text
       style="
@@ -14,14 +14,14 @@
       <p style="font-weight: 1000; font-size: 2.5vh; margin-top: 2vh">
         게임조작법
       </p>
-    </v-btn>
-    <p style="font-size: 5vh; font-weight: 700">스네이크 게임</p>
+    </v-btn> -->
+    <!-- <p style="font-size: 5vh; font-weight: 700">스네이크 게임</p> -->
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
 
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
       <p
-        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 30vh"
       >
         Game Over
       </p>
@@ -187,10 +187,9 @@ export default {
         width: "100%",
         "text-align": "center",
         position: "absolute",
-        left: "1vw",
-        top: "12vh",
+        height: "95vh"
       });
-      $("#defaultCanvas0").css({ width: "85vw", height: "75vh" });
+      $("#defaultCanvas0").css({ width: "100vw", height: "95vh" });
     },
 
     modelReady() {
@@ -390,6 +389,16 @@ export default {
           }
         } else {
           sketch.image(this.video, -this.snakeCanvasWidth, 0);
+          sketch.textStyle(sketch.BOLD)
+          sketch.translate(this.window_width, 0)
+          sketch.scale(-1, 1)
+          sketch.textSize(35)
+          sketch.fill(255, 0, 0)
+          sketch.text('포즈를 인식할 수 없습니다', -80, 200)
+          sketch.textSize(100)
+          sketch.textStyle(sketch.NORMAL)
+          sketch.fill(0, 255, 255)
+          sketch.text(this.countDown, 455, 100)
         }
       } else {
         this.loading = true;
@@ -422,7 +431,15 @@ export default {
   },
   created() {
     this.Tutorial = true;
+    this.gamestatus = true;
+    this.countDownTimer();
   },
+  destroyed(){
+    this.sketch.remove();
+    this.sketch.noLoop();
+    this.sketch.clear();
+    console.log(this.sketch);
+  }
 };
 </script>
 
