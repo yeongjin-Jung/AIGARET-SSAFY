@@ -46,8 +46,8 @@ class ChangePasswordView(UpdateAPIView):
                 # Check old password
                 if not self.object.check_password(serializer.data.get("old_password")):
                     print(self.object,"//",serializer.data.get("old_password"), "//")
-                    return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"status": "fail", "message":"wrong password"}, status=status.HTTP_400_BAD_REQUEST)
                 # set_password also hashes the password that the user will get
                 self.object.set_password(serializer.data.get("new_password"))
                 self.object.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response({"status": "success"}, status=status.HTTP_201_CREATED)
