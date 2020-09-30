@@ -280,7 +280,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       }
-      // console.log(testd)
+      console.log(testd)
       // axios.post(SERVER.URL + '?', testd).catch((err) => console.log(err));
       // axios.post(SERVER.URL + '?', {
       //   gameNo: this.$route.query.gameNo,
@@ -297,7 +297,7 @@ export default {
   },
   mounted () {
     this.start_time = this.timeNow()
-     console.log(this.$store.state.userInfo)
+    // console.log(this.$store.state.userInfo)
   },
   destroyed(){
     this.sketch.remove();
