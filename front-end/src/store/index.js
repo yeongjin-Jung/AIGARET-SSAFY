@@ -4,20 +4,22 @@ import axios from 'axios'
 
 import SERVER from '@/api/server.js'
 
+import router from '@/router/index.js'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    id: localStorage.getItem('id'),
     accessToken: localStorage.getItem('accessToken'),
     userInfo: {
-      'id': '',
-      'username': '',
-      'name': '',
-      'age': '',
-      'img': ''
+      'userid': localStorage.getItem('userid'),
+      'username': localStorage.getItem('username'),
+      'name': localStorage.getItem('name'),
+      'age': localStorage.getItem('age'),
+      'goal_time': localStorage.getItem('goal_time'),
+      'profile_image': localStorage.getItem('profile_image')
     },
-    img: '',
+
     isIdDuplicated: false,
   },
 
@@ -27,11 +29,19 @@ export default new Vuex.Store({
     },
 
     SET_USER_INFO(state, userInfo) {
-      state.userInfo.id = userInfo.id
+      state.userInfo.userid = userInfo.id
       state.userInfo.username = userInfo.username
       state.userInfo.name = userInfo.name
       state.userInfo.age = userInfo.age
-      state.userInfo.img = userInfo.img
+      state.userInfo.goal_time = userInfo.goal_time
+      state.userInfo.profile_image = userInfo.profile_image
+
+      localStorage.setItem('userid', userInfo.id)
+      localStorage.setItem('username', userInfo.username)
+      localStorage.setItem('name', userInfo.name)
+      localStorage.setItem('age', userInfo.age)
+      localStorage.setItem('goal_time', userInfo.goal_time)
+      localStorage.setItem('profile_image', userInfo.profile_image)
     },
 
     SET_USER_ID (state, id) {
@@ -45,29 +55,30 @@ export default new Vuex.Store({
     },
 
     LOGOUT(state) {
-      state.id = ''
       state.accessToken = ''
 
-      state.userInfo.id = ''
+      state.userInfo.userid = ''
       state.userInfo.username = ''
       state.userInfo.name = ''
       state.userInfo.age = ''
+      state.userInfo.goal_time = ''
+      state.userInfo.profile_image = ''
 
-
-      localStorage.removeItem('id')
       localStorage.removeItem('accessToken')
-    },
 
-    SET_IMG(state, base64Encoded) {
-      state.img = base64Encoded
+      localStorage.removeItem('userid')
+      localStorage.removeItem('username')
+      localStorage.removeItem('name')
+      localStorage.removeItem('age')
+      localStorage.removeItem('goal_time')
+      localStorage.removeItem('profile_image')
     },
-
   },
 
   getters: {
     isLoggedIn(state){
-      console.log("AccessToken : ", state.accessToken)
-      console.log("!!state.accessToken : ", !!state.accessToken)
+      // console.log("AccessToken : ", state.accessToken)
+      // console.log("!!state.accessToken : ", !!state.accessToken)
 
       if (state.accessToken === 'null' || state.accessToken === undefined) {
         return false;
@@ -75,6 +86,10 @@ export default new Vuex.Store({
         return !!state.accessToken;
       }
     },
+
+    getUserProfileImage(state) {
+      return state.userInfo.profile_image
+    }
   },
 
   actions: {
@@ -92,43 +107,21 @@ export default new Vuex.Store({
     },
 
     signup({ commit, dispatch }, signupData) {
-      const data = {
-        'username': signupData.id,
-        'name': signupData.name,
-        'age': signupData.age,
-        'password': signupData.password,
-        'confirm_password': signupData.passwordConfirm,
-        'img': signupData.img
-      }
-
-      axios.post(SERVER.URL + SERVER.ROUTES.signup, data)
+      axios.post(SERVER.URL + SERVER.ROUTES.signup, signupData)
       .then(res => {
         const loginData = {
-          'username': signupData.id,
+          'username': signupData.username,
           'password': signupData.password
         }
         dispatch('login', loginData)
-        
       })
       .catch(err => console.log(err))
     },
 
     login({ commit }, loginData) {
-      console.log("loginData : ", loginData)
-
-      const data = {
-        'username': loginData.username,
-        'password': loginData.password
-      }
-
-      axios.post(SERVER.URL + SERVER.ROUTES.login, data)
+      axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
       .then(res => {
-        console.log("res", res)
-        console.log("로그인 아이디 : ", res.data.user.username)
-        console.log("받아온 토큰 : ", res.data.token)
-
         commit('SET_USER_INFO', res.data.user)
-        commit('SET_USER_ID', res.data.user.username)
         commit('SET_TOKEN', res.data.token)
       })
       .catch(err => {
@@ -141,19 +134,24 @@ export default new Vuex.Store({
     },
 
     changePassword ({ state, commit }, userInfo) {
-      const data = {
-        id: state.id,
-        password: userInfo.password,
-        new_password: userInfo.newPassword
-      }
-
-      axios.post(SERVER.URL + SERVER.ROUTES.changePassword, data)
-      .then(res => {
-        console.log('비밀번호 변경 완료!')
-        alert("변경된 비밀번호로 로그인 해주세요.")
-        commit('LOGOUT')
+      axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo, {
+        headers : {
+          'Authorization': 'JWT ' + state.accessToken
+        }
       })
-      .catch()
+      .then(res => {
+        alert("비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해주세요.")
+        commit('LOGOUT')
+        router.push('/')
+      })
+      .catch(err => {
+        // console.log(err)
+        console.log(err.response)
+
+        if(err.response.data.message=='wrong password') {
+          alert('잘못된 비밀번호를 입력했습니다. 다시 입력해주세요.')
+        }
+      })
     },
 
     changeImage(new_image) {

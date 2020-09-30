@@ -1,14 +1,14 @@
 <template>
   <v-system-bar app color="orange" style="height: 5vh;">
     <router-link to="/" style="text-decoration: none;">
-      <v-btn icon style="margin-left: 10px;"><v-icon style="font-size: 4.5vh;" >mdi-home</v-icon></v-btn>
+      <v-btn icon style="margin-left: 10px; height:3.5vh;"><v-icon style="font-size: 4.5vh;" >mdi-home</v-icon></v-btn>
     </router-link>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 10px; display:inline; font-family: CookieRun-Bold;"
     >AIGARET</p>
     <v-spacer></v-spacer>
     <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
-      {{ $store.state.id }}님 환영합니다.
+      {{ $store.state.userInfo.name }}님 환영합니다.
     </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"

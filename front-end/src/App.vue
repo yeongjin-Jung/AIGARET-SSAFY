@@ -5,8 +5,8 @@
     
     <Login v-if="!isLoggedIn" id="background_cover" />
     
-    <v-main v-if="isLoggedIn" id="background_cover"> 
-      <v-container fluid class="fill-height">
+    <v-main v-if="isLoggedIn" id="background_cover"  style="padding-top: 5vh;"> 
+      <v-container fluid class="fill-height" style="padding-top: 0px; position:absolute; ">
         <router-view />
         <Footer />
       </v-container>
@@ -61,5 +61,7 @@ export default {
 #background_cover {
   background-image: url("assets/bluemoon.png");
   background-size : cover;
+  padding-top: 0px;
+  
 }
 </style>

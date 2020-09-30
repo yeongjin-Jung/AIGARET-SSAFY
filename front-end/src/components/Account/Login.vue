@@ -6,8 +6,8 @@
         <v-form>
           <p style="text-align: center; font-size:11vh; font-family: CookieRun-Bold;">AIGARET</p>
           <p style="text-align: center; font-size:4vh; font-family: CookieRun-Regular; font-weight: 500;">AI Game Rehabilitation Trainer</p>
-          <v-text-field v-model="loginData.username" dark filled background-color="#005792" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData)"></v-text-field>
-          <v-text-field v-model="loginData.password" dark filled background-color="#005792" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData)"></v-text-field>
+          <v-text-field v-model="loginData.username" dark filled background-color="#005792" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData); loginData.username=''; loginData.password=''"></v-text-field>
+          <v-text-field v-model="loginData.password" dark filled background-color="#005792" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData); loginData.username=''; loginData.password=''"></v-text-field>
         </v-form>
 
         <div>

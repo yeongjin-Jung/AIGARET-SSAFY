@@ -19,9 +19,9 @@
               <v-form class="ma-4">
                 <ValidationObserver>
                   <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
-                    <v-text-field id="id" v-model="signupData.id" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
+                    <v-text-field id="id" v-model="signupData.username" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
-                        <v-btn outlined small rounded @click="checkIdDuplicate(signupData.id)">중복확인</v-btn>
+                        <v-btn outlined small rounded @click="checkIdDuplicate(signupData.username)">중복확인</v-btn>
                       </template>
                     </v-text-field>
                   </ValidationProvider>
@@ -29,22 +29,27 @@
                 
                 <v-alert dense outlined type="error" v-if="isIdDuplicated">이미 가입된 아이디입니다.</v-alert>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 8, regex: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]/ }">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 4 }">
                   <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="PasswordConfirm" rules="required|confirmed:confirmation">
-                  <v-text-field v-model="signupData.passwordConfirm" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
+                  <v-text-field v-model="signupData.confirm_password" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Name" rules="required|max:10">
                   <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Age" rules="required">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="나이" rules="required|numeric|max:2">
                   <v-text-field v-model="signupData.age" :error-messages="errors" label="나이" name="age" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
             <!-- <div style="width: 100%; margin: 0 10px; float: left; text-align: center"> -->
+                
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="목표시간" rules="required|numeric|max:3">
+                  <v-text-field v-model="signupData.goal_time" :error-messages="errors" label="일주일 목표시간" name="goal_time" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
+                </ValidationProvider>
+                
               <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
@@ -88,7 +93,7 @@ import $ from 'jquery'
 import * as faceapi from './face-api-min'
 
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
-import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
+import { required, email, max, min, regex, confirmed, numeric } from 'vee-validate/dist/rules'
 
 import { mapState, mapActions } from 'vuex'
 
@@ -99,14 +104,9 @@ extend('required', {
   message: '{_field_} 값은 반드시 입력해야 합니다.'
 })
 
-extend('email', {
-  ...email,
-  message: '{_field_} 형식이 아닙니다.'
-})
-
 extend('regex', {
   ...regex,
-  message: '비밀번호는 영문, 숫자, 특수기호를 모두 포함하여야 합니다.'
+  message: '비밀번호는 4자리 이상이어야 합니다.'
 })
 
 extend('max', {
@@ -123,6 +123,12 @@ extend('confirmed', {
   ...confirmed,
   message: '비밀번호가 같지 않습니다.'
 })
+
+extend('numeric', {
+  ...numeric,
+  message: '{_field_} 값은 숫자여야 합니다.'
+})
+
 
 export default {
   name: 'Signup',
@@ -141,12 +147,13 @@ export default {
       localStream: '',
 
       signupData: {
-        id: '',
-        password: '',
-        passwordConfirm: '',
+        username: '',
         name: '',
         age: '',
-        img: ''
+        password: '',
+        confirm_password: '',
+        goal_time: '',
+        profile_image: ''
       },
 
       isCaptured: false,
@@ -209,7 +216,8 @@ export default {
 
       const base64Encoded = canvas.toDataURL()
       // console.log(base64Encoded)
-      this.$store.commit('SET_IMG', base64Encoded)
+      // this.$store.commit('SET_IMG', base64Encoded)
+      this.signupData.profile_image = base64Encoded
     },
 
     videoResume () {
