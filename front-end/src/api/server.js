@@ -4,8 +4,8 @@ export default {
   ROUTES: {
     signup: 'rest-auth/signup/',
     login: 'rest-auth/login/',
-    checkIdDuplicate: 'checkIdDuplicate/',
-    
+    checkIdDuplicate: 'rest-auth/checkIdDuplicate/',
+    changepassword: 'changepassword/',
     getGameInfo: 'games/'
   }
 }
