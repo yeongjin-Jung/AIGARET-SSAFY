@@ -3,15 +3,15 @@
     <v-row style="text-align: center;">
       <!-- 로그인 -->
       <v-flex> 
-        <v-form>
+        <v-form ref="form">
           <p style="text-align: center; font-size:11vh; font-family: CookieRun-Bold;">AIGARET</p>
           <p style="text-align: center; font-size:4vh; font-family: CookieRun-Regular; font-weight: 500;">AI Game Rehabilitation Trainer</p>
-          <v-text-field v-model="loginData.username" dark filled background-color="#005792" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" @keypress.enter="login(loginData)"></v-text-field>
-          <v-text-field v-model="loginData.password" dark filled background-color="#005792" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData)"></v-text-field>
+          <v-text-field v-model="loginData.username" dark filled background-color="#005792" label="ID" name="login" style="margin-top: 30px;" append-icon="mdi-account" type="text" ></v-text-field>
+          <v-text-field v-model="loginData.password" dark filled background-color="#005792" id="Password" label="Password" name="password" append-icon="mdi-lock" type="password" @keypress.enter="login(loginData); clearForm()"></v-text-field>
         </v-form>
 
         <div>
-          <v-btn id="btn-login-id" class="mr-5" @click="login(loginData)" style="height:6vh;"><span style="font-family:NanumBarunGothic; max-width:100%; font-size:2.5vh; font-weight:bold;">로그인</span></v-btn>
+          <v-btn id="btn-login-id" class="mr-5" @click="login(loginData); clearForm()" style="height:6vh;"><span style="font-family:NanumBarunGothic; max-width:100%; font-size:2.5vh; font-weight:bold;">로그인</span></v-btn>
           <!-- <v-btn id="btn-login-face" class="mr-3" @click="loginWithFace()">얼굴인식으로 로그인</v-btn> -->
           <!-- <v-btn id="btn-login-face" class="mr-3" @click="signupDialog = true">회원가입</v-btn> -->
           <!-- <FaceLogin /> -->
@@ -97,6 +97,10 @@ export default {
     loginWithFace() {
       this.loginWithFaceButtonClicked = true
 
+    },
+
+    clearForm() {
+      this.$refs.form.reset()
     }
   },
 

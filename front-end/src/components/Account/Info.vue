@@ -4,7 +4,7 @@
       <div id="outer" class="row">
 
         <!-- 왼쪽 div 영역(div_inner_left) -->
-        <div id="div_inner_left" class="col-md-4" style="background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
+        <div id="div_inner_left" class="col-md-4" style="height: 100px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap; height: ">
 
           <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
           <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center">
@@ -18,7 +18,7 @@
             <!-- 1. 비밀번호 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" style="background: #53cde2">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" style="background: #53cde2">
                   <v-icon>mdi-account-edit</v-icon>
                 </v-btn>
               </template>
@@ -56,8 +56,45 @@
             <!-- 2. 사진 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_image" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #005792">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #006cb5">
                   <v-icon>mdi-camera-retake</v-icon>
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                  <p class="ma-2" style="color: white; font-family: CookieRun-Bold">사진 변경</p>
+                </v-card-title>
+
+                <v-card-text style="padding-bottom: 10px">
+                  <div class="my-2" style="display: flex; justify-content: center; align-items: center">
+                    <video id="video" width="400" height="300" autoplay muted></video>
+                    <canvas id="canvas" width="400" height="300" style="position: absolute"></canvas>
+                  </div>
+
+                  <div class="my-2" style="display: flex; justify-content: center;">
+                    <v-btn class="mx-2" fab @click="videoPauseAndCapture">
+                      <v-icon>mdi-camera</v-icon>
+                    </v-btn>
+                    <v-btn class="mx-2" fab @click="videoResume">
+                      <v-icon>mdi-refresh</v-icon>
+                    </v-btn>
+                  </div>
+                  <v-divider></v-divider>
+
+                  <div class="my-2" style="display: flex; justify-content: center">
+                    <v-btn class="mx-2" color="error" @click="changePicture" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+
+            <!-- 3. 목표 시간 변경 다이얼로그-->
+            <v-dialog v-model="dialog_change_goal_time" width="500" persistent>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" style="background: #005792">
+                  <v-icon>mdi-human-edit</v-icon>
                 </v-btn>
               </template>
 
@@ -91,35 +128,51 @@
             </v-dialog>
           </div>
 
-          <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더 위치. -->
-          <div id="div_inner_left_third" style="width: 400px; height: 300px; background: yellow">
-            <v-calendar
-              ref="calendar"
-              v-model="focus"
-              color="primary"
-              :events="events"
-              :event-color="getEventColor"
-              :type="type"
-              @click:event="showEvent"
-              @click:more="viewDay"
-              @click:date="viewDay"
-              @change="updateRange"
-            ></v-calendar>
+          <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더, 통계 버튼 위치. -->
+          <div id="div_left_third" style="width: 90%;">
+            <v-list dense style="background: transparent">
+              <v-list-item-group v-model="item" color="#c4c3c0">
+                <v-list-item v-for="(item, i) in items" :key="i">
+
+                  <v-list-item-icon>
+                    <v-icon v-text="item.icon"></v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.text" style="font-family: CookieRun-Bold"></v-list-item-title>
+                  </v-list-item-content>
+
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </div>
         </div>
 
         <!-- 오른쪽 div 영역(div_inner_left) -->
         <div id="div_inner_right" class="col-md-8" style="background-color: transparent;">
           
-          <!-- 1. 모든 게임에 대한 종합 데이터 -->
+          <!-- 달성률 영역-->
+          <div style="text-align: center">
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률</p>
+            <v-progress-linear center rounded value="70" height="30" color="yellow" style="width: 50%; display: inline-block">80/100 달성</v-progress-linear>
+          </div>
+
+          <!-- 캘린더 OR 통계 영역 -->
           <div id="div_inner_right_first" class="ma-2" style="background: transparent">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">모든 게임 종합 데이터</p>&emsp;
-            <BarChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
-            <PieChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
+            <div v-if="item == 0">
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더</p>&emsp;
+              <Calendar style="height: 200px"/>
+            </div>
+            
+            <div v-if="item == 1">
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
+              <BarChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
+              <PieChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
+            </div>  
           </div>
 
           <!-- 2. 각 게임별 일주일 데이터 -->
-          <div id="div_inner_right_second" class="ma-2 pa-1" style="background: yellow;">
+          <!-- <div id="div_inner_right_second" class="ma-2 pa-1" style="background: yellow;">
             <div>
               <v-btn>손목</v-btn>
               <v-btn>스네이크</v-btn>
@@ -129,7 +182,7 @@
             <v-progress-circular class="mx-10 my-2" color="green lighten-2" :size="100" :width="15" value="60" style="font-family: CookieRun-Bold">팔</v-progress-circular>
             <v-progress-circular class="mx-10 my-2" color="blue lighten-2" :size="100" :width="15" value="30" style="font-family: CookieRun-Bold">다리</v-progress-circular>
             <v-progress-circular class="mx-10 my-2" color="pink lighten-2" :size="100" :width="15" value="80" style="font-family: CookieRun-Bold">몸</v-progress-circular>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -149,6 +202,7 @@ import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/r
 
 import BarChart from '@/components/Account/BarChart'
 import PieChart from '@/components/Account/PieChart'
+import Calendar from '@/components/Account/Calendar'
 
 extend('required', {
   ...required,
@@ -166,11 +220,18 @@ export default {
     ValidationProvider,
 
     BarChart,
-    PieChart
+    PieChart,
+    Calendar
   },
 
   data () {
     return {
+      item: 0,
+      items: [
+        { text: '캘린더', icon: 'mdi-calendar' },
+        { text: '통계', icon: 'mdi-chart-box' },
+      ],
+
       dialog_my_info: '',
       dialog_change_password: '',
       dialog_change_image: '',
