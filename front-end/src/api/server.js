@@ -9,6 +9,6 @@ export default {
     changepassword: 'changepassword/',
     // Game
     getGameInfo: 'games/',
-    sendData: `games/${ this.$route.query.gameNo }/users/${ this.$store.state.userInfo.userid }/records/`,
+    // sendData: `games/${ this.$route.query.gameNo }/users/${ this.$store.state.userInfo.userid }/records/`,
   }
 }
