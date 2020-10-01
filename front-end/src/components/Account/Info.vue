@@ -160,8 +160,8 @@
           <!-- 캘린더 OR 통계 영역 -->
           <div id="div_inner_right_first" class="ma-2" style="background: transparent">
             <div v-if="item == 0">
-              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더</p>&emsp;
-              <Calendar style="height: 200px"/>
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
+              <Calendar style=""/>
             </div>
             
             <div v-if="item == 1">
