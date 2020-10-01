@@ -17,4 +17,4 @@ class Record(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='game_record')
     score = models.IntegerField()
     start_time = models.DateTimeField()
-    play_Time = models.IntegerField()
+    play_time = models.IntegerField()
