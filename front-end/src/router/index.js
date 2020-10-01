@@ -26,9 +26,9 @@ const routes = [
     component: () => import('../components/Account/Info.vue')
   },
   {
-    path: '/report',
-    name: 'Report',
-    component: () => import('../components/UserInfomation/MyTrainingReport.vue')
+    path: '/rank',
+    name: 'Rank',
+    component: () => import('../components/UserInfomation/Ranking.vue')
   },
   {
     path: '/WristTouchGame',

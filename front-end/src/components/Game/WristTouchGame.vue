@@ -1,7 +1,7 @@
 <template>
   <div style="width:98vw; height:94.7vh; position:absolute; top:0px; text-align : center;">
     <!-- <h4>손목터치게임</h4> -->
-    <div style="text-align: center; width : 70vw; height: 70vh;  margin-top : 10vh;"></div>
+    <!-- <div style="text-align: center; width : 70vw; height: 70vh;  margin-top : 10vh;"></div> -->
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
     <!-- <v-btn @click="Tutorial = !Tutorial" text style="position:absolute; top:2vh;; left:1vw; margin-top:7vh; height: 7vh; width:8vw; background:yellow; ">
       <p style="font-weight:1000; font-size: 2.5vh;  margin-top: 2vh;">게임조작법</p>
