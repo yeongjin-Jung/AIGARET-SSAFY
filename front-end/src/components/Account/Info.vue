@@ -251,7 +251,7 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.userInfo.img,
+      img: this.$store.state.userInfo.profile_image,
       base64Encoded: ''
     }
   },

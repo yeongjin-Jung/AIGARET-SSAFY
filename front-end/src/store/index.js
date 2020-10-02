@@ -11,13 +11,14 @@ export default new Vuex.Store({
     id: localStorage.getItem('id'),
     accessToken: localStorage.getItem('accessToken'),
     userInfo: {
-      'id': '',
-      'username': '',
-      'name': '',
-      'age': '',
-      'img': ''
+      'userid': localStorage.getItem('userid'),
+      'username': localStorage.getItem('username'),
+      'name': localStorage.getItem('name'),
+      'age': localStorage.getItem('age'),
+      'goal_time': localStorage.getItem('goal_time'),
+      'profile_image': localStorage.getItem('profile_image')
     },
-    img: '',
+
     isIdDuplicated: false,
     gameRecords: []
   },
@@ -28,11 +29,19 @@ export default new Vuex.Store({
     },
 
     SET_USER_INFO(state, userInfo) {
-      state.userInfo.id = userInfo.id
+      state.userInfo.userid = userInfo.id
       state.userInfo.username = userInfo.username
       state.userInfo.name = userInfo.name
       state.userInfo.age = userInfo.age
-      state.userInfo.img = userInfo.img
+      state.userInfo.goal_time = userInfo.goal_time
+      state.userInfo.profile_image = userInfo.profile_image
+
+      localStorage.setItem('userid', userInfo.id)
+      localStorage.setItem('username', userInfo.username)
+      localStorage.setItem('name', userInfo.name)
+      localStorage.setItem('age', userInfo.age)
+      localStorage.setItem('goal_time', userInfo.goal_time)
+      localStorage.setItem('profile_image', userInfo.profile_image)
     },
 
     SET_USER_ID (state, id) {
@@ -46,28 +55,35 @@ export default new Vuex.Store({
     },
 
     LOGOUT(state) {
-      state.id = ''
       state.accessToken = ''
 
-      state.userInfo.id = ''
+      state.userInfo.userid = ''
       state.userInfo.username = ''
       state.userInfo.name = ''
       state.userInfo.age = ''
+      state.userInfo.goal_time = ''
+      state.userInfo.profile_image = ''
 
-
-      localStorage.removeItem('id')
       localStorage.removeItem('accessToken')
-    },
 
-    SET_IMG(state, base64Encoded) {
-      state.img = base64Encoded
+      localStorage.removeItem('userid')
+      localStorage.removeItem('username')
+      localStorage.removeItem('name')
+      localStorage.removeItem('age')
+      localStorage.removeItem('goal_time')
+      localStorage.removeItem('profile_image')
     },
 
     SET_RECORDS(state, data) {
       state.gameRecords = data
       // console.log('state.gameRecords : ', state.gameRecords)
-    }
+    },
 
+    SET_CHANGED_PROFILE_IMAGE(state, data) {
+      state.userInfo.profile_image = data
+      localStorage.removeItem('profile_image')
+      localStorage.setItem('profile_image', data)
+    }
   },
 
   getters: {
@@ -177,6 +193,7 @@ export default new Vuex.Store({
       })
       .then(res => {
         console.log(res)
+        commit('SET_CHANGED_PROFILE_IMAGE', newImage)
       })
       .catch()
     },
