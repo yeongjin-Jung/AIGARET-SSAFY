@@ -1,8 +1,9 @@
 from django.urls import path
 from . import views
 
-app_name = 'mypage'
+app_name = 'mypages'
 
 urlpatterns = [
     path('calendar/', views.MyPageCanlendarView.as_view(), name='calendar'),
+    path('imagechange/', views.ChangeProfileImageView.as_view(), name='imagechange')
 ]
