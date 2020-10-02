@@ -7,6 +7,7 @@ export default {
     checkIdDuplicate: 'checkIdDuplicate/',
     
     getGameInfo: 'games/',
-    getRecords: 'mypages/calendar/'
+    getRecords: 'mypages/calendar/',
+    changeImage: 'mypages/imagechange/'
   }
 }

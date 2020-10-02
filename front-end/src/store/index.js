@@ -65,6 +65,7 @@ export default new Vuex.Store({
 
     SET_RECORDS(state, data) {
       state.gameRecords = data
+      // console.log('state.gameRecords : ', state.gameRecords)
     }
 
   },
@@ -161,10 +162,12 @@ export default new Vuex.Store({
       .catch()
     },
 
-    changeImage({}, new_image) {
+    changeImage({ state }, newImage) {
+      console.log('changePicture called.')
+      console.log('new image : ', newImage)
+
       const data = {
-        id: state.id,
-        new_image: new_image
+        "profile_image": newImage
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data, {
@@ -173,27 +176,24 @@ export default new Vuex.Store({
         }
       })
       .then(res => {
+        console.log(res)
       })
       .catch()
     },
 
-    getRecords({ commit }, todayDate) {
+    async getRecords({ commit }, todayDate) {
       const data = {
-        // "date": todayDate
-        "date": "2020-09-30"
+        "date": todayDate
       }
-      console.log('getRecords called.')
-      console.log('todayDate : ', todayDate)
-      console.log("access token : ", this.state.accessToken)
-      
-      axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data, {
+
+      await axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data, {
         headers: {
-          'Authorization': 'JWT' + this.state.accessToken
+          'Authorization': 'JWT ' + this.state.accessToken,
         }
       })
       .then(res => {
-        console.log(res)
-        commit('SET_RECORDS', res.records)
+        // console.log(res)
+        commit('SET_RECORDS', res.data.records)
       })
       .catch(err => {
         console.log(err)

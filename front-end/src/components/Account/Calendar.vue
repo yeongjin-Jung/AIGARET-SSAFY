@@ -3,7 +3,7 @@
     <div id="calendar">
     </div>
 
-    <div id="my_modal" style="width: 500px">
+    <div id="my_modal" style="width: 600px">
       <div id="modal_content">
       </div>
       <v-btn class="modal_close_btn" color="error">닫기</v-btn>
@@ -30,7 +30,19 @@ export default {
     let d = today.getDate()
 
     let todayDate = y + "-" + (m >= 10 ? m : '0' + m) + "-" + (d >= 10 ? d : '0' + d)
-    this.getRecords(todayDate)
+    this.getRecords(todayDate).then( () => {
+      console.log('!!!!!!!!!!!!')
+      this.gameRecords = this.$store.state.gameRecords
+      console.log('this.gameRecords -> ', this.gameRecords)
+      console.log('this.$store.state.gameRecords -> ', this.$store.state.gameRecords)  
+    })
+    
+    // setTimeout(() => {
+    //   this.gameRecords = this.$store.state.gameRecords
+    //   console.log('this.gameRecords -> ', this.gameRecords)
+    //   console.log('this.$store.state.gameRecords -> ', this.$store.state.gameRecords)  
+    // }, 100);
+
 
     const setCalendarData = (year, month) => {
       let calHtml = "";
@@ -308,6 +320,7 @@ export default {
       setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
     }
 
+    let self = this
     $(document).on('click', '.div_can_click', function(e) {
       let target = e.target
       let targetTagName = target.tagName
@@ -333,33 +346,35 @@ export default {
 
       let idx = Number(strs[2])
 
+      console.log('self.gameRecords', self.gameRecords)
+
       // 전체 시간
-      // let totaltime = this.gameRecords[idx-1].totaltime
-      // console.log(totaltime)
+      let totaltime = self.gameRecords[idx-1].totaltime
+      totaltime = self.secondsToHms(totaltime)
 
       // 손목 터치 게임(time, score)
-      // let wristTouchGameTime = this.gameRecords[idx-1].record[0].time
-      // let wristTouchGameScore = this.gameRecords[idx-1].record[0].score
-      // console.log(wristTouchGameTime + ", " + wristTouchGameScore)
+      let wristTouchGameTime = self.gameRecords[idx-1].record[0].time
+      wristTouchGameTime = self.secondsToHms(wristTouchGameTime)
+      let wristTouchGameScore = self.gameRecords[idx-1].record[0].score
       
       // 스네이크 게임(time, score)
-      // let snakeGameTime = this.gameRecords[idx-1].record[1].time
-      // let snakeGameScore = this.gameRecords[idx-1].record[1].score
-      // console.log(snakeGameTime + ", " + snakeGameScore)
+      let snakeGameTime = self.gameRecords[idx-1].record[1].time
+      snakeGameTime = self.secondsToHms(snakeGameTime)
+      let snakeGameScore = self.gameRecords[idx-1].record[1].score
       
       // 점프 게임(time, score)
-      // let jumpGameTime = this.gameRecords[idx-1].record[2].time
-      // let jumpGameScore = this.gameRecords[idx-1].record[2].score
-      // console.log(jumpGameTime + ", " + jumpGameScore)
+      let jumpGameTime = self.gameRecords[idx-1].record[2].time
+      jumpGameTime = self.secondsToHms(jumpGameTime)
+      let jumpGameScore = self.gameRecords[idx-1].record[2].score
 
       let divContent =
         `
           <h1>${ clickedDate }</h1>
           <hr>
-          <h2>총 운동시간 : </h2><br>
-          <h3>손목 터치 게임 : 총 스코어 </h3>
-          <h3>스네이크 게임 :  총 스코어 </h3>
-          <h3>점프 게임 :  총 스코어 </h3><br>
+          <h2>총 운동시간 : ${ totaltime }</h2><br>
+          <h3>손목 터치 게임 : ${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>
+          <h3>스네이크 게임 : ${ snakeGameTime }, 총 스코어 ${ snakeGameScore }점</h3>
+          <h3>점프 게임 : ${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>
         `
 
       $('#modal_content').empty()
@@ -419,6 +434,19 @@ export default {
       alert('test')
       console.log("test")
     },
+
+    secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+
+      var hDisplay = h > 0 ? h + (h == 1 ? "시간 " : "시간 ") : "";
+      var mDisplay = m > 0 ? m + (m == 1 ? "분 " : "분 ") : "";
+      var sDisplay = s > 0 ? s + (s == 1 ? "초" : "초") : "";
+
+      return hDisplay + mDisplay + sDisplay; 
+    }
   }
 };
 </script>

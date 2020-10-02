@@ -9,7 +9,7 @@
           <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
           <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center">
             <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
-            <v-img :src="img" width="400px" height="300px" style="background: red"></v-img>
+            <v-img :src="img" width="400px" height="300px" style=""></v-img>
           </div>
 
           <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경과 사진 변경 버튼이 있음. -->
@@ -83,7 +83,7 @@
                   <v-divider></v-divider>
 
                   <div class="my-2" style="display: flex; justify-content: center">
-                    <v-btn class="mx-2" color="error" @click="changePicture" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="error" @click="changeImage(base64Encoded); cancelChangingPicture()" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
                     <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
                   </div>
                 </v-card-text>
@@ -120,7 +120,7 @@
                   <v-divider></v-divider>
 
                   <div class="my-2" style="display: flex; justify-content: center">
-                    <v-btn class="mx-2" color="error" @click="changePicture" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="error" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
                     <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
                   </div>
                 </v-card-text>
@@ -251,12 +251,13 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.img
+      img: this.$store.state.userInfo.img,
+      base64Encoded: ''
     }
   },
 
   methods: {
-    ...mapActions(['changePassword']),
+    ...mapActions(['changePassword', 'changeImage']),
 
     // home() {
     //   this.$router.push({ path: "/" });
@@ -290,6 +291,7 @@ export default {
 
       const base64Encoded = canvas.toDataURL()
       console.log(base64Encoded)
+      this.base64Encoded = base64Encoded
     },
 
     videoResume () {
@@ -324,10 +326,6 @@ export default {
         faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
         faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
       }, 100)
-    },
-
-    changePicture () {
-      // 멈춰있는 사진 백에 전송.
     },
 
     cancelChangingPicture () {
