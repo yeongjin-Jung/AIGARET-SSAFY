@@ -84,6 +84,12 @@ export default new Vuex.Store({
       state.userInfo.profile_image = data
       localStorage.removeItem('profile_image')
       localStorage.setItem('profile_image', data)
+    },
+    
+    SET_CHANGED_GOAL_TIME(state, data) {
+      state.userInfo.goal_time = data
+      localStorage.removeItem('goal_time')
+      localStorage.setItem('goal_time', data)
     }
   },
 
@@ -101,6 +107,10 @@ export default new Vuex.Store({
 
     image(state) {
       return state.userInfo.profile_image
+    },
+
+    goal_time(state) {
+      return state.userInfo.goal_time
     }
   },
 
@@ -181,6 +191,22 @@ export default new Vuex.Store({
       })
       .then(res => {
         commit('SET_CHANGED_PROFILE_IMAGE', newImage)
+      })
+      .catch()
+    },
+
+    changeGoalTime({ state, commit }, newGoalTime) {
+      const data = {
+        'goal_time': newGoalTime
+      }
+
+      axios.post(SERVER.URL + SERVER.ROUTES.changeGoalTime, data, {
+        headers : {
+          'Authorization': 'JWT ' + state.accessToken
+        }
+      })
+      .then(res => {
+        commit('SET_CHANGED_GOAL_TIME', newGoalTime)
       })
       .catch()
     },

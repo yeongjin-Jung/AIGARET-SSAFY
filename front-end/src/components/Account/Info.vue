@@ -100,28 +100,30 @@
 
               <v-card>
                 <v-card-title class="headline justify-center" style="background: #BBBBFF">
-                  <p class="ma-2" style="color: white; font-family: CookieRun-Bold">사진 변경</p>
+                  <p class="ma-2" style="color: white; font-family: CookieRun-Bold">목표 시간 변경</p>
                 </v-card-title>
 
                 <v-card-text style="padding-bottom: 10px">
-                  <div class="my-2" style="display: flex; justify-content: center; align-items: center">
-                    <video id="video" width="400" height="300" autoplay muted></video>
-                    <canvas id="canvas" width="400" height="300" style="position: absolute"></canvas>
-                  </div>
+
 
                   <div class="my-2" style="display: flex; justify-content: center;">
-                    <v-btn class="mx-2" fab @click="videoPauseAndCapture">
-                      <v-icon>mdi-camera</v-icon>
-                    </v-btn>
-                    <v-btn class="mx-2" fab @click="videoResume">
-                      <v-icon>mdi-refresh</v-icon>
-                    </v-btn>
+                    <v-slider
+                      v-model="newGoalTime"
+                      hint="일주일 목표 시간을 설정해주세요."
+                      max="168"
+                      min="0"
+                      label="일주일 목표 시간(시간)"
+                      thumb-label
+                      :thumb-size="50"
+                      :rules="rules"
+                    ></v-slider>
                   </div>
+
                   <v-divider></v-divider>
 
                   <div class="my-2" style="display: flex; justify-content: center">
-                    <v-btn class="mx-2" color="error" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
-                    <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
+                    <v-btn class="mx-2" color="error" @click="changeGoalTime(newGoalTime); dialog_change_goal_time = false" :disabled="newGoalTime == 0" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="primary" @click="dialog_change_goal_time = false; newGoalTime = 1" style="font-family: CookieRun-Bold">취소</v-btn>
                   </div>
                 </v-card-text>
               </v-card>
@@ -153,7 +155,7 @@
           
           <!-- 달성률 영역-->
           <div style="text-align: center">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률</p>
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률(이번 주 플레이 시간 / {{ goal_time }})</p>
             <v-progress-linear center rounded value="70" height="30" color="yellow" style="width: 50%; display: inline-block">80/100 달성</v-progress-linear>
           </div>
 
@@ -240,6 +242,7 @@ export default {
       dialog_my_info: '',
       dialog_change_password: '',
       dialog_change_image: '',
+      dialog_change_goal_time: '',
 
       video: document.getElementById('video'),
       canvas: document.getElementById('canvas'),
@@ -257,18 +260,27 @@ export default {
       isCaptured: false,
 
       img: this.$store.state.userInfo.profile_image,
-      base64Encoded: ''
+      base64Encoded: '',
+
+      newGoalTime: 1,
+      rules: [
+        v => v != 0 || '최소 1시간 이상으로 설정해주세요.',
+      ],
     }
   },
 
   computed: {
     image() {
       return this.$store.state.userInfo.profile_image
+    },
+
+    goal_time() {
+      return this.$store.state.userInfo.goal_time
     }
   },
 
   methods: {
-    ...mapActions(['changePassword', 'changeImage']),
+    ...mapActions(['changePassword', 'changeImage', 'changeGoalTime']),
 
     videoStart () {
       this.videoFlag = true

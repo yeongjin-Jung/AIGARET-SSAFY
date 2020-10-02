@@ -11,6 +11,7 @@ export default {
 
     // mypage
     getRecords: 'mypages/calendar/',
+    changeGoalTime: 'mypages/goaltimechange/',
 
     // Game
     getGameInfo: 'games/',
