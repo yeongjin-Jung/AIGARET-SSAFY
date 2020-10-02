@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # My Apps
     'accounts',
     'games',
+    'mypages',
 
     # CORS
     'corsheaders',
