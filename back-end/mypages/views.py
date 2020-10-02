@@ -9,6 +9,8 @@ from games.serializers import RecordSerializer
 from django.db.models import Sum
 from django.http.response import JsonResponse
 from rest_framework import status
+from datetime import datetime
+from django.utils import timezone
 
 # Create your views here.
 class MyPageCanlendarView(APIView):
@@ -73,3 +75,30 @@ class ChangeGoalTimeView(APIView):
         user.save()
 
         return Response({"status":"success"})
+
+class AchievementPercentageView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        user_id = self.request.user.pk
+        start_date = timezone.make_aware(datetime.strptime(request.data.get('start_date')+' 00:00:00.000000', '%Y-%m-%d %H:%M:%S.%f'))
+        end_date = timezone.make_aware(datetime.strptime(request.data.get('end_date')+' 00:00:00.000000', '%Y-%m-%d %H:%M:%S.%f'))
+
+        # print(start_date, end_date)
+
+        total_time_dict = Record.objects.filter(start_time__lte=end_date, start_time__gte=start_date, user_id=user_id).aggregate(Sum('play_time'))
+
+        obj = Record.objects.filter(start_time__lte=end_date, start_time__gte=start_date, user_id=user_id)
+
+        for o in obj:
+            print(o.start_time, o.play_time)
+
+        total_time = total_time_dict['play_time__sum']
+
+        if not total_time:
+            total_time = 0
+
+        return Response({"total_time":total_time})
+
+
+
