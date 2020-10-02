@@ -8,6 +8,7 @@ from .serializers import CalendarSerializer
 from games.serializers import RecordSerializer
 from django.db.models import Sum
 from django.http.response import JsonResponse
+from rest_framework import status
 
 # Create your views here.
 class MyPageCanlendarView(APIView):
@@ -21,7 +22,7 @@ class MyPageCanlendarView(APIView):
         user_id = self.request.user.pk
         # print(username)
 
-        data = [{"records":[]}]
+        data = {"records":[]}
 
         for d in range(1, int(day)+1):
             day_str = str(d).zfill(2)
@@ -44,9 +45,19 @@ class MyPageCanlendarView(APIView):
             for r in game_record:
                 total_time += r["time"]
 
-            data[0]["records"] += [{'date':date, 'totaltime':total_time, 'record':game_record}]
+            data["records"] += [{'date':date, 'totaltime':total_time, 'record':game_record}]
 
         # print(data)
         return JsonResponse(data, safe=False)
 
+class ChangeProfileImageView(APIView):
+    permission_classes = (IsAuthenticated,)
 
+    def post(self, request, format=None):
+        if not User.objects.filter(pk=self.request.user.pk).exists():
+            return Response({"status":"fail", "message":"존재하지 않는 회원입니다."})
+        user = User.objects.get(pk=self.request.user.pk)
+        user.profile_image = request.data.get('profile_image')
+        user.save()
+
+        return Response({"status":"success"})
