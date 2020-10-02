@@ -42,4 +42,7 @@ urlpatterns = [
     
     # games
     path('api/games/', include('games.urls')),
+
+    # mypages
+    path('api/mypages/', include('mypages.urls')),
 ]
