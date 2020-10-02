@@ -275,21 +275,25 @@ export default {
       this.start_time = this.timeNow()
     },
     sendGameData () {
-      const testd = {
+      const gameData = {
         userId: this.$store.state.userInfo.userid,
         gameNo: this.$route.query.gameNo,
         startTime: this.start_time,
         endTime: this.end_time,
         gameScore: this.game_score,
       }
-      console.log(testd)
-      // axios.post(SERVER.URL + SERVER.ROUTES.sendData, testd).catch((err) => console.log(err));
-      // axios.post(SERVER.URL + '?', {
-      //   gameNo: this.$route.query.gameNo,
-      //   startTime: this.start_time,
-      //   endTime: this.end_time,
-      //   gameScore: this.game_score,
-      // }).catch((err) => console.log(err));
+      // console.log(gameData)
+      axios.post(SERVER.URL + `games/${ this.$route.query.gameNo }/users/${ this.$store.state.userInfo.userid }/records/`, gameData, {
+        headers: { 'Authorization': `JWT ${ this.$store.state.accessToken }` }
+      })
+      .then((res) => {
+        if (res.status === 201) {
+          console.log('데이터가 생성되었습니다.');
+        } else {
+          console.log('201말고 뭐가 오지?');
+        }
+      })
+      .catch((err) => console.log(err));
     }
   },
   created () {
