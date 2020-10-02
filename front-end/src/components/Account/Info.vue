@@ -9,7 +9,7 @@
           <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
           <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center">
             <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
-            <v-img :src="img" width="400px" height="300px" style=""></v-img>
+            <v-img :src="image" width="400px" height="300px" style=""></v-img>
           </div>
 
           <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경과 사진 변경 버튼이 있음. -->
@@ -253,6 +253,12 @@ export default {
 
       img: this.$store.state.userInfo.profile_image,
       base64Encoded: ''
+    }
+  },
+
+  computed: {
+    image() {
+      return this.$store.state.userInfo.profile_image
     }
   },
 

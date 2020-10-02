@@ -97,6 +97,10 @@ export default new Vuex.Store({
         return !!state.accessToken;
       }
     },
+
+    image(state) {
+      return state.userInfo.profile_image
+    }
   },
 
   actions: {
@@ -178,7 +182,7 @@ export default new Vuex.Store({
       .catch()
     },
 
-    changeImage({ state }, newImage) {
+    changeImage({ state, commit }, newImage) {
       console.log('changePicture called.')
       console.log('new image : ', newImage)
 
@@ -192,7 +196,6 @@ export default new Vuex.Store({
         }
       })
       .then(res => {
-        console.log(res)
         commit('SET_CHANGED_PROFILE_IMAGE', newImage)
       })
       .catch()
