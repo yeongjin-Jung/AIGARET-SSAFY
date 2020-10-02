@@ -31,7 +31,7 @@
                         <v-icon :class="{ 'show-btns': hover }" color="transparent">{{ icon }}</v-icon>
                       </v-btn>
                     </div>
-                  </v-row>
+                  </v-row>\
                 </v-card-title>
               </v-img>
             </v-card>

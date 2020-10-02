@@ -83,6 +83,9 @@ export default {
       start_time: null,
       end_time: null,
       game_score: 0,
+      cat_face : null,
+      cat_foot : null,
+      mouse : null,
     }
   },
   components: {
@@ -114,10 +117,21 @@ export default {
         }
       })
 
-      // this.train = sketch.createImg(
-      //   "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
-      // );
-      // this.train.hide();
+      this.cat_face = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/94951811-e6d86b00-051f-11eb-9edf-92b2f185bf9d.png"
+      );
+      this.cat_face.hide();
+
+      this.cat_foot = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/94953711-f73e1500-0522-11eb-9a3e-e6fe03cbf2ae.png"
+      );
+      this.cat_foot.hide();
+
+
+      this.mouse = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/94952939-b7c2f900-0521-11eb-98a9-b562fbbaaf5d.png"
+      );
+      this.mouse.hide();
 
       $('#defaultCanvas0').parent().css({
         width: '98vw',
@@ -155,11 +169,13 @@ export default {
       sketch.scale(-1, 1)
       sketch.image(this.video, 0, 0, this.window_width+1, this.window_height+1)
 
+
       var that = this
       if (this.pose != null && this.gamestatus == true) {
         this.loading = false
         // 장애물
-        sketch.rect(this.position_x, this.position_y, 100, 100)
+        sketch.image(this.mouse, this.position_x, this.position_y, 100, 100)
+        // sketch.rect(this.position_x, this.position_y, 100, 100)
         sketch.translate(this.window_width, 0)
         sketch.scale(-1, 1)
 
@@ -193,37 +209,39 @@ export default {
           const eyeL = that.pose.leftEye
           const d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y)
           sketch.fill(255, 0, 0)
+          sketch.image(that.cat_face, that.pose.rightEar.x, that.pose.rightEar.y-2*d, 2.6*d, 2.6*d)
           // sketch.ellipse(that.pose.nose.x, that.pose.nose.y, d);
           sketch.fill(0, 0, 255)
 
           if (
-            (that.pose.rightWrist.x > that.position_x &&
-              that.pose.rightWrist.x < that.position_x + 100 &&
-              that.pose.rightWrist.y > that.position_y &&
-              that.pose.rightWrist.y < that.position_y + 100) ||
-            (that.pose.leftWrist.x > that.position_x &&
-              that.pose.leftWrist.x < that.position_x + 100 &&
-              that.pose.leftWrist.y > that.position_y &&
-              that.pose.leftWrist.y < that.position_y + 100)
+            (that.pose.rightWrist.x -0.3*d > that.position_x &&
+              that.pose.rightWrist.x -0.3*d < that.position_x + 100 &&
+              that.pose.rightWrist.y - 1.3 * d > that.position_y &&
+              that.pose.rightWrist.y - 1.3 * d < that.position_y + 100) ||
+            (that.pose.leftWrist.x -0.3*d > that.position_x &&
+              that.pose.leftWrist.x -0.3*d< that.position_x + 100 &&
+              that.pose.leftWrist.y - 1.3 * d > that.position_y &&
+              that.pose.leftWrist.y - 1.3 * d< that.position_y + 100)
           ) {
             that.chanege()
           }
+          sketch.image(this.cat_foot, that.pose.rightWrist.x -0.3*d, that.pose.rightWrist.y - 1.3 * d, 1.5*d, 1.5*d)
+          sketch.image(this.cat_foot, that.pose.leftWrist.x -0.3*d, that.pose.leftWrist.y - 1.3 * d, 1.5*d, 1.5*d)
+          // sketch.ellipse(that.pose.rightWrist.x, that.pose.rightWrist.y, 32)
+          // sketch.ellipse(that.pose.leftWrist.x, that.pose.leftWrist.y, 32)
 
-          sketch.ellipse(that.pose.rightWrist.x, that.pose.rightWrist.y, 32)
-          sketch.ellipse(that.pose.leftWrist.x, that.pose.leftWrist.y, 32)
+          // for (let i = 0; i < that.pose.keypoints.length; i++) {
+          //   const x = that.pose.keypoints[i].position.x
+          //   const y = that.pose.keypoints[i].position.y
+          //   sketch.fill(0, 255, 0)
+          //   sketch.ellipse(x, y, 16, 16)
+          // }
 
-          for (let i = 0; i < that.pose.keypoints.length; i++) {
-            const x = that.pose.keypoints[i].position.x
-            const y = that.pose.keypoints[i].position.y
-            sketch.fill(0, 255, 0)
-            sketch.ellipse(x, y, 16, 16)
-          }
-
-          for (let i = 0; i < that.skeleton.length; i++) {
-            const a = that.skeleton[i][0]
-            const b = that.skeleton[i][1]
-            sketch.line(a.position.x, a.position.y, b.position.x, b.position.y)
-          }
+          // for (let i = 0; i < that.skeleton.length; i++) {
+          //   const a = that.skeleton[i][0]
+          //   const b = that.skeleton[i][1]
+          //   sketch.line(a.position.x, a.position.y, b.position.x, b.position.y)
+          // }
         } else {
           sketch.image(this.video, 0, 0, this.window_width, this.window_height)
 

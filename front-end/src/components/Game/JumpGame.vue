@@ -2,62 +2,14 @@
   <div
     style="
       width: 98.5vw;
-      height: 79vh;
+      height: 94.7vh;
       position: absolute;
-      top: 0.2vh;
+      top:0px;
       text-align: center;
       left: 0px;
     "
   >
-    <v-btn
-      id="gameStart"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >게임시작</v-btn
-    >
-    <v-btn
-      id="poseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >점프포즈</v-btn
-    >
-    <v-btn
-      id="noPoseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >노점프포즈</v-btn
-    >
-    <v-btn
-      id="poseTrain"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >포즈학습</v-btn
-    >
-    <v-btn
+    <!-- <v-btn
       @click="Tutorial = !Tutorial"
       text
       style="
@@ -70,8 +22,67 @@
         background: yellow;
       "
       >게임조작법</v-btn
-    >
+    > -->
     <vue-p5 @setup="setup" @draw="draw" ></vue-p5>
+
+     <v-btn
+      id="gameStart"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left:0px;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5.5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold;  ">게임시작</span></v-btn
+    >
+
+    <v-btn
+      id="poseSave"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left:25vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5.5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold;  ">점프화면캡처</span></v-btn
+    >
+    <v-btn
+      id="noPoseSave"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left:50vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5.5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold; ">런닝화면캡처</span></v-btn
+    >
+
+    <v-btn
+      id="poseTrain"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left:75vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5.5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold;  ">포즈학습</span></v-btn
+    >
 
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
@@ -159,7 +170,7 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
-import JumpGameTutorial from "./JumpGameTutorial";
+// import JumpGameTutorial from "./JumpGameTutorial";
 import GameFinishModal from "./GameFinishModal";
 import Loading from "./loding";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
@@ -187,7 +198,7 @@ export default {
       videoCanvas: null,
       canvasWidth: 1150,
       canvasHeight: 800,
-      videoWidth: 1200,
+      videoWidth: 1130,
       videoHeight: 800,
       countDown : 5,
 
@@ -239,7 +250,7 @@ export default {
     HooperPagination,
     GameFinishModal,
     Loading,
-    JumpGameTutorial,
+    // JumpGameTutorial,
   },
   methods: {
     setup(sketch) {
@@ -256,7 +267,7 @@ export default {
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
       );
       this.jumper = sketch.createImg(
-        "require('./apple.png')"
+        "https://user-images.githubusercontent.com/53737175/94951811-e6d86b00-051f-11eb-9edf-92b2f185bf9d.png"
       );
       this.train.hide();
       this.bg.hide();
@@ -284,11 +295,11 @@ export default {
         width: "98.4vw",
         "text-align": "center",
         position: "absolute",
-        top: "10vh",
+        top: "0px",
         left: 0,
       });
 
-      $("#defaultCanvas0").css({ width: "99vw", height: "78vh" });
+      $("#defaultCanvas0").css({ width: "98.9vw", height: "84vh" });
     },
 
     modelLoaded() {
@@ -313,42 +324,42 @@ export default {
     setupButton(sketch) {
       var that = this;
       // left button
-      this.poseSave = sketch.select("#poseSave");
-      this.poseSave.mousePressed(function () {
-        setTimeout(function () {
-          that.classifier.addImage("jump");
-          that.jumpPoseCollecting = true;
+      // this.poseSave = sketch.select("#poseSave");
+      // this.poseSave.mousePressed(function () {
+      //   setTimeout(function () {
+      //     that.classifier.addImage("jump");
+      //     that.jumpPoseCollecting = true;
 
-          setTimeout(function () {
-            that.jumpPoseCollecting = false;
-            console.log("점프사진 수집완료");
-          }, 5000);
-        }, 100);
-      });
+      //     setTimeout(function () {
+      //       that.jumpPoseCollecting = false;
+      //       console.log("점프사진 수집완료");
+      //     }, 5000);
+      //   }, 100);
+      // });
 
-      this.noPoseSave = sketch.select("#noPoseSave");
-      this.noPoseSave.mousePressed(function () {
-      setTimeout(function () {
-          that.classifier.addImage("noJump");
-          that.NojumpPoseCollecting = true;
+      // this.noPoseSave = sketch.select("#noPoseSave");
+      // this.noPoseSave.mousePressed(function () {
+      // setTimeout(function () {
+      //     that.classifier.addImage("noJump");
+      //     that.NojumpPoseCollecting = true;
 
-          setTimeout(function () {
-            that.NojumpPoseCollecting = false;
-            console.log("슬라이드사진 수집완료");
-          }, 5000);
-        }, 100);
-      });
+      //     setTimeout(function () {
+      //       that.NojumpPoseCollecting = false;
+      //       console.log("슬라이드사진 수집완료");
+      //     }, 5000);
+      //   }, 100);
+      // });
 
       this.gameStart = sketch.select("#gameStart");
       this.gameStart.mousePressed(function () {
         that.gameState = true;
       });
 
-      // train button
-      this.trainButton = sketch.select("#poseTrain");
-      this.trainButton.mousePressed(function () {
-        that.classifier.train(that.whileTraining);
-      });
+      // // train button
+      // this.trainButton = sketch.select("#poseTrain");
+      // this.trainButton.mousePressed(function () {
+      //   that.classifier.train(that.whileTraining);
+      // });
     },
     finished(loss) {
       console.log("학습");
@@ -523,7 +534,7 @@ export default {
   },
 
   created() {
-    this.Tutorial = true;
+    // this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
   },
   destroyed(){
