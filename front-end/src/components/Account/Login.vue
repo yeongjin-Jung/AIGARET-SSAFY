@@ -12,7 +12,7 @@
         </v-form>
 
         <div>
-          <v-btn id="btn-login-id" class="mr-5" @click="login(loginData)" style="height:6vh;"><span style="font-family:NanumBarunGothic; max-width:100%; font-size:2.5vh; font-weight:bold;">로그인</span></v-btn>
+          <v-btn id="btn-login-id" class="mr-5" @click="login(loginData); clearForm()" style="height:6vh;"><span style="font-family:NanumBarunGothic; max-width:100%; font-size:2.5vh; font-weight:bold;">로그인</span></v-btn>
           <!-- <v-btn id="btn-login-face" class="mr-3" @click="loginWithFace()">얼굴인식으로 로그인</v-btn> -->
           <!-- <v-btn id="btn-login-face" class="mr-3" @click="signupDialog = true">회원가입</v-btn> -->
           <!-- <FaceLogin /> -->
@@ -98,6 +98,10 @@ export default {
     loginWithFace() {
       this.loginWithFaceButtonClicked = true
 
+    },
+
+    clearForm() {
+      this.$refs.form.reset()
     }
   },
 

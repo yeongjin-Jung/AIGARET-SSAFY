@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
 
     isIdDuplicated: false,
+    gameRecords: []
   },
 
   mutations: {
@@ -73,6 +74,17 @@ export default new Vuex.Store({
       localStorage.removeItem('goal_time')
       localStorage.removeItem('profile_image')
     },
+
+    SET_RECORDS(state, data) {
+      state.gameRecords = data
+      // console.log('state.gameRecords : ', state.gameRecords)
+    },
+
+    SET_CHANGED_PROFILE_IMAGE(state, data) {
+      state.userInfo.profile_image = data
+      localStorage.removeItem('profile_image')
+      localStorage.setItem('profile_image', data)
+    }
   },
 
   getters: {
@@ -87,7 +99,7 @@ export default new Vuex.Store({
       }
     },
 
-    getUserProfileImage(state) {
+    image(state) {
       return state.userInfo.profile_image
     }
   },
@@ -154,17 +166,42 @@ export default new Vuex.Store({
       })
     },
 
-    changeImage(new_image) {
+    changeImage({ state, commit }, newImage) {
+      console.log('changePicture called.')
+      console.log('new image : ', newImage)
+
       const data = {
-        id: state.id,
-        new_image: new_image
+        "profile_image": newImage
       }
 
-      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data)
+      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data, {
+        headers : {
+          'Authorization': 'JWT ' + state.accessToken
+        }
+      })
       .then(res => {
-
+        commit('SET_CHANGED_PROFILE_IMAGE', newImage)
       })
       .catch()
+    },
+
+    async getRecords({ commit }, todayDate) {
+      const data = {
+        "date": todayDate
+      }
+
+      await axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data, {
+        headers: {
+          'Authorization': 'JWT ' + this.state.accessToken,
+        }
+      })
+      .then(res => {
+        // console.log(res)
+        commit('SET_RECORDS', res.data.records)
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
 
