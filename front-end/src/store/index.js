@@ -19,6 +19,7 @@ export default new Vuex.Store({
     },
     img: '',
     isIdDuplicated: false,
+    gameRecords: []
   },
 
   mutations: {
@@ -61,6 +62,10 @@ export default new Vuex.Store({
     SET_IMG(state, base64Encoded) {
       state.img = base64Encoded
     },
+
+    SET_RECORDS(state, data) {
+      state.gameRecords = data
+    }
 
   },
 
@@ -156,15 +161,33 @@ export default new Vuex.Store({
       .catch()
     },
 
-    changeImage(new_image) {
+    changeImage({}, new_image) {
       const data = {
         id: state.id,
         new_image: new_image
       }
 
-      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data)
+      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data, {
+        headers : {
+          'Authorization': 'JWT ' + state.accessToken
+        }
+      })
       .then(res => {
+      })
+      .catch()
+    },
 
+    getRecords({ commit }, todayDate) {
+      console.log('getRecords called.')
+      console.log('todayDate : ', todayDate)
+ 
+      axios.post(SERVER.URL + SERVER.ROUTES.getRecords, todayDate, {
+        headers: {
+          'Authorization': 'JWT' + this.state.accessToken
+        }
+      })
+      .then(res => {
+        commit('SET_RECORDS', res.records)
       })
       .catch()
     }

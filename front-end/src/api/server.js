@@ -6,6 +6,7 @@ export default {
     login: 'rest-auth/login/',
     checkIdDuplicate: 'checkIdDuplicate/',
     
-    getGameInfo: 'games/'
+    getGameInfo: 'games/',
+    getRecords: 'getRecords/'
   }
 }

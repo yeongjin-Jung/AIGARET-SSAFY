@@ -19,18 +19,18 @@ export default {
   name: "Calendar",
   data() {
     return {
-      totalGamePlayTime: '61분 00초',
-      wristTouchGamePlayTime: '10분 10초',
-      wristTouchGameScore: '100점',
-      snakeGamePlayTime: '20분 20초',
-      snakeGameScore: '200점',
-      jumpGamePlayTime: '30분 30초',
-      jumpGameScore: '300점'
+      gameRecords: this.$store.state.gameRecords
     }
   },
 
   mounted() {
     const today = new Date();
+    let y = today.getFullYear()
+    let m = today.getMonth() + 1
+    let d = today.getDate()
+
+    // this.getRecords(y + "-" + (m >= 10 ? m : '0' + m) + "-" + (d >= 10 ? d : '0' + d))
+
     const setCalendarData = (year, month) => {
       let calHtml = "";
 
@@ -46,8 +46,6 @@ export default {
       const todayMonth = today.getMonth();
       const todayDate = today.getDate();
 
-    console.log("firstDayName : ", firstDayName)
-      console.log("todayDate : ", todayDate)
       const stamp = '/img/stamp.833cb0bc.png'
 
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>일</span></div>`;
@@ -61,19 +59,23 @@ export default {
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 7; j++) {
           
-          // 달력상 저번달 일자 표시 #FFFFBB(노) #FFB3BB(빨)
+          // 달력상 저번달 일자 표시
           if (i == 0 && j < firstDayName) {
             if (j == 0) {
-              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month-1}-${prevLastDay - (firstDayName - 1) + j}">
-              ${ prevLastDay - (firstDayName - 1) + j }</button></p><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day horizontalGutter'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${ prevLastDay - (firstDayName - 1) + j }</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             } else if (j == 6) {
-              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month-1}-${prevLastDay - (firstDayName - 1) + j}">${
-                prevLastDay - (firstDayName - 1) + j
-              }</button></p><span></span></div>`;
+              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${ prevLastDay - (firstDayName - 1) + j }</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             } else {
-              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month-1}-${prevLastDay - (firstDayName - 1) + j}">${
-                prevLastDay - (firstDayName - 1) + j
-              }</button></p><span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+              calHtml += `<div style='background-color: #FFFFBB;' class='calendar__day horizontalGutter'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${ prevLastDay - (firstDayName - 1) + j }</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             }
           }
           
@@ -81,41 +83,50 @@ export default {
           else if (i == 0 && j == firstDayName) {
             if (j == 0) {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">
-                ${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
-
+                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day horizontalGutter div_can_click' id="${ year }-${ month }-${ startDayCount }">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">
-                ${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
             }
             else if (j == 6) {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
             }
             else {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #FFB3BB;' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
             }
           }
@@ -124,54 +135,72 @@ export default {
           else if (i == 0 && j > firstDayName) {
             if (j == 0) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter '>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
             }
             else if (j == 6) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day'>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
             }
 
             else {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter'>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                calHtml += `<div style='background-color: #FFB3BB' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                  calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                  startDayCount++
-                  )}'></span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
+                  calHtml += `<div style='background-color: #BBFFC9' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                                <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                                <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                                <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
             }
           }
@@ -180,53 +209,70 @@ export default {
           else if (i > 0 && startDayCount <= lastDay) {
             if (j == 0) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
             }
             else if (j == 6) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day verticalGutter'>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
             }
             else {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'>
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                            </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #FFB3BB;'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
               else {
-                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0"><button class="button" value="${ year }-${month}-${startDayCount}">${startDayCount}</button></p><span id='${year}${month}${setFixDayCount(
-                startDayCount++
-                )}'><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+                calHtml += `<div style='background-color: #BBFFC9;'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                              <p style="margin-bottom: 0; padding-bottom: 0">${startDayCount}</p>
+                              <span id='${year}${month}${setFixDayCount(startDayCount++)}'>
+                              <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                              </div>`;
               }
             }
           }
@@ -234,11 +280,20 @@ export default {
           // 다음 달(달력상 나머지 공간)
           else if (startDayCount > lastDay) {
             if (j == 0) {
-              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p><span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             } else if (j == 6) {
-              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p><span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day verticalGutter'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             } else {
-              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'><p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p><span><img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/></span></div>`;
+              calHtml += `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'>
+                            <p style="margin-bottom: 0; padding-bottom: 0">${lastDayCount++}</p>
+                            <img src="${ stamp }" style="width: 30px; height: 30px; margin-bottom: 0; padding-bottom: 0"/>
+                          </div>`;
             }
           }
         }
@@ -264,20 +319,63 @@ export default {
       setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
     }
 
-    var self = this;
-    $(document).on('click', '.button', function(e) {
+    $(document).on('click', '.div_can_click', function(e) {
+      let target = e.target
+      let targetTagName = target.tagName
+
+      let clickedDate = ''
+
+      if(targetTagName == 'P') {
+        let parent = target.parentNode
+        clickedDate = parent.getAttribute('id')
+
+      } else if(targetTagName == 'IMG') {
+        let parent = target.parentNode
+        clickedDate = parent.getAttribute('id')
+      } else if(targetTagName == 'DIV') {
+        clickedDate = target.getAttribute('id')
+      }
+
+      let strs = clickedDate.split("-")
+      strs[1] = strs[1] >= 10 ? strs[1] : '0' + strs[1]
+      strs[2] = strs[2] >= 10 ? strs[2] : '0' + strs[2]
+
+      clickedDate = strs[0] + "-" + strs[1] + "-" + strs[2]
+
+      let idx = Number(strs[2])
+
+      // 전체 시간
+      // let totaltime = this.gameRecords[idx-1].totaltime
+      // console.log(totaltime)
+
+      // 손목 터치 게임(time, score)
+      // let wristTouchGameTime = this.gameRecords[idx-1].record[0].time
+      // let wristTouchGameScore = this.gameRecords[idx-1].record[0].score
+      // console.log(wristTouchGameTime + ", " + wristTouchGameScore)
+      
+      // 스네이크 게임(time, score)
+      // let snakeGameTime = this.gameRecords[idx-1].record[1].time
+      // let snakeGameScore = this.gameRecords[idx-1].record[1].score
+      // console.log(snakeGameTime + ", " + snakeGameScore)
+      
+      // 점프 게임(time, score)
+      // let jumpGameTime = this.gameRecords[idx-1].record[2].time
+      // let jumpGameScore = this.gameRecords[idx-1].record[2].score
+      // console.log(jumpGameTime + ", " + jumpGameScore)
+
       let divContent =
-      `
-        <h1>${e.target.value}</h1>
-        <hr>
-        <h2>총 운동시간 : ${ self.totalGamePlayTime }</h2><br>
-        <h3>손목 터치 게임 : ${ self.wristTouchGamePlayTime} 총 스코어 ${ self.wristTouchGameScore }</h3>
-        <h3>스네이크 게임 : ${ self.snakeGamePlayTime} 총 스코어 ${ self.snakeGameScore }</h3>
-        <h3>점프 게임 : ${ self.jumpGamePlayTime} 총 스코어 ${ self.jumpGameScore }</h3><br>
-      `
+        `
+          <h1>${ clickedDate }</h1>
+          <hr>
+          <h2>총 운동시간 : </h2><br>
+          <h3>손목 터치 게임 : 총 스코어 </h3>
+          <h3>스네이크 게임 :  총 스코어 </h3>
+          <h3>점프 게임 :  총 스코어 </h3><br>
+        `
+
       $('#modal_content').empty()
       $('#modal_content').append(divContent)
-      console.log(divContent)
+      // console.log(divContent)
       modal('my_modal');
     })
 
@@ -326,7 +424,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getDayRecord']),
+    ...mapActions(['getRecords']),
 
     test() {
       alert('test')
@@ -362,6 +460,10 @@ body {
   border-radius: 5px;
   /* padding: 20px; */
   padding-top: 5px;
+}
+
+.div_can_click {
+  cursor: pointer;
 }
 
 .horizontalGutter {
