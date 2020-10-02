@@ -178,18 +178,26 @@ export default new Vuex.Store({
     },
 
     getRecords({ commit }, todayDate) {
+      const data = {
+        // "date": todayDate
+        "date": "2020-09-30"
+      }
       console.log('getRecords called.')
       console.log('todayDate : ', todayDate)
- 
-      axios.post(SERVER.URL + SERVER.ROUTES.getRecords, todayDate, {
+      console.log("access token : ", this.state.accessToken)
+      
+      axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data, {
         headers: {
           'Authorization': 'JWT' + this.state.accessToken
         }
       })
       .then(res => {
+        console.log(res)
         commit('SET_RECORDS', res.records)
       })
-      .catch()
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
 

@@ -158,7 +158,7 @@
           </div>
 
           <!-- 캘린더 OR 통계 영역 -->
-          <div id="div_inner_right_first" class="ma-2" style="background: transparent">
+          <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 675.844px">
             <div v-if="item == 0">
               <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
               <Calendar style=""/>
@@ -166,8 +166,8 @@
             
             <div v-if="item == 1">
               <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
-              <BarChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
-              <PieChart class="ma-5" style="width: 300px; height: 300px; display: inline-block"/>
+              <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
+              <PieChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
             </div>  
           </div>
 
@@ -375,5 +375,9 @@ export default {
 }
 .basil--text {
   color: #356859 !important;
+}
+
+body {
+  overflow: hidden
 }
 </style>
