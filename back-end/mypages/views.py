@@ -56,8 +56,20 @@ class ChangeProfileImageView(APIView):
     def post(self, request, format=None):
         if not User.objects.filter(pk=self.request.user.pk).exists():
             return Response({"status":"fail", "message":"존재하지 않는 회원입니다."})
-        user = User.objects.get(pk=self.request.user.pk)
+        user = self.request.user
         user.profile_image = request.data.get('profile_image')
+        user.save()
+
+        return Response({"status":"success"})
+
+class ChangeGoalTimeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        if not User.objects.filter(pk=self.request.user.pk).exists():
+            return Response({"status":"fail", "message":"존재하지 않는 회원입니다."})
+        user = self.request.user
+        user.goal_time = request.data.get('goal_time')
         user.save()
 
         return Response({"status":"success"})
