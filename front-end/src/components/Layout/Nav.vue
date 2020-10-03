@@ -34,9 +34,9 @@ export default {
     }
   },
   mounted() {
-    console.log('this.$store.state : ', this.$store.state)
-    console.log('this.$store.state.userStore : ', this.$store.state.userStore)
-    console.log('tihs.$store.state.userStore.userInfo.name : ', this.$store.state.userStore.userInfo.name)
+    // console.log('this.$store.state : ', this.$store.state)
+    // console.log('this.$store.state.userStore : ', this.$store.state.userStore)
+    // console.log('tihs.$store.state.userStore.userInfo.name : ', this.$store.state.userStore.userInfo.name)
   },
 
   methods: {

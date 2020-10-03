@@ -68,6 +68,5 @@ export default {
   background-image: url("assets/bluemoon.png");
   background-size : cover;
   padding-top: 0px;
-  
 }
 </style>

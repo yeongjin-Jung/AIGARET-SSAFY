@@ -15,6 +15,7 @@ from .serializers import GameSerializer, RecordSerializer
 from django.views import View
 
 import datetime, time, json
+from datetime import date, timedelta
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
@@ -59,11 +60,16 @@ class RecordView(APIView):
         except ValueError:
             print('KeyError: sort 값이 존재하지 않습니다.')
         
+        week_method = request.GET['week']
+        
         if sort_method == 'high':
+            from_monday = date.today().weekday()
             if user_pk is None:
-                records = Record.objects.filter(Q(game_id=game_pk)).order_by('-score')[:count]
+                records = Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday))).order_by('-score')[:count]
             else:
                 records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk)).order_by('-score')[:count]
+                if week_method:
+                    records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday))).order_by('-score')[:count]
         else:
             if user_pk is None:
                 records = Record.objects.filter(Q(game_id=game_pk)).order_by('-start_time')[:count]
