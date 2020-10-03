@@ -2,62 +2,14 @@
   <div
     style="
       width: 98.5vw;
-      height: 79vh;
+      height: 94.7vh;
       position: absolute;
-      top: 0.2vh;
+      top: 0px;
       text-align: center;
       left: 0px;
     "
   >
-    <v-btn
-      id="gameStart"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >게임시작</v-btn
-    >
-    <v-btn
-      id="poseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >점프포즈</v-btn
-    >
-    <v-btn
-      id="noPoseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >노점프포즈</v-btn
-    >
-    <v-btn
-      id="poseTrain"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >포즈학습</v-btn
-    >
-    <v-btn
+    <!-- <v-btn
       @click="Tutorial = !Tutorial"
       text
       style="
@@ -70,13 +22,77 @@
         background: yellow;
       "
       >게임조작법</v-btn
+    > -->
+    <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+
+    <v-btn
+      id="gameStart"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left: 0px;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold">게임시작</span></v-btn
     >
-    <vue-p5 @setup="setup" @draw="draw" ></vue-p5>
+
+    <v-btn
+      id="poseSave"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left: 25vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold">점프화면캡처</span></v-btn
+    >
+    <v-btn
+      id="noPoseSave"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left: 50vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold">런닝화면캡처</span></v-btn
+    >
+
+    <v-btn
+      id="poseTrain"
+      style="
+        position: absolute;
+        bottom: 0vh;
+        margin-bottom: 0vh;
+        left: 75vw;
+        height: 10.7vh;
+        width: 25vw;
+        font-size: 5vh;
+        border-radius: 0px;
+      "
+      ><span style="font-family: CookieRun-Bold">포즈학습</span></v-btn
+    >
 
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
       <p
-        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+        style="
+          font-size: 17vh;
+          color: white;
+          font-weight: 500;
+          margin-top: 20vh;
+        "
       >
         Game Over
       </p>
@@ -159,7 +175,7 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
-import JumpGameTutorial from "./JumpGameTutorial";
+// import JumpGameTutorial from "./JumpGameTutorial";
 import GameFinishModal from "./GameFinishModal";
 import Loading from "./loding";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
@@ -187,9 +203,9 @@ export default {
       videoCanvas: null,
       canvasWidth: 1150,
       canvasHeight: 800,
-      videoWidth: 1200,
+      videoWidth: 1130,
       videoHeight: 800,
-      countDown : 5,
+      countDown: 5,
 
       // preload
       music: null,
@@ -216,8 +232,8 @@ export default {
       trainButton: null,
       state: "waiting",
       jumpPoseCollecting: false,
-      NojumpPoseCollecting : false,
-      reCollecting : false,
+      NojumpPoseCollecting: false,
+      reCollecting: false,
       // game
       modal: false,
       score: 0,
@@ -239,7 +255,7 @@ export default {
     HooperPagination,
     GameFinishModal,
     Loading,
-    JumpGameTutorial,
+    // JumpGameTutorial,
   },
   methods: {
     setup(sketch) {
@@ -256,7 +272,7 @@ export default {
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
       );
       this.jumper = sketch.createImg(
-        "require('./apple.png')"
+        "https://user-images.githubusercontent.com/53737175/94951811-e6d86b00-051f-11eb-9edf-92b2f185bf9d.png"
       );
       this.train.hide();
       this.bg.hide();
@@ -284,11 +300,11 @@ export default {
         width: "98.4vw",
         "text-align": "center",
         position: "absolute",
-        top: "10vh",
+        top: "0px",
         left: 0,
       });
 
-      $("#defaultCanvas0").css({ width: "99vw", height: "78vh" });
+      $("#defaultCanvas0").css({ width: "98.9vw", height: "84vh" });
     },
 
     modelLoaded() {
@@ -312,31 +328,48 @@ export default {
 
     setupButton(sketch) {
       var that = this;
-      // left button
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
-        setTimeout(function () {
-          that.classifier.addImage("jump");
-          that.jumpPoseCollecting = true;
-
+        for (var i = 0; i < 130; i++) {
           setTimeout(function () {
+            that.classifier.addImage("jump");
+            that.jumpPoseCollecting = true;
+            console.log("점프사진 수집중")
+          }, 15 * (i + 1));
+        }
+        setTimeout(function () {
             that.jumpPoseCollecting = false;
             console.log("점프사진 수집완료");
-          }, 5000);
-        }, 100);
+            }, 3000);
+
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-      setTimeout(function () {
-          that.classifier.addImage("noJump");
-          that.NojumpPoseCollecting = true;
+      // setTimeout(function () {
+      //     that.classifier.addImage("noJump");
+      //     that.NojumpPoseCollecting = true;
 
+      //     setTimeout(function () {
+      //       that.NojumpPoseCollecting = false;
+      //       console.log("슬라이드사진 수집완료");
+      //     }, 5000);
+      //   }, 100);
+
+
+
+        for (var i = 0; i < 100; i++) {
           setTimeout(function () {
+            that.classifier.addImage("noJump");
+            that.NojumpPoseCollecting = true;
+            console.log("런닝사진 수집중")
+          }, 15 * (i + 1));
+        }
+        setTimeout(function () {
             that.NojumpPoseCollecting = false;
-            console.log("슬라이드사진 수집완료");
-          }, 5000);
-        }, 100);
+            console.log("런닝사진 수집완료");
+            }, 3000);
+
       });
 
       this.gameStart = sketch.select("#gameStart");
@@ -359,7 +392,7 @@ export default {
 
       if (loss == null) {
         that.classifier.classify(that.gotResults);
-        // console.log(that.gotResults);
+        console.log("학습이 완료 되었습니다.")
       } else {
         console.log(loss);
       }
@@ -500,7 +533,6 @@ export default {
       this.scroll = 15;
       this.trains = [];
       this.gameState = false;
-
     },
 
     doCloseTutorial() {
@@ -523,12 +555,12 @@ export default {
   },
 
   created() {
-    this.Tutorial = true;
+    // this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
   },
-  destroyed(){
+  destroyed() {
     console.log("끄기");
-  }
+  },
 };
 </script>
 
@@ -536,4 +568,71 @@ export default {
 #defaultCanvas0 {
   display: inline-block;
 }
+
+
+.container {
+  margin: auto;
+}
+
+.button {
+  cursor: pointer;
+  margin-left: 5px;
+  margin-bottom: 15px;
+  text-shadow: 0 -2px 0 #4a8a65, 0 1px 1px #c2dece;
+  box-sizing: border-box;
+  font-size: 2em;
+  font-family: Helvetica, Arial, Sans-Serif;
+  text-decoration: none;
+  font-weight: bold;
+  color: #5ea97d;
+  height: 65px;
+  line-height: 65px;
+  padding: 0 32.5px;
+  display: inline-block;
+  width: auto;
+  background: -webkit-gradient(linear, left top, left bottom, from(#9ceabd), color-stop(26%, #9ddab6), to(#7fbb98));
+  background: linear-gradient(to bottom, #9ceabd 0%, #9ddab6 26%, #7fbb98 100%);
+  border-radius: 5px;
+  border-top: 1px solid #c8e2d3;
+  border-bottom: 1px solid #c2dece;
+  top: 0;
+  -webkit-transition: all 0.06s ease-out;
+  transition: all 0.06s ease-out;
+  position: relative;
+}
+.button:visited {
+  color: #5ea97d;
+}
+
+.button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, from(#baf1d1), color-stop(26%, #b7e4ca), to(#96c7ab));
+  background: linear-gradient(to bottom, #baf1d1 0%, #b7e4ca 26%, #96c7ab 100%);
+}
+
+.button:active {
+  top: 6px;
+  text-shadow: 0 -2px 0 #7fbb98, 0 1px 1px #c2dece, 0 0 4px white;
+  color: white;
+}
+.button:active:before {
+  top: 0;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.7), 0 3px 9px rgba(0, 0, 0, 0.2);
+}
+
+.button:before {
+  display: inline-block;
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  top: 6px;
+  border-radius: 5px;
+  height: 65px;
+  background: linear-gradient(to top, #1e5033 0%, #378357 6px);
+  -webkit-transition: all 0.078s ease-out;
+  transition: all 0.078s ease-out;
+  box-shadow: 0 1px 0 2px rgba(0, 0, 0, 0.3), 0 5px 2.4px rgba(0, 0, 0, 0.5), 0 10.8px 9px rgba(0, 0, 0, 0.2);
+}
+
 </style>

@@ -3,21 +3,25 @@
     <div>
       <div id="outer" class="row">
 
-        <div id="inner_left" class="col-md-4" style="background-color: transparent; height: 400px; display: flex; justify-content: center; flex-wrap: wrap;">
+        <!-- 왼쪽 div 영역(div_inner_left) -->
+        <div id="div_inner_left" class="col-md-4" style="height: 100px; padding-top: 120px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
 
-          <!-- 사진! -->
-          <div style="width: 400px; height: 300px; background-color: transparent; text-align: center">
-            <v-img :src="img" width="400px" height="300px"></v-img>
+          <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
+          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center; margin-bottom: 5px">
+            <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
+            <v-img :src="image" width="400px" height="300px" style=""></v-img>
           </div>
 
-          <div style="display: inline-block">
-            <!-- 비밀번호 변경 -->
+          <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경, 사진 변경, 목표시간 변경 버튼이 있음. -->
+          <div id="div_inner_left_second" style="margin-bottom: 5px">
+            
+            <!-- 1. 비밀번호 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" style="background: #53cde2">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" style="background: #53cde2">
                   <v-icon>mdi-account-edit</v-icon>
                 </v-btn>
-              </template>
+              </template>s
 
               <v-card>
                 <ValidationObserver v-slot="{ invalid }">
@@ -49,10 +53,10 @@
               </v-card>
             </v-dialog>
 
-            <!-- 사진 변경 -->
+            <!-- 2. 사진 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_image" width="500" persistent>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn class="ma-2" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #005792">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" @click="videoStart()" style="background: #006cb5">
                   <v-icon>mdi-camera-retake</v-icon>
                 </v-btn>
               </template>
@@ -79,29 +83,108 @@
                   <v-divider></v-divider>
 
                   <div class="my-2" style="display: flex; justify-content: center">
-                    <v-btn class="mx-2" color="error" @click="changePicture" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="error" @click="changeImage(base64Encoded); cancelChangingPicture()" :disabled="!isCaptured" style="font-family: CookieRun-Bold">변경</v-btn>
                     <v-btn class="mx-2" color="primary" @click="cancelChangingPicture" style="font-family: CookieRun-Bold">취소</v-btn>
                   </div>
                 </v-card-text>
               </v-card>
             </v-dialog>
+
+            <!-- 3. 목표 시간 변경 다이얼로그-->
+            <v-dialog v-model="dialog_change_goal_time" width="500" persistent>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" style="background: #005792">
+                  <v-icon>mdi-human-edit</v-icon>
+                </v-btn>
+              </template>
+
+              <v-card>
+                <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                  <p class="ma-2" style="color: white; font-family: CookieRun-Bold">목표 시간 변경</p>
+                </v-card-title>
+
+                <v-card-text style="padding-bottom: 10px">
+
+
+                  <div class="my-2" style="display: flex; justify-content: center;">
+                    <v-slider
+                      v-model="newGoalTime"
+                      hint="일주일 목표 시간을 설정해주세요."
+                      max="168"
+                      min="0"
+                      label="일주일 목표 시간(시간)"
+                      thumb-label
+                      :thumb-size="50"
+                      :rules="rules"
+                    ></v-slider>
+                  </div>
+
+                  <v-divider></v-divider>
+
+                  <div class="my-2" style="display: flex; justify-content: center">
+                    <v-btn class="mx-2" color="error" @click="changeGoalTime(newGoalTime); dialog_change_goal_time = false" :disabled="newGoalTime == 0" style="font-family: CookieRun-Bold">변경</v-btn>
+                    <v-btn class="mx-2" color="primary" @click="dialog_change_goal_time = false; newGoalTime = 1" style="font-family: CookieRun-Bold">취소</v-btn>
+                  </div>
+                </v-card-text>
+              </v-card>
+            </v-dialog>
+          </div>
+
+          <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더, 통계 버튼 위치. -->
+          <div id="div_left_third" style="width: 90%;">
+            <v-list dense style="background: transparent">
+              <v-list-item-group v-model="item" color="#c4c3c0">
+                <v-list-item v-for="(item, i) in items" :key="i">
+
+                  <v-list-item-icon>
+                    <v-icon v-text="item.icon"></v-icon>
+                  </v-list-item-icon>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.text" style="font-family: CookieRun-Bold"></v-list-item-title>
+                  </v-list-item-content>
+
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </div>
         </div>
 
-        <div id="inner_right" class="col-md-8" style="background-color: transparent; height: 400px">
-          <!-- 이름 및 아이디 -->
-          <div class="ma-2" style="background-color: transparent;">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">관리자(이름)</p>&emsp;
-            <p class="text-md-left font-weight-bold" style="font-size: 1rem; text-indent: 2rem; font-family: CookieRun-Bold;">Administrator(아이디)</p>
+        <!-- 오른쪽 div 영역(div_inner_left) -->
+        <div id="div_inner_right" class="col-md-8" style="background-color: transparent;">
+          
+          <!-- 달성률 영역-->
+          <div style="text-align: center">
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.total_time / 3600) }} / {{ goal_time }})</p>
+            <v-progress-linear center rounded :value="progressValue" height="30" color="#FF0084" style="width: 50%; display: inline-block">{{ progressValue }}% 달성</v-progress-linear>
           </div>
 
-          <!-- 내 게임 진행 현황 -->
-          <div class="ma-2 pa-1" style="background-color: transparent;">
+          <!-- 캘린더 OR 통계 영역 -->
+          <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 675.844px">
+            <div v-if="item == 0">
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
+              <Calendar style=""/>
+            </div>
+            
+            <div v-if="item == 1">
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
+              <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
+              <PieChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
+            </div>  
+          </div>
+
+          <!-- 2. 각 게임별 일주일 데이터 -->
+          <!-- <div id="div_inner_right_second" class="ma-2 pa-1" style="background: yellow;">
+            <div>
+              <v-btn>손목</v-btn>
+              <v-btn>스네이크</v-btn>
+              <v-btn>점프</v-btn>
+            </div>
             <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">진행 현황</p>
             <v-progress-circular class="mx-10 my-2" color="green lighten-2" :size="100" :width="15" value="60" style="font-family: CookieRun-Bold">팔</v-progress-circular>
             <v-progress-circular class="mx-10 my-2" color="blue lighten-2" :size="100" :width="15" value="30" style="font-family: CookieRun-Bold">다리</v-progress-circular>
             <v-progress-circular class="mx-10 my-2" color="pink lighten-2" :size="100" :width="15" value="80" style="font-family: CookieRun-Bold">몸</v-progress-circular>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -115,9 +198,14 @@ import { mapActions } from 'vuex'
 
 import $ from 'jquery'
 import * as faceapi from 'face-api.js'
+import moment from 'moment'
 
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
+
+import BarChart from '@/components/Account/BarChart'
+import PieChart from '@/components/Account/PieChart'
+import Calendar from '@/components/Account/Calendar'
 
 extend('required', {
   ...required,
@@ -137,14 +225,25 @@ extend('min', {
 export default {
   components: {
     ValidationObserver,
-    ValidationProvider
+    ValidationProvider,
+
+    BarChart,
+    PieChart,
+    Calendar
   },
 
   data () {
     return {
+      item: 0,
+      items: [
+        { text: '캘린더', icon: 'mdi-calendar' },
+        { text: '통계', icon: 'mdi-chart-box' },
+      ],
+
       dialog_my_info: '',
       dialog_change_password: '',
       dialog_change_image: '',
+      dialog_change_goal_time: '',
 
       video: document.getElementById('video'),
       canvas: document.getElementById('canvas'),
@@ -161,12 +260,37 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.userInfo.profile_image
+      img: this.$store.state.userInfo.profile_image,
+      base64Encoded: '',
+
+      newGoalTime: 1,
+      rules: [
+        v => v != 0 || '최소 1시간 이상으로 설정해주세요.',
+      ],
+
+      date: {
+        'start_date': '',
+        'end_date': ''
+      },
+    }
+  },
+
+  computed: {
+    image() {
+      return this.$store.state.userInfo.profile_image
+    },
+
+    goal_time() {
+      return this.$store.state.userInfo.goal_time
+    },
+
+    progressValue() {
+      return this.$store.getters.progressValue
     }
   },
 
   methods: {
-    ...mapActions(['changePassword']),
+    ...mapActions(['changePassword', 'changeImage', 'changeGoalTime', 'getAchievePercent']),
 
     videoStart () {
       this.videoFlag = true
@@ -195,7 +319,8 @@ export default {
       // console.log(canvas.toDataURL())
 
       const base64Encoded = canvas.toDataURL()
-      // console.log(base64Encoded)
+      console.log(base64Encoded)
+      this.base64Encoded = base64Encoded
     },
 
     videoResume () {
@@ -232,10 +357,6 @@ export default {
       }, 100)
     },
 
-    changePicture () {
-      // 멈춰있는 사진 백에 전송.
-    },
-
     cancelChangingPicture () {
       this.isCaptured = false
       this.localStream.getTracks()[0].stop()
@@ -253,10 +374,20 @@ export default {
   },
 
   mounted () {
-    // console.log('Info.vue mounted.')
-    // console.log('this.video', this.video)
-    // console.log('this.canvas', this.canvas)
-    // console.log("this.img : ", this.img)
+    let prevSunday = moment().day(0).year() + "-" + ((moment().day(0).month()+1) >= 10 ? (moment().day(0).month()+1) : ('0' + (moment().day(0).month()+1))) + "-" + ((moment().day(0).date()) >= 10 ? (moment().day(0).date()) : ('0' + (moment().day(0).date())))
+    let nextSunday = moment().day(7).year() + "-" + ((moment().day(7).month()+1) >= 10 ? (moment().day(7).month()+1) : ('0' + (moment().day(7).month()+1))) + "-" + ((moment().day(7).date()) >= 10 ? (moment().day(7).date()) : ('0' + (moment().day(7).date())))
+    
+    this.date.start_date = prevSunday
+    this.date.end_date = nextSunday
+
+    this.getAchievePercent(this.date).then(() => {
+      // console.log("total_time : ", this.$store.state.total_time)
+      // console.log("goal_time : ", this.goal_time)
+      
+      // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
+      // console.log('this.progressValue : ', this.progressValue)
+    })
+
   },
 
   updated () {
@@ -276,12 +407,6 @@ export default {
       console.log('canvas tag : ', this.canvas)
     }
   },
-
-  computed: {
-    getUserProfileImage() {
-      return this.$store.getters.getUserProfileImage;
-    }
-  }
 }
 </script>
 
@@ -291,5 +416,9 @@ export default {
 }
 .basil--text {
   color: #356859 !important;
+}
+
+body {
+  overflow: hidden
 }
 </style>

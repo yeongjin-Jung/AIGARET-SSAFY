@@ -21,6 +21,9 @@ export default new Vuex.Store({
     },
 
     isIdDuplicated: false,
+    gameRecords: [],
+
+    total_time: ''
   },
 
   mutations: {
@@ -73,6 +76,27 @@ export default new Vuex.Store({
       localStorage.removeItem('goal_time')
       localStorage.removeItem('profile_image')
     },
+
+    SET_RECORDS(state, data) {
+      state.gameRecords = data
+      // console.log('state.gameRecords : ', state.gameRecords)
+    },
+
+    SET_CHANGED_PROFILE_IMAGE(state, data) {
+      state.userInfo.profile_image = data
+      localStorage.removeItem('profile_image')
+      localStorage.setItem('profile_image', data)
+    },
+    
+    SET_CHANGED_GOAL_TIME(state, data) {
+      state.userInfo.goal_time = data
+      localStorage.removeItem('goal_time')
+      localStorage.setItem('goal_time', data)
+    },
+
+    SET_TOTAL_TIME(state, data) {
+      state.total_time = data
+    }
   },
 
   getters: {
@@ -87,8 +111,17 @@ export default new Vuex.Store({
       }
     },
 
-    getUserProfileImage(state) {
+    image(state) {
       return state.userInfo.profile_image
+    },
+
+    goal_time(state) {
+      return state.userInfo.goal_time
+    },
+
+    progressValue(state) {
+      let retValue = (parseInt(state.total_time / 3600) / state.userInfo.goal_time * 100).toFixed(1)
+      return retValue
     }
   },
 
@@ -134,11 +167,7 @@ export default new Vuex.Store({
     },
 
     changePassword ({ state, commit }, userInfo) {
-      axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo, {
-        headers : {
-          'Authorization': 'JWT ' + state.accessToken
-        }
-      })
+      axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo)
       .then(res => {
         alert("비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해주세요.")
         commit('LOGOUT')
@@ -154,15 +183,53 @@ export default new Vuex.Store({
       })
     },
 
-    changeImage(new_image) {
+    changeImage({ state, commit }, newImage) {
+      console.log('changePicture called.')
+      console.log('new image : ', newImage)
+
       const data = {
-        id: state.id,
-        new_image: new_image
+        "profile_image": newImage
       }
 
       axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data)
       .then(res => {
+        commit('SET_CHANGED_PROFILE_IMAGE', newImage)
+      })
+      .catch()
+    },
 
+    changeGoalTime({ state, commit }, newGoalTime) {
+      const data = {
+        'goal_time': newGoalTime
+      }
+
+      axios.post(SERVER.URL + SERVER.ROUTES.changeGoalTime, data)
+      .then(res => {
+        commit('SET_CHANGED_GOAL_TIME', newGoalTime)
+      })
+      .catch()
+    },
+
+    async getRecords({ commit }, todayDate) {
+      const data = {
+        "date": todayDate
+      }
+
+      await axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data)
+      .then(res => {
+        // console.log(res)
+        commit('SET_RECORDS', res.data.records)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+
+    async getAchievePercent({ state, commit }, data) {
+      await axios.post(SERVER.URL + SERVER.ROUTES.getAchievePercent, data)
+      .then(res => {
+        console.log(res)
+        commit('SET_TOTAL_TIME', res.data.total_time)
       })
       .catch()
     }
