@@ -100,7 +100,11 @@
       <!-- /footer -->
       <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
         <button
-          @click="doClose"
+          @click="
+            doClose();
+            sendGameData();
+            reStartTime();
+          "
           style="
             background-color: red;
             height: 8vh;
@@ -168,8 +172,10 @@
 </template>
 
 <script>
-import VueP5 from "vue-p5";
+import SERVER from "@/api/server.js";
+import axios from "axios";
 
+import VueP5 from "vue-p5";
 // import p5_dom from "./p5_dom_min";
 // import p5_sound from "./p5_sound_min";
 import ml5 from "ml5";
@@ -206,6 +212,11 @@ export default {
       videoWidth: 1130,
       videoHeight: 800,
       countDown: 5,
+      
+      // record
+      start_time: null,
+      end_time: null,
+      game_score: 0,
 
       // preload
       music: null,
@@ -375,6 +386,7 @@ export default {
       this.gameStart = sketch.select("#gameStart");
       this.gameStart.mousePressed(function () {
         that.gameState = true;
+        that.start_time = that.timeNow();
       });
 
       // train button
@@ -501,6 +513,8 @@ export default {
             // let sound = sketch.random(failSounds);
             // sound.play();
 
+            this.end_time = this.timeNow();
+            this.game_score = this.score;
             that.modal = true;
             that.restart = true;
             that.gameState = false;
@@ -551,6 +565,41 @@ export default {
           this.countDownTimer();
         }, 1000);
       }
+    },
+    timeNow() {
+      var date = new Date().toISOString();
+      var time = new Date().toString("ko-KR");
+      return date.slice(0, 10) + " " + time.slice(16, 24);
+    },
+    reStartTime() {
+      this.start_time = this.timeNow();
+    },
+    sendGameData() {
+      const gameData = {
+        userId: this.$store.state.userInfo.userid,
+        gameNo: this.$route.query.gameNo,
+        startTime: this.start_time,
+        endTime: this.end_time,
+        gameScore: this.game_score,
+      };
+      console.log(gameData)
+      axios
+        .post(
+          SERVER.URL +
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userInfo.userid}/`,
+          gameData,
+          {
+            headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("데이터가 생성되었습니다.");
+          } else {
+            console.log("201말고 뭐가 오지?");
+          }
+        })
+        .catch((err) => console.log(err));
     },
   },
 
