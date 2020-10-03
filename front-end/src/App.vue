@@ -20,6 +20,10 @@ import Nav from '@/components/Layout/Nav'
 import Footer from '@/components/Layout/Footer'
 import Login from '@/components/Account/Login'
 
+import { mapGetters } from 'vuex'
+
+const userStore = 'userStore'
+
 export default {
   name: "App",
   
@@ -30,9 +34,11 @@ export default {
   },
 
   computed: {
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
-    }
+    ...mapGetters(userStore, ['isLoggedIn']),
+
+    // isLoggedIn() {
+    //   return this.$store.getters.isLoggedIn;
+    // }
   }
 };
 </script>
