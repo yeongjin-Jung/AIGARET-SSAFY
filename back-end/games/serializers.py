@@ -18,8 +18,8 @@ class GameSerializer(serializers.ModelSerializer):
 
 class RecordSerializer(serializers.ModelSerializer):
     # record json 작성시 필요한 부분
-    user = UserSerializer(required=False)
-    game = GameSerializer(required=False)
+    user = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
+    game = serializers.PrimaryKeyRelatedField(read_only=True, required=False)
     score = serializers.IntegerField(required=False)
     start_time = serializers.DateTimeField(required=False)
     play_time = serializers.IntegerField(required=False)

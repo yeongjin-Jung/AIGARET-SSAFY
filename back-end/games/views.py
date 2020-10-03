@@ -33,8 +33,43 @@ def detail(request, game_pk):
 
 class RecordView(APIView):
     @permission_classes([IsAuthenticatedOrReadOnly])
-    def get(self, request, game_pk, user_pk):
-        records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk))
+    def get(self, request, **kwargs):
+        # url확인
+        # game_pk, user_pk 확인
+        game_pk = kwargs['game_pk']
+        try:
+            user_pk = kwargs['user_pk']
+        except:
+            user_pk = None
+
+        # query string 확인
+        # count 확인
+        count = 100
+        try:
+            count = int(request.GET['count']) if 0 <= int(request.GET['count']) <= 100 else 100
+        except KeyError:
+            print('KeyError: count 값이 존재하지 않습니다.')
+        except ValueError:
+            print('ValueError: count 값이 숫자가 아닙니다.')
+
+        # sort 요청 확인
+        sort_method = 'lastest'
+        try:
+            sort_method = request.GET['sort']
+        except ValueError:
+            print('KeyError: sort 값이 존재하지 않습니다.')
+        
+        if sort_method == 'high':
+            if user_pk is None:
+                records = Record.objects.filter(Q(game_id=game_pk)).order_by('-score')[:count]
+            else:
+                records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk)).order_by('-score')[:count]
+        else:
+            if user_pk is None:
+                records = Record.objects.filter(Q(game_id=game_pk)).order_by('-start_time')[:count]
+            else:
+                records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk)).order_by('-start_time')[:count]
+
         serializer = RecordSerializer(records, many=True)
         return Response(serializer.data)
     
@@ -51,3 +86,11 @@ class RecordView(APIView):
             serializer.save(user=user, game=game)
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         return Response({'err': '암튼 에러임'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
+def rank(request, game_pk):
+    count = int(request.GET['count']) if 0 <= int(request.GET['count']) <= 100 else 100
+    records = Record.objects.filter(game_id=game_pk).order_by('-score')[:count]
+    serializer = RecordSerializer(records, many=True)
+    return Response(serializer.data)
