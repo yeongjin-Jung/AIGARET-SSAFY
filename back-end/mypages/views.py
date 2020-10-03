@@ -76,6 +76,20 @@ class ChangeGoalTimeView(APIView):
 
         return Response({"status":"success"})
 
+class TotalGameTimeView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, format=None):
+        game_count = Game.objects.count()
+        total_time_dict = {}
+        for game_pk in range(1, game_count+1):
+            game_name = Game.objects.get(id=game_pk).game_name
+            total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk).aggregate(Sum('play_time'))
+            
+            total_time_dict[game_name] = total_time
+
+        return JsonResponse(total_time_dict)
+        
 class AchievementPercentageView(APIView):
     permission_classes = (IsAuthenticated,)
 
@@ -99,6 +113,5 @@ class AchievementPercentageView(APIView):
             total_time = 0
 
         return Response({"total_time":total_time})
-
 
 
