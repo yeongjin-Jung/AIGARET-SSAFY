@@ -1,3 +1,8 @@
+import axios from 'axios'
+import SERVER from '@/api/server.js'
+
+import userStore from './userStore'
+
 const mypageStore = {
   namespaced: true,
 
@@ -8,7 +13,7 @@ const mypageStore = {
 
   getters: {
     progressValue(state) {
-      let retValue = (parseInt(state.total_time / 3600) / state.userInfo.goal_time * 100).toFixed(1)
+      let retValue = (parseInt(state.total_time / 3600) / userStore.state.userInfo.goal_time * 100).toFixed(1)
       return retValue
     }
   },

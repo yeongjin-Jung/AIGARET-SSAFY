@@ -155,7 +155,7 @@
           
           <!-- 달성률 영역-->
           <div style="text-align: center">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.total_time / 3600) }} / {{ goal_time }})</p>
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.mypageStore.total_time / 3600) }} / {{ goal_time }})</p>
             <v-progress-linear center rounded :value="progressValue" height="30" color="#FF0084" style="width: 50%; display: inline-block">{{ progressValue }}% 달성</v-progress-linear>
           </div>
 

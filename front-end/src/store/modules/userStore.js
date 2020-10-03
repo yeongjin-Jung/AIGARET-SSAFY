@@ -1,6 +1,6 @@
 import axios from 'axios'
-import SERVER from '@/api/server.js'
-import Vuex from 'vuex'
+import router from '@/router/index'
+import SERVER from '@/api/server'
 
 const userStore = {
   namespaced: true,
