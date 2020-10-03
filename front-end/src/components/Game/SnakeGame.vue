@@ -561,9 +561,6 @@ export default {
         .catch((err) => console.log(err));
     },
   },
-  computed: {
-    ...mapGetters(userStore),
-  },
   created() {
     this.Tutorial = true;
     this.gamestatus = true;
