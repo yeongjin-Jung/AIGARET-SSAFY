@@ -21,7 +21,9 @@ export default new Vuex.Store({
     },
 
     isIdDuplicated: false,
-    gameRecords: []
+    gameRecords: [],
+
+    total_time: ''
   },
 
   mutations: {
@@ -90,6 +92,10 @@ export default new Vuex.Store({
       state.userInfo.goal_time = data
       localStorage.removeItem('goal_time')
       localStorage.setItem('goal_time', data)
+    },
+
+    SET_TOTAL_TIME(state, data) {
+      state.total_time = data
     }
   },
 
@@ -111,6 +117,11 @@ export default new Vuex.Store({
 
     goal_time(state) {
       return state.userInfo.goal_time
+    },
+
+    progressValue(state) {
+      let retValue = (parseInt(state.total_time / 3600) / state.userInfo.goal_time * 100).toFixed(1)
+      return retValue
     }
   },
 
@@ -228,6 +239,19 @@ export default new Vuex.Store({
       .catch(err => {
         console.log(err)
       })
+    },
+
+    async getAchievePercent({ state, commit }, data) {
+      await axios.post(SERVER.URL + SERVER.ROUTES.getAchievePercent, data, {
+        headers : {
+          'Authorization': 'JWT ' + state.accessToken
+        }
+      })
+      .then(res => {
+        console.log(res)
+        commit('SET_TOTAL_TIME', res.data.total_time)
+      })
+      .catch()
     }
   },
 
