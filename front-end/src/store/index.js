@@ -167,11 +167,7 @@ export default new Vuex.Store({
     },
 
     changePassword ({ state, commit }, userInfo) {
-      axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo, {
-        headers : {
-          'Authorization': 'JWT ' + state.accessToken
-        }
-      })
+      axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo)
       .then(res => {
         alert("비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해주세요.")
         commit('LOGOUT')
@@ -195,11 +191,7 @@ export default new Vuex.Store({
         "profile_image": newImage
       }
 
-      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data, {
-        headers : {
-          'Authorization': 'JWT ' + state.accessToken
-        }
-      })
+      axios.post(SERVER.URL + SERVER.ROUTES.changeImage, data)
       .then(res => {
         commit('SET_CHANGED_PROFILE_IMAGE', newImage)
       })
@@ -211,11 +203,7 @@ export default new Vuex.Store({
         'goal_time': newGoalTime
       }
 
-      axios.post(SERVER.URL + SERVER.ROUTES.changeGoalTime, data, {
-        headers : {
-          'Authorization': 'JWT ' + state.accessToken
-        }
-      })
+      axios.post(SERVER.URL + SERVER.ROUTES.changeGoalTime, data)
       .then(res => {
         commit('SET_CHANGED_GOAL_TIME', newGoalTime)
       })
@@ -227,11 +215,7 @@ export default new Vuex.Store({
         "date": todayDate
       }
 
-      await axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data, {
-        headers: {
-          'Authorization': 'JWT ' + this.state.accessToken,
-        }
-      })
+      await axios.post(SERVER.URL + SERVER.ROUTES.getRecords, data)
       .then(res => {
         // console.log(res)
         commit('SET_RECORDS', res.data.records)
@@ -242,11 +226,7 @@ export default new Vuex.Store({
     },
 
     async getAchievePercent({ state, commit }, data) {
-      await axios.post(SERVER.URL + SERVER.ROUTES.getAchievePercent, data, {
-        headers : {
-          'Authorization': 'JWT ' + state.accessToken
-        }
-      })
+      await axios.post(SERVER.URL + SERVER.ROUTES.getAchievePercent, data)
       .then(res => {
         console.log(res)
         commit('SET_TOTAL_TIME', res.data.total_time)
