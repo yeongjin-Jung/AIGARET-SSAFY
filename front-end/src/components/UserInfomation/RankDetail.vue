@@ -12,7 +12,7 @@
               <!-- <div style="border: black 3px dashed;">주간최고점수</div> -->
               <!-- div 대신 v-col 로 써도됨(line.16 주석 풀어볼 것), 상황에따라 횡,종 변화할 수 있음 (line.10, 22 주석풀어볼 것) -->
               <v-col style="border: red 3px dashed;">
-                주간최고점수(선택한게임 나의 주간기록 중 높은점수순으로 1개)
+                주간최고점수(선택한게임의 이번주 나의 최고점수)
                 <!-- <div style="border: black 3px dashed;">{{ myDataWeek[0].score }}</div> -->
                 <div v-for="n in myDataWeek.length" :key="n" style="border: black 3px dashed;">{{ myDataWeek[n-1].score }}</div>
               </v-col>
@@ -28,7 +28,7 @@
         <v-col cols="6" style="border: gray 3px dashed; display: flex; align-items: center; justify-content: center; height: 40vh;">
         <!-- cols="6" 으로 가운데 정렬 효과 -->
           <div style="border: black 3px dashed;">
-            본인점수(선택한게임 내 모든기록 중 높은점수순으로 1개)
+            최고점수(선택한게임의 역대 나의 최고점수)
             <div v-for="n in myData.length" :key="n" style="border: black 3px dashed;">{{ myData[n-1].score }}</div>
           </div>
         </v-col>
@@ -37,7 +37,7 @@
 
     <v-col cols="7" align-self="center" style="border: green 3px dashed;"> <!-- 2분할 -->
           <v-col style="border: red 3px dashed; display: flex; align-items: center; justify-content: space-around;">
-            전체랭킹(선택한게임 모든기록 높은점수순으로 몇개)
+            전체랭킹(선택한게임의 이번주 최고점수)
             <div style="border: black 3px dashed;">이번주 최고점수: {{ gameData[0].score }}</div>
           </v-col>
       <!-- <v-row no-gutters justify="center">
@@ -105,7 +105,7 @@ export default {
           count: 1,
           week: true,
         },
-      }).then((res) => {console.log(res.data)
+      }).then((res) => {
           if (res.status === 200) {
             this.myDataWeek = res.data
           } else {
