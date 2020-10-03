@@ -535,7 +535,7 @@ export default {
     },
     sendGameData() {
       const gameData = {
-        userId: this.$store.state.userInfo.userid,
+        userId: this.$store.state.userStore.userInfo.userid,
         gameNo: this.$route.query.gameNo,
         startTime: this.start_time,
         endTime: this.end_time,
@@ -545,7 +545,7 @@ export default {
       axios
         .post(
           SERVER.URL +
-            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userInfo.userid}/`,
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userStore.userInfo.userid}/`,
           gameData,
           {
             headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
@@ -560,6 +560,9 @@ export default {
         })
         .catch((err) => console.log(err));
     },
+  },
+  computed: {
+    ...mapGetters(userStore),
   },
   created() {
     this.Tutorial = true;
