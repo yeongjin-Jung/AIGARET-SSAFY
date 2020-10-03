@@ -5,9 +5,9 @@
         <router-link to="/info" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
           <v-btn id="info" elevation="0" style="height:14.5vh; width:7vw;"></v-btn>
         </router-link>
-
+        
         <router-link to="/rank" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn id="rank" elevation="0" style="height:15.4vh; width:7vw;"></v-btn>
+          <v-btn id="rank" elevation="0" style="height:15.6vh; width:7.2vw;"><div></div></v-btn>
         </router-link>
 
         <v-btn id="logout" elevation="0" @click="logout()" style="height:15.2vh; width:7vw; margin-left:1.5vw; margin-right:1.5vw;" ></v-btn>

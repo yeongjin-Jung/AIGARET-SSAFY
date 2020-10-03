@@ -1,5 +1,14 @@
 <template>
-  <div style="width: 98vw; height: 95vh; position:absolute; top:0px; left:0px; text-align: center">
+  <div
+    style="
+      width: 98vw;
+      height: 95vh;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      text-align: center;
+    "
+  >
     <!-- <v-btn
       @click="Tutorial = !Tutorial"
       text
@@ -21,7 +30,12 @@
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
       <p
-        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 30vh"
+        style="
+          font-size: 17vh;
+          color: white;
+          font-weight: 500;
+          margin-top: 30vh;
+        "
       >
         Game Over
       </p>
@@ -75,6 +89,11 @@
       </template>
     </SnakeGameTutorial> -->
     <Loading v-if="loading"></Loading>
+    <GameLevelModal v-if="levelChange">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow;">
+        {{ level }}
+      </p>
+    </GameLevelModal>
   </div>
 </template>
 
@@ -85,6 +104,7 @@ import $ from "jquery";
 import GameFinishModal from "./GameFinishModal";
 import { Snake } from "../../api/game/snake/snake";
 import SnakeGameTutorial from "./SnakeGameTutorial";
+import GameLevelModal from "./GameLevelModal";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
 import Loading from "./loding";
 import "../../assets/hooper.css";
@@ -132,9 +152,11 @@ export default {
       firstStart: true,
       gamestatus: false,
 
-      countDown: 25,
+      countDown: 20,
       score: 0,
-      speed: 27,
+      speed: 24,
+      levelChange: false,
+      level: "",
     };
   },
   components: {
@@ -145,6 +167,7 @@ export default {
     Hooper,
     Slide,
     HooperPagination,
+    GameLevelModal,
   },
   methods: {
     setup(sketch) {
@@ -187,7 +210,7 @@ export default {
         width: "100%",
         "text-align": "center",
         position: "absolute",
-        height: "95vh"
+        height: "95vh",
       });
       $("#defaultCanvas0").css({ width: "100vw", height: "95vh" });
     },
@@ -239,13 +262,58 @@ export default {
 
       if (this.s.eat(this.food)) {
         that.score += 100;
-        that.countDown = 25;
+
         // Level2
-        if (that.score == 500) {
-          that.speed = 22;
-        } else if (that.score == 1000) {
-          that.speed = 17;
+        if (that.score >= 400 && that.score < 800) {
+          that.speed = 21;
+          that.countDown = 15;
+          if (that.score == 400) {
+            that.level = "Level 2";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
         }
+        // Level3
+        else if (that.score >= 800 && that.score < 1200) {
+          that.speed = 17;
+          that.countDown = 12;
+          if (that.score == 800) {
+            that.level = "Level 3";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        }
+        // Level4
+        else if (that.score >= 1200 && that.score < 2000) {
+          that.speed = 10;
+          that.countDown = 10;
+          if (that.score == 1200) {
+            that.level = "Level 4";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        }
+        // Level5
+        else if (that.score >= 2000) {
+          that.speed = 6;
+          that.countDown = 8;
+          if (that.score == 2000) {
+            that.level = "Final";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        } else {
+          that.countDown = 20;
+        }
+
         that.pickLocation(sketch);
       }
       // snake
@@ -307,16 +375,16 @@ export default {
         sketch.text(this.countDown, 270 + this.snakeCanvasWidth, 50);
 
         if (this.countDown == 0) {
-          this.modal = true;
-          this.score = 0;
-          this.gamestatus = false;
-          this.s = new Snake(
-            sketch,
-            this.scl,
-            this.snakeCanvasWidth,
-            this.height,
-            this.food
-          );
+          that.modal = true;
+          that.score = 0;
+          that.gamestatus = false;
+          // that.s = new Snake(
+          //   sketch,
+          //   that.scl,
+          //   that.snakeCanvasWidth,
+          //   that.height,
+          //   that.food
+          // );
         }
 
         sketch.translate(this.videoWidth, 0);
@@ -389,16 +457,24 @@ export default {
           }
         } else {
           sketch.image(this.video, -this.snakeCanvasWidth, 0);
-          sketch.textStyle(sketch.BOLD)
-          sketch.translate(this.window_width, 0)
-          sketch.scale(-1, 1)
-          sketch.textSize(35)
-          sketch.fill(255, 0, 0)
-          sketch.text('포즈를 인식할 수 없습니다', -80, 200)
-          sketch.textSize(100)
-          sketch.textStyle(sketch.NORMAL)
-          sketch.fill(0, 255, 255)
-          sketch.text(this.countDown, 455, 100)
+          sketch.textStyle(sketch.BOLD);
+          sketch.translate(this.window_width, 0);
+          sketch.scale(-1, 1);
+          sketch.textSize(35);
+          sketch.fill(255, 0, 0);
+          sketch.text("포즈를 인식할 수 없습니다", -80, 200);
+          
+          //카운트다운 
+          sketch.textSize(50);
+          sketch.textStyle(sketch.NORMAL);
+          sketch.fill(0, 255, 255);
+          sketch.text(that.countDown, 70, 50);
+
+          // 점수판
+          sketch.textSize(30);
+          sketch.textStyle(sketch.BOLD);
+          sketch.fill(255, 0, 0);
+          sketch.text("점수 : " + this.score, -170, 40);
         }
       } else {
         this.loading = true;
@@ -417,6 +493,13 @@ export default {
       this.countDownTimer();
       this.closeModal();
       this.gamestatus = true;
+      this.s = new Snake(
+        this.sketch,
+        this.scl,
+        this.snakeCanvasWidth,
+        this.height,
+        this.food
+      );
     },
 
     doCloseTutorial() {
@@ -433,13 +516,14 @@ export default {
     this.Tutorial = true;
     this.gamestatus = true;
     this.countDownTimer();
+    var that = this;
   },
-  destroyed(){
+  destroyed() {
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
     console.log(this.sketch);
-  }
+  },
 };
 </script>
 

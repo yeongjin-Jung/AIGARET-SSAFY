@@ -26,11 +26,11 @@
                       <p class="caption font-weight-medium font-italic text-left">{{ item.subtext }}</p>
                     </div>
 
-                    <div class="align-self-center">
+                    <!-- <div class="align-self-center">
                       <v-btn v-for="(icon, index) in icons" :key="index" :class="{ 'show-btns': hover }" color="transparent" icon>
                         <v-icon :class="{ 'show-btns': hover }" color="transparent">{{ icon }}</v-icon>
                       </v-btn>
-                    </div>
+                    </div> -->
                   </v-row>\
                 </v-card-title>
               </v-img>
