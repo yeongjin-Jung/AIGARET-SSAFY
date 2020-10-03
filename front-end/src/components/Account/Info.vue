@@ -155,7 +155,7 @@
           
           <!-- 달성률 영역-->
           <div style="text-align: center">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.total_time / 3600) }} / {{ goal_time }})</p>
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.mypageStore.total_time / 3600) }} / {{ goal_time }})</p>
             <v-progress-linear center rounded :value="progressValue" height="30" color="#FF0084" style="width: 50%; display: inline-block">{{ progressValue }}% 달성</v-progress-linear>
           </div>
 
@@ -194,7 +194,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import $ from 'jquery'
 import * as faceapi from 'face-api.js'
@@ -206,6 +206,9 @@ import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/r
 import BarChart from '@/components/Account/BarChart'
 import PieChart from '@/components/Account/PieChart'
 import Calendar from '@/components/Account/Calendar'
+
+const userStore = 'userStore'
+const mypageStore = 'mypageStore'
 
 extend('required', {
   ...required,
@@ -260,7 +263,6 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.userInfo.profile_image,
       base64Encoded: '',
 
       newGoalTime: 1,
@@ -276,21 +278,25 @@ export default {
   },
 
   computed: {
-    image() {
-      return this.$store.state.userInfo.profile_image
-    },
+    ...mapGetters(userStore, ['image', 'goal_time']),
+    ...mapGetters(mypageStore, ['progressValue']),
 
-    goal_time() {
-      return this.$store.state.userInfo.goal_time
-    },
+    // image() {
+    //   return this.$store.state.userInfo.profile_image
+    // },
 
-    progressValue() {
-      return this.$store.getters.progressValue
-    }
+    // goal_time() {
+    //   return this.$store.state.userInfo.goal_time
+    // },
+
+    // progressValue() {
+    //   return this.$store.getters.progressValue
+    // }
   },
 
   methods: {
-    ...mapActions(['changePassword', 'changeImage', 'changeGoalTime', 'getAchievePercent']),
+    ...mapActions(userStore, ['changePassword', 'changeImage', 'changeGoalTime']),
+    ...mapActions(mypageStore, ['getAchievePercent']),
 
     videoStart () {
       this.videoFlag = true

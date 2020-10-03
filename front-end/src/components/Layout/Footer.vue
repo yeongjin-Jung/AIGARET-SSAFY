@@ -19,6 +19,8 @@
 <script>
 import { mapActions } from 'vuex';
 
+const userStore = 'userStore'
+
 export default {
   name: 'Footer',
   
@@ -29,7 +31,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(userStore, ['logout']),
   }
 }
 </script>
