@@ -3,73 +3,67 @@
 //Importing Line class from the vue-chartjs wrapper
 import { Line } from "vue-chartjs";
 
-//Exporting this so it can be used in other components
 export default {
-  extends: Line,
-  data() {
-    return {
-      datacollection: {
-        //Data to be represented on x-axis
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"
-        ],
-        datasets: [
-          {
-            label: "Data One",
-            backgroundColor: "#f87979",
-            pointBackgroundColor: "white",
-            borderWidth: 1,
-            pointBorderColor: "#249EBF",
-            //Data to be represented on y-axis
-            data: [40, 20, 30, 50, 90, 10, 20, 40, 50, 70, 90, 100]
-          }
-        ]
-      },
-      //Chart.js options that controls the appearance of the chart
-      options: {
-        scales: {
-          yAxes: [
+    extends: Line,
+    data () {
+      return {
+        chartData: {
+          labels: ["1월",	"2월",	"3월",	"4월",	"5월",	"6월",	"7월", "8월", "9월", "10월", "11월", "12월"],
+          datasets: [
             {
+              label: '손목 터치 게임(분)',
+              data: [600,	1150,	342,	6050,	2522,	3241,	1259,	157,	1545, 9841, 3000, 6000],
+              fill: false,
+              borderColor: "rgba(255, 99, 132, 1)",
+              backgroundColor: "rgba(255, 99, 132, 1)",
+              borderWidth: 3
+            },
+            {
+              label: '스네이크 게임(분)',
+              data: [300,	100,	8008,	6247,	8544,	684,	125,	674,	1231, 154, 876, 376],
+              fill: false,
+              borderColor: "rgba(255, 206, 86, 1)",
+              backgroundColor: "rgba(255, 206, 86, 1)",
+              borderWidth: 3
+            },
+            {
+              label: '점프 게임(분)',
+              data: [457,	5685,	342,	235,	365,	697,	1259,	58,	1545, 346, 243, 156],
+              fill: false,
+              borderColor: "rgba(75, 192, 192, 1)",
+              backgroundColor: "rgba(75, 192, 192, 1)",
+              borderWidth: 3
+            }
+          ]
+        },
+        options: {
+          scales: {
+            yAxes: [{
               ticks: {
                 beginAtZero: true
               },
               gridLines: {
                 display: true
               }
-            }
-          ],
-          xAxes: [
-            {
+            }],
+            xAxes: [ {
               gridLines: {
                 display: false
               }
-            }
-          ]
-        },
-        legend: {
-          display: true
-        },
-        responsive: true,
-        maintainAspectRatio: false
+            }]
+          },
+          legend: {
+            display: true
+          },
+          responsive: true,
+          maintainAspectRatio: false
+        }
       }
-    };
-  },
-  mounted() {
-    //renderChart function renders the chart with the datacollection and options object.
-    this.renderChart(this.datacollection, this.options);
+    },
+    mounted () {
+      this.renderChart(this.chartData, this.options)
+    }
   }
-};
 </script>
 
 <style>

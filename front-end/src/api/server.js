@@ -13,7 +13,8 @@ export default {
     getRecords: 'mypages/calendar/',
     changeGoalTime: 'mypages/goaltimechange/',
     getAchievePercent: 'mypages/achievepercent/',
-    
+    getPieData: 'mypages/totalgametime/',
+
     // Game
     getGameInfo: 'games/',
     // sendData: `games/${ this.$route.query.gameNo }/users/${ this.$store.state.userInfo.userid }/records/`,

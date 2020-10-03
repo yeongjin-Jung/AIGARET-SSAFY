@@ -168,7 +168,8 @@
             
             <div v-if="item == 1">
               <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
-              <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
+              <!-- <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/> -->
+              <LineChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
               <PieChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
             </div>  
           </div>
@@ -204,6 +205,7 @@ import { extend, ValidationObserver, setInteractionMode, ValidationProvider } fr
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
 import BarChart from '@/components/Account/BarChart'
+import LineChart from '@/components/Account/LineChart'
 import PieChart from '@/components/Account/PieChart'
 import Calendar from '@/components/Account/Calendar'
 
@@ -231,6 +233,7 @@ export default {
     ValidationProvider,
 
     BarChart,
+    LineChart,
     PieChart,
     Calendar
   },
