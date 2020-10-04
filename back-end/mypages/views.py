@@ -19,6 +19,8 @@ class MyPageCanlendarView(APIView):
     def post(self, request, format=None):
         game_count = Game.objects.count()
         today = request.data.get('date')
+        if not today:
+            return(Response({"status":"fail", "message":"날짜 데이터가 없습니다."}))
         year, month, day = tuple(today.split('-'))
         # print(year, month, day)
         user_id = self.request.user.pk
@@ -85,6 +87,8 @@ class TotalGameTimeView(APIView):
         for game_pk in range(1, game_count+1):
             game_name = Game.objects.get(id=game_pk).game_name
             total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk).aggregate(Sum('play_time'))
+            if not total_time["play_time__sum"]:
+                total_time["play_time__sum"] = 0
             
             total_time_dict[game_name] = total_time
 
@@ -102,10 +106,10 @@ class AchievementPercentageView(APIView):
 
         total_time_dict = Record.objects.filter(start_time__lte=end_date, start_time__gte=start_date, user_id=user_id).aggregate(Sum('play_time'))
 
-        obj = Record.objects.filter(start_time__lte=end_date, start_time__gte=start_date, user_id=user_id)
+        # obj = Record.objects.filter(start_time__lte=end_date, start_time__gte=start_date, user_id=user_id)
 
-        for o in obj:
-            print(o.start_time, o.play_time)
+        # for o in obj:
+        #     print(o.start_time, o.play_time)
 
         total_time = total_time_dict['play_time__sum']
 
@@ -114,4 +118,49 @@ class AchievementPercentageView(APIView):
 
         return Response({"total_time":total_time})
 
+class MonthlyGameTimeView(APIView):
+    permission_classes = (IsAuthenticated,)
 
+    def post(self, request, format=None):
+        game_count = Game.objects.count()
+        user_id = self.request.user.pk
+        today = request.data.get('today')
+        if not today:
+            return(Response({"status":"fail", "message":"날짜 데이터가 없습니다."}))
+        if len(today.split('-')) != 3 or len(today) != 10:
+            return(Response({"status":"fail", "message":"날짜 데이터의 형식을 yyyy-mm-dd로 입력해주세요."}))
+
+        year, month, day = tuple(today.split('-'))
+        
+        user_id = self.request.user.pk
+        # print(username)
+
+        data = {"records":[]}
+
+        year = int(year)
+        month = int(month)
+        if month != 12:
+            last_year = year - 1
+            for m in range(month+1, 13):
+                year_month = str(last_year) + '-' + str(m).zfill(2)
+                game_record = []
+                for game_pk in range(1, game_count+1):
+                    game_name = Game.objects.get(id=game_pk).game_name
+                    total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk, start_time__year=last_year, start_time__month=m).aggregate(Sum('play_time'))
+                    time = total_time["play_time__sum"] if total_time["play_time__sum"] else 0
+                    game_record.append({"game":game_name, "time":time})
+                monthly_record = {"date":year_month, "record":game_record}
+                data["records"].append(monthly_record)
+        for m in range(1, month):
+            for m in range(1, month+1):
+                year_month = str(year) + '-' + str(m).zfill(2)
+                game_record = []
+                for game_pk in range(1, game_count+1):
+                    game_name = Game.objects.get(id=game_pk).game_name
+                    total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk, start_time__year=year, start_time__month=m).aggregate(Sum('play_time'))
+                    time = total_time["play_time__sum"] if total_time["play_time__sum"] else 0
+                    game_record.append({"game":game_name, "time":time})
+                monthly_record = {"date":year_month, "record":game_record}
+                data["records"].append(monthly_record)
+        # print(data)
+        return JsonResponse(data, safe=False)
