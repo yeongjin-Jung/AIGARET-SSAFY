@@ -23,7 +23,7 @@
       "
       >게임조작법</v-btn
     > -->
-    <vue-p5 @setup="setup" @draw="draw"></vue-p5>
+    <vue-p5 @setup="setup" @draw="draw"> </vue-p5>
 
     <v-btn
       id="gameStart"
@@ -133,7 +133,7 @@
         </button>
       </template>
     </GameFinishModal>
-    <JumpGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+    <!-- <JumpGameTutorial @close="doCloseTutorial" v-if="Tutorial">
       <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
       <hooper style="margin-top: -3vh">
         <slide></slide>
@@ -161,7 +161,7 @@
           닫기
         </button>
       </template>
-    </JumpGameTutorial>
+    </JumpGameTutorial> -->
 
     <Loading v-if="loading"></Loading>
   </div>
@@ -169,9 +169,9 @@
 
 <script>
 import VueP5 from "vue-p5";
-
-// import p5_dom from "./p5_dom_min";
-// import p5_sound from "./p5_sound_min";
+import p5 from "p5";
+window.p5 = p5;
+import "p5/lib/addons/p5.sound";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
@@ -192,7 +192,7 @@ export default {
       label: "",
 
       score: null,
-      scroll: 15,
+      scroll: 13,
       scrollBg: 0,
       trains: [],
       unicorn: null,
@@ -246,6 +246,9 @@ export default {
 
       //
       removeCanvas: false,
+      sound: null,
+      jumpGameBGM: null,
+      jumpSound : null,
     };
   },
   components: {
@@ -261,10 +264,16 @@ export default {
     setup(sketch) {
       var that = this;
       this.sketchObj = sketch;
+
+      // this.p5.prototype.soundFormats('./Jump.mp3','./Jump.ogg');
+
+      // var sound = this.p5.prototype.loadSound('./Jump.mp3');
+      // var sound = p5.prototype.loadSound(['./Jump.mp3', './Jump.ogg'])
       sketch.createCanvas(
         this.canvasWidth + this.videoWidth,
         this.canvasHeight
       );
+
       this.train = sketch.createImg(
         "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
       );
@@ -272,7 +281,7 @@ export default {
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
       );
       this.jumper = sketch.createImg(
-        "https://user-images.githubusercontent.com/53737175/94951811-e6d86b00-051f-11eb-9edf-92b2f185bf9d.png"
+        "https://user-images.githubusercontent.com/53737175/94998253-79920c00-05eb-11eb-814f-99ae41ccc470.png"
       );
       this.train.hide();
       this.bg.hide();
@@ -334,42 +343,38 @@ export default {
           setTimeout(function () {
             that.classifier.addImage("jump");
             that.jumpPoseCollecting = true;
-            console.log("점프사진 수집중")
+            console.log("점프사진 수집중");
           }, 15 * (i + 1));
         }
         setTimeout(function () {
-            that.jumpPoseCollecting = false;
-            console.log("점프사진 수집완료");
-            }, 3000);
-
+          that.jumpPoseCollecting = false;
+          console.log("점프사진 수집완료");
+        }, 3000);
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-      // setTimeout(function () {
-      //     that.classifier.addImage("noJump");
-      //     that.NojumpPoseCollecting = true;
+        // setTimeout(function () {
+        //     that.classifier.addImage("noJump");
+        //     that.NojumpPoseCollecting = true;
 
-      //     setTimeout(function () {
-      //       that.NojumpPoseCollecting = false;
-      //       console.log("슬라이드사진 수집완료");
-      //     }, 5000);
-      //   }, 100);
-
-
+        //     setTimeout(function () {
+        //       that.NojumpPoseCollecting = false;
+        //       console.log("슬라이드사진 수집완료");
+        //     }, 5000);
+        //   }, 100);
 
         for (var i = 0; i < 100; i++) {
           setTimeout(function () {
             that.classifier.addImage("noJump");
             that.NojumpPoseCollecting = true;
-            console.log("런닝사진 수집중")
+            console.log("런닝사진 수집중");
           }, 15 * (i + 1));
         }
         setTimeout(function () {
-            that.NojumpPoseCollecting = false;
-            console.log("런닝사진 수집완료");
-            }, 3000);
-
+          that.NojumpPoseCollecting = false;
+          console.log("런닝사진 수집완료");
+        }, 3000);
       });
 
       this.gameStart = sketch.select("#gameStart");
@@ -392,7 +397,7 @@ export default {
 
       if (loss == null) {
         that.classifier.classify(that.gotResults);
-        console.log("학습이 완료 되었습니다.")
+        console.log("학습이 완료 되었습니다.");
       } else {
         console.log(loss);
       }
@@ -419,6 +424,8 @@ export default {
       // }
       if (event.key == " ") {
         this.unicorn.jump();
+        this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
+        this.jumpSound.play();
         return false;
       }
     },
@@ -428,7 +435,6 @@ export default {
       if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
       }
-
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
       sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
       sketch.scale(-1, 1);
@@ -487,9 +493,9 @@ export default {
 
         sketch.fill(255);
         sketch.textStyle(sketch.NORMAL);
-        sketch.textSize(60);
+        sketch.textSize(85);
         sketch.textFont("monospace");
-        sketch.text(`Score: ${this.score}`, 15, 60);
+        sketch.text(`Score: ${this.score}`, 15, 80);
 
         for (const t of this.trains) {
           t.move();
@@ -557,9 +563,33 @@ export default {
   created() {
     // this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
+    this.jumpGameBGM = new Audio(require("../../assets/sound/JumpGameBGM.mp3")); // path to file
+    this.jumpGameBGM.volume = 0.2;
+    // this.jumpGameBGM.muted =true;
+    this.jumpGameBGM.loop = true;
+    this.jumpGameBGM.autoplay =true;
+
+    console.log("안녕");
+    this.jumpGameBGM.play();
   },
+  mounted(){
+    // this.jumpGameBGM = new Audio(require("../../assets/sound/JumpGameBGM.mp3")); // path to file
+    // this.jumpGameBGM.volume = 0.2;
+    // this.jumpGameBGM.loop = true;
+
+
+    console.log(this.jumpGameBGM);
+
+  },
+
+
   destroyed() {
     console.log("끄기");
+    this.jumpGameBGM.pause();
+    
+    this.jumpGameBGM = null;
+    this.jumpSound = null;
+    // this.$forceUpdate();
   },
 };
 </script>
@@ -568,71 +598,4 @@ export default {
 #defaultCanvas0 {
   display: inline-block;
 }
-
-
-.container {
-  margin: auto;
-}
-
-.button {
-  cursor: pointer;
-  margin-left: 5px;
-  margin-bottom: 15px;
-  text-shadow: 0 -2px 0 #4a8a65, 0 1px 1px #c2dece;
-  box-sizing: border-box;
-  font-size: 2em;
-  font-family: Helvetica, Arial, Sans-Serif;
-  text-decoration: none;
-  font-weight: bold;
-  color: #5ea97d;
-  height: 65px;
-  line-height: 65px;
-  padding: 0 32.5px;
-  display: inline-block;
-  width: auto;
-  background: -webkit-gradient(linear, left top, left bottom, from(#9ceabd), color-stop(26%, #9ddab6), to(#7fbb98));
-  background: linear-gradient(to bottom, #9ceabd 0%, #9ddab6 26%, #7fbb98 100%);
-  border-radius: 5px;
-  border-top: 1px solid #c8e2d3;
-  border-bottom: 1px solid #c2dece;
-  top: 0;
-  -webkit-transition: all 0.06s ease-out;
-  transition: all 0.06s ease-out;
-  position: relative;
-}
-.button:visited {
-  color: #5ea97d;
-}
-
-.button:hover {
-  background: -webkit-gradient(linear, left top, left bottom, from(#baf1d1), color-stop(26%, #b7e4ca), to(#96c7ab));
-  background: linear-gradient(to bottom, #baf1d1 0%, #b7e4ca 26%, #96c7ab 100%);
-}
-
-.button:active {
-  top: 6px;
-  text-shadow: 0 -2px 0 #7fbb98, 0 1px 1px #c2dece, 0 0 4px white;
-  color: white;
-}
-.button:active:before {
-  top: 0;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.7), 0 3px 9px rgba(0, 0, 0, 0.2);
-}
-
-.button:before {
-  display: inline-block;
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  z-index: -1;
-  top: 6px;
-  border-radius: 5px;
-  height: 65px;
-  background: linear-gradient(to top, #1e5033 0%, #378357 6px);
-  -webkit-transition: all 0.078s ease-out;
-  transition: all 0.078s ease-out;
-  box-shadow: 0 1px 0 2px rgba(0, 0, 0, 0.3), 0 5px 2.4px rgba(0, 0, 0, 0.5), 0 10.8px 9px rgba(0, 0, 0, 0.2);
-}
-
 </style>

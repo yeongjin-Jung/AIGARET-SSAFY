@@ -90,7 +90,7 @@
     </SnakeGameTutorial> -->
     <Loading v-if="loading"></Loading>
     <GameLevelModal v-if="levelChange">
-      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow;">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow">
         {{ level }}
       </p>
     </GameLevelModal>
@@ -154,9 +154,10 @@ export default {
 
       countDown: 20,
       score: 0,
-      speed: 24,
+      speed: 22,
       levelChange: false,
       level: "",
+      snake: null,
     };
   },
   components: {
@@ -174,15 +175,14 @@ export default {
       this.sketch = sketch;
       sketch.createCanvas(this.snakeCanvasWidth + this.videoWidth, this.height);
 
-      // this.leftBuffer = sketch.createGraphics(
-      //   this.snakeCanvasWidth,
-      //   this.height
-      // );
-      // this.rightBuffer = sketch.createGraphics(this.videoWidth, this.height);
-
       this.video = sketch.createCapture(sketch.VIDEO);
       this.video.size(this.videoWidth, this.videoHeight);
       this.video.hide();
+
+      this.snake = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/94985813-a6670480-0594-11eb-807d-6bb9303e20c4.png"
+      );
+      this.snake.hide();
 
       this.poseNet = ml5.poseNet(this.video, this.modelReady());
       var that = this;
@@ -266,7 +266,7 @@ export default {
         // Level2
         if (that.score >= 400 && that.score < 800) {
           that.speed = 21;
-          that.countDown = 15;
+          that.countDown = 18;
           if (that.score == 400) {
             that.level = "Level 2";
             that.levelChange = true;
@@ -278,7 +278,7 @@ export default {
         // Level3
         else if (that.score >= 800 && that.score < 1200) {
           that.speed = 17;
-          that.countDown = 12;
+          that.countDown = 15;
           if (that.score == 800) {
             that.level = "Level 3";
             that.levelChange = true;
@@ -289,8 +289,8 @@ export default {
         }
         // Level4
         else if (that.score >= 1200 && that.score < 2000) {
-          that.speed = 10;
-          that.countDown = 10;
+          that.speed = 12;
+          that.countDown = 13;
           if (that.score == 1200) {
             that.level = "Level 4";
             that.levelChange = true;
@@ -301,8 +301,8 @@ export default {
         }
         // Level5
         else if (that.score >= 2000) {
-          that.speed = 6;
-          that.countDown = 8;
+          that.speed = 10;
+          that.countDown = 10;
           if (that.score == 2000) {
             that.level = "Final";
             that.levelChange = true;
@@ -395,10 +395,17 @@ export default {
           const eyeL = that.pose.leftEye;
           const d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
           sketch.fill(255, 0, 0);
-          sketch.ellipse(
-            that.pose.nose.x - this.snakeCanvasWidth,
-            that.pose.nose.y + 15,
-            d - 25
+          // sketch.ellipse(
+          //   that.pose.nose.x - this.snakeCanvasWidth,
+          //   that.pose.nose.y + 15,
+          //   d - 25
+          // );
+          sketch.image(
+            that.snake,
+            that.pose.nose.x - this.snakeCanvasWidth - 0.35* d,
+            that.pose.nose.y ,
+            0.9*d ,
+            0.9*d
           );
           sketch.fill(0, 0, 255);
 
@@ -406,52 +413,52 @@ export default {
             (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.upPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.upPosition_y &&
-              that.pose.nose.y + 15 < that.upPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.upPosition_y &&
+              that.pose.nose.y + 23 < that.upPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.upPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.upPosition_y &&
-              that.pose.nose.y + 15 < that.upPosition_y + 50)
+              that.pose.nose.y + 23 > that.upPosition_y &&
+              that.pose.nose.y + 23 < that.upPosition_y + 50)
           ) {
             this.label = "top";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.downPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.downPosition_y &&
-              that.pose.nose.y + 15 < that.downPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.downPosition_y &&
+              that.pose.nose.y + 23 < that.downPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.downPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.downPosition_y &&
-              that.pose.nose.y + 15 < that.downPosition_y + 50)
+              that.pose.nose.y + 23 > that.downPosition_y &&
+              that.pose.nose.y + 23 < that.downPosition_y + 50)
           ) {
             this.label = "down";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.leftPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.leftPosition_y &&
-              that.pose.nose.y + 15 < that.leftPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.leftPosition_y &&
+              that.pose.nose.y + 23 < that.leftPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.leftPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.leftPosition_y &&
-              that.pose.nose.y + 15 < that.leftPosition_y + 50)
+              that.pose.nose.y + 23 > that.leftPosition_y &&
+              that.pose.nose.y + 23 < that.leftPosition_y + 50)
           ) {
             this.label = "left";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.rightPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.rightPosition_y &&
-              that.pose.nose.y + 15 < that.rightPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.rightPosition_y &&
+              that.pose.nose.y + 23 < that.rightPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.rightPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.rightPosition_y &&
-              that.pose.nose.y + 15 < that.rightPosition_y + 50)
+              that.pose.nose.y + 23 > that.rightPosition_y &&
+              that.pose.nose.y + 23 < that.rightPosition_y + 50)
           ) {
             this.label = "right";
           }
@@ -463,8 +470,8 @@ export default {
           sketch.textSize(35);
           sketch.fill(255, 0, 0);
           sketch.text("포즈를 인식할 수 없습니다", -80, 200);
-          
-          //카운트다운 
+
+          //카운트다운
           sketch.textSize(50);
           sketch.textStyle(sketch.NORMAL);
           sketch.fill(0, 255, 255);
