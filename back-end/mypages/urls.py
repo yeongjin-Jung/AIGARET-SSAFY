@@ -9,4 +9,5 @@ urlpatterns = [
     path('goaltimechange/', views.ChangeGoalTimeView.as_view(), name='goaltimechange'),
     path('totalgametime/', views.TotalGameTimeView.as_view(), name='totalgametime'),
     path('achievepercent/', views.AchievementPercentageView.as_view(), name='achievepercent'),
+    path('monthlygametime/', views.MonthlyGameTimeView.as_view(), name='monthlygametime'),
 ]
