@@ -498,7 +498,12 @@ export default {
           sketch.text("점수 : " + this.score, -170, 40);
         }
       } else {
-        this.loading = true;
+        if(this.gamestatus == true){
+          this.loading = true;
+        }
+        else{
+          this.loading = false;
+        }
       }
     },
     closeModal() {

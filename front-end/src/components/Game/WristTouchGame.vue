@@ -119,6 +119,8 @@ export default {
       cat_face: null,
       cat_foot: null,
       mouse: null,
+      touchGameBGM: null,
+      failSound: null,
     };
   },
   components: {
@@ -170,10 +172,10 @@ export default {
         "text-align": "center",
         position: "absolute",
         top: "0",
-        height: "94.8vh",
+        height: "95vh",
       });
 
-      $("#defaultCanvas0").css({ width: "64vw", height: "94.8vh" });
+      $("#defaultCanvas0").css({ width: "64vw", height: "95vh" });
     },
     modelReady() {
       console.log("Model Loaded");
@@ -238,7 +240,13 @@ export default {
           this.modal = true;
           this.score = 0;
           this.gamestatus = false;
-          this.loading = true;
+          this.failSound = new Audio(
+            require("../../assets/sound/fail.mp3")
+          ); // path to file
+          this.failSound.volume = 0.2;
+          // this.jumpGameBGM.muted =true;
+          this.touchGameBGM.volume = 0.03;
+          this.failSound.play();
         }
 
         if (this.pose.score > 0.25 && this.pose != null) {
@@ -316,7 +324,12 @@ export default {
           sketch.text("점수 : " + this.score, 40, 60);
         }
       } else {
-        this.loading = true;
+        if (this.gamestatus == true) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
+
         console.log("로딩중");
       }
     },
@@ -333,6 +346,7 @@ export default {
       this.countDownTimer();
       this.closeModal();
       this.gamestatus = true;
+      this.touchGameBGM.volume = 0.2;
     },
     // doCloseTutorial () {
     //   this.Tutorial = false
@@ -383,6 +397,14 @@ export default {
     this.Tutorial = true;
     this.countDownTimer();
     this.gamestatus = true;
+    this.touchGameBGM = new Audio(
+      require("../../assets/sound/TouchGameBGM.mp3")
+    ); // path to file
+    this.touchGameBGM.volume = 0.2;
+    // this.jumpGameBGM.muted =true;
+    this.touchGameBGM.loop = true;
+    this.touchGameBGM.autoplay = true;
+    this.touchGameBGM.play();
   },
   mounted() {
     this.start_time = this.timeNow();
@@ -391,7 +413,9 @@ export default {
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
-    console.log(this.sketch);
+
+    this.touchGameBGM.pause();
+    this.touchGameBGM = null;
   },
 };
 </script>

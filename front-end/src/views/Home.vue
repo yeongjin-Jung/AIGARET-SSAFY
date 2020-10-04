@@ -2,7 +2,7 @@
   <v-container fluid class="text-center mb-16">
     <!-- <v-container fluid class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
     <div v-if="gameInfo[model] == null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
-      <MARQUEE scrollamount="15" style="width : 35vw;">게임을 선택해주세요</MARQUEE>
+      <MARQUEE scrollamount="15" style="width : 35vw; color: black;">게임을 선택해주세요</MARQUEE>
     </div>
     <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
       <MARQUEE scrollamount="15" style="width : 35vw;">{{ gameInfo[model].game_name }}</MARQUEE>
@@ -103,14 +103,15 @@ export default {
 
 <style scoped>
 .v-card {
-  transition: opacity 0.4s ease-in-out, width 0.1s ease-in-out, height 0.2s ease-in-out;
-  width: 25vw;
+  transition: opacity 0.4s ease-in-out, width 0.1s ease-in-out, height 0.25s ease-in-out;
+  width: 30vw;
   height: 15vh;
 }
 
 .v-card:not(.on-minimize) {
-  width: 25vw;
-  height: 37vh;
+  width: 30vw;
+  height: 50vh;
+  margin-bottom: 100px;
 }
 
 /* -----------한세트----------- */

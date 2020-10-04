@@ -168,6 +168,11 @@
     </JumpGameTutorial> -->
 
     <Loading v-if="loading"></Loading>
+    <GameLevelModal v-if="levelChange">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow">
+        {{ level }}
+      </p>
+    </GameLevelModal>
   </div>
 </template>
 
@@ -176,11 +181,10 @@ import SERVER from "@/api/server.js";
 import axios from "axios";
 
 import VueP5 from "vue-p5";
-// import p5_dom from "./p5_dom_min";
-// import p5_sound from "./p5_sound_min";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
+import GameLevelModal from "./GameLevelModal";
 // import JumpGameTutorial from "./JumpGameTutorial";
 import GameFinishModal from "./GameFinishModal";
 import Loading from "./loding";
@@ -223,7 +227,7 @@ export default {
       ding: null,
       whistle: null,
       bg: null,
-      train: null,
+      obstacle: null,
       jumper: null,
 
       // posenet
@@ -255,7 +259,7 @@ export default {
 
       confidence: null,
 
-      //
+      levelChange: false,
       removeCanvas: false,
       sound: null,
       jumpGameBGM: null,
@@ -270,6 +274,7 @@ export default {
     GameFinishModal,
     Loading,
     // JumpGameTutorial,
+    GameLevelModal,
   },
   methods: {
     setup(sketch) {
@@ -285,8 +290,8 @@ export default {
         this.canvasHeight
       );
 
-      this.train = sketch.createImg(
-        "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
+      this.obstacle = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/95007583-4d5aa780-064c-11eb-84b5-676cb9fc7ac1.png"
       );
       this.bg = sketch.createImg(
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
@@ -294,7 +299,7 @@ export default {
       this.jumper = sketch.createImg(
         "https://user-images.githubusercontent.com/53737175/94998253-79920c00-05eb-11eb-814f-99ae41ccc470.png"
       );
-      this.train.hide();
+      this.obstacle.hide();
       this.bg.hide();
       this.jumper.hide();
 
@@ -350,12 +355,12 @@ export default {
       var that = this;
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
-        for (var i = 0; i < 130; i++) {
+        for (var i = 0; i < 80; i++) {
           setTimeout(function () {
             that.classifier.addImage("jump");
             that.jumpPoseCollecting = true;
             console.log("점프사진 수집중");
-          }, 15 * (i + 1));
+          }, 10 * (i + 1));
         }
         setTimeout(function () {
           that.jumpPoseCollecting = false;
@@ -375,12 +380,12 @@ export default {
         //     }, 5000);
         //   }, 100);
 
-        for (var i = 0; i < 100; i++) {
+        for (var i = 0; i < 60; i++) {
           setTimeout(function () {
             that.classifier.addImage("noJump");
             that.NojumpPoseCollecting = true;
             console.log("런닝사진 수집중");
-          }, 15 * (i + 1));
+          }, 10 * (i + 1));
         }
         setTimeout(function () {
           that.NojumpPoseCollecting = false;
@@ -419,7 +424,7 @@ export default {
         this.restart = false;
         this.score = 0;
         this.scrollBg = 0;
-        this.scroll = 15;
+        this.scroll = 13;
         this.trains = [];
         this.gameState = true;
         // this.sketchObj.loop();
@@ -471,7 +476,7 @@ export default {
         sketch.textSize(80);
         sketch.textStyle(sketch.BOLD);
         sketch.fill(255, 0, 0);
-        sketch.text("슬라이드사진 수집중", 1350, 100);
+        sketch.text("런닝사진 수집중", 1350, 100);
       }
 
       if (this.gameState) {
@@ -491,7 +496,7 @@ export default {
           this.trains.push(
             new Train(
               sketch,
-              this.train,
+              this.obstacle,
               this.canvasWidth,
               sketch.height,
               this.scroll
@@ -509,6 +514,23 @@ export default {
         sketch.textFont("monospace");
         sketch.text(`Score: ${this.score}`, 15, 80);
 
+        if (this.score == 500) {
+            that.scroll = 18;
+            that.level = "Level 2";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+          }, 600);
+        }
+        else if(this.score == 1000){
+            that.scroll = 24;
+            that.level = "Level 3";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+          }, 600);
+        }
+
         for (const t of this.trains) {
           t.move();
           t.show();
@@ -521,9 +543,9 @@ export default {
 
             this.end_time = this.timeNow();
             this.game_score = this.score;
-            that.modal = true;
-            that.restart = true;
-            that.gameState = false;
+            this.modal = true;
+            this.restart = true;
+            this.gameState = false;
           }
         }
 
@@ -616,8 +638,6 @@ export default {
     // this.jumpGameBGM.muted =true;
     this.jumpGameBGM.loop = true;
     this.jumpGameBGM.autoplay =true;
-
-    console.log("안녕");
     this.jumpGameBGM.play();
   },
   mounted(){

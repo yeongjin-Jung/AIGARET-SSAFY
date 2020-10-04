@@ -6,7 +6,7 @@
       <v-btn v-bind="attrs" v-on="on" class="ml-5" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height:530px;">
+    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 600px;">
 
       <div id="div_left" style="margin:auto; text-align:center">
 
@@ -62,7 +62,7 @@
 
       <!-- 오른쪽 웹캠 div -->
       
-      <div id="div_right" style="background: #fcfeff; text-align: center; height:100%; padding-top:30px;">
+      <div id="div_right" style="background: #fcfeff; text-align: center; height:100%; padding-top:50px;">
 
         <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
