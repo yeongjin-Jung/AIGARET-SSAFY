@@ -5,7 +5,7 @@ export default {
     // Account
     signup: 'rest-auth/signup/',
     login: 'rest-auth/login/',
-    checkIdDuplicate: 'rest-auth/checkIdDuplicate/',
+    checkIdDuplicate: 'idDuplicateCheck/',
     changepassword: 'changepassword/',
     changeImage: 'mypages/imagechange/',
 
