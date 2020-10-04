@@ -30,6 +30,10 @@ const userStore = {
       }
     },
 
+    isIdDuplicated(state) {
+      return state.isIdDuplicated
+    },
+
     image(state) {
       return state.userInfo.profile_image
     },
@@ -40,10 +44,6 @@ const userStore = {
   },
 
   mutations: {
-    SET_ID_DUPLICATED(state, res) {
-      state.isIdDuplicated = res
-    },
-
     SET_USER_INFO(state, userInfo) {
       state.userInfo.userid = userInfo.id
       state.userInfo.username = userInfo.username
@@ -101,18 +101,26 @@ const userStore = {
       localStorage.removeItem('goal_time')
       localStorage.setItem('goal_time', data)
     },
+
+    SET_ID_DUPLICATED(state, data) {
+      state.isIdDuplicated = data
+    }
   },
 
   actions: {
     checkIdDuplicate({ commit }, id) {
-      axios.post(SERVER.URL + SERVER.ROUTES.checkIdDuplicate, id)
-      .then(res => {
-        console.log("res : ", res)
+      const data = {
+        'username': id
+      }
 
-        if(res == true)
-          commit(SET_ID_DUPLICATED, true)
+      axios.post(SERVER.URL + SERVER.ROUTES.checkIdDuplicate, data)
+      .then(res => {
+        console.log("res.data.status : ", res.data.status) // fail or success
+
+        if(res.data.status == 'success')
+          commit('SET_ID_DUPLICATED', false)
         else
-          commit(SET_ID_DUPLICATED, false)
+          commit('SET_ID_DUPLICATED', true)
       })
       .catch()
     },
