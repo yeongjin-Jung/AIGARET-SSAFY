@@ -632,6 +632,8 @@ export default {
 
 
   destroyed() {
+    let stream = this.video.elt.srcObject
+    stream.getTracks()[0].stop()
     console.log("끄기");
     this.jumpGameBGM.pause();
     

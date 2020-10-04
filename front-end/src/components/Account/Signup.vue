@@ -161,7 +161,9 @@ export default {
       timerId: null,
       videoFLag: false,
 
-      isIdDuplicatedCheck: false
+      isIdDuplicatedCheck: false,
+
+      localStream: ''
     }
   },
 
