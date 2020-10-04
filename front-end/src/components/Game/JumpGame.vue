@@ -216,7 +216,7 @@ export default {
       videoWidth: 1130,
       videoHeight: 800,
       countDown: 5,
-      
+
       // record
       start_time: null,
       end_time: null,
@@ -248,7 +248,9 @@ export default {
       state: "waiting",
       jumpPoseCollecting: false,
       NojumpPoseCollecting: false,
+      training : false,
       reCollecting: false,
+      loss : null,
       // game
       modal: false,
       score: 0,
@@ -263,7 +265,7 @@ export default {
       removeCanvas: false,
       sound: null,
       jumpGameBGM: null,
-      jumpSound : null,
+      jumpSound: null,
     };
   },
   components: {
@@ -411,12 +413,16 @@ export default {
 
     whileTraining(loss) {
       var that = this;
+      this.loss = loss;
 
       if (loss == null) {
         that.classifier.classify(that.gotResults);
+        that.training = false;
         console.log("학습이 완료 되었습니다.");
       } else {
         console.log(loss);
+        that.training = true;
+
       }
     },
     restartGame() {
@@ -448,9 +454,14 @@ export default {
     },
     draw(sketch) {
       var that = this;
+      var jumpSoundFlag = true;
 
       if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
+        if(this.unicorn.y == 600 && this.gameState ==true){
+          this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
+          this.jumpSound.play();
+        }
       }
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
       sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
@@ -469,14 +480,22 @@ export default {
         sketch.textSize(80);
         sketch.textStyle(sketch.BOLD);
         sketch.fill(255, 0, 0);
-        sketch.text("점프사진 수집중", 1450, 100);
+        sketch.text("점프사진 수집중...", 1450, 100);
+
       }
 
       if (this.NojumpPoseCollecting == true) {
         sketch.textSize(80);
         sketch.textStyle(sketch.BOLD);
         sketch.fill(255, 0, 0);
-        sketch.text("런닝사진 수집중", 1350, 100);
+        sketch.text("런닝사진 수집중...", 1350, 100);
+      }
+
+      if (this.training == true){
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("학습중...", 1550, 100);
       }
 
       if (this.gameState) {
@@ -515,19 +534,18 @@ export default {
         sketch.text(`Score: ${this.score}`, 15, 80);
 
         if (this.score == 500) {
-            that.scroll = 18;
-            that.level = "Level 2";
-            that.levelChange = true;
-            setTimeout(function () {
-              that.levelChange = false;
+          that.scroll = 18;
+          that.level = "Level 2";
+          that.levelChange = true;
+          setTimeout(function () {
+            that.levelChange = false;
           }, 600);
-        }
-        else if(this.score == 1000){
-            that.scroll = 24;
-            that.level = "Level 3";
-            that.levelChange = true;
-            setTimeout(function () {
-              that.levelChange = false;
+        } else if (this.score == 1000) {
+          that.scroll = 24;
+          that.level = "Level 3";
+          that.levelChange = true;
+          setTimeout(function () {
+            that.levelChange = false;
           }, 600);
         }
 
@@ -610,7 +628,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      console.log(gameData)
+      console.log(gameData);
       axios
         .post(
           SERVER.URL +
@@ -637,26 +655,14 @@ export default {
     this.jumpGameBGM.volume = 0.2;
     // this.jumpGameBGM.muted =true;
     this.jumpGameBGM.loop = true;
-    this.jumpGameBGM.autoplay =true;
+    this.jumpGameBGM.autoplay = true;
     this.jumpGameBGM.play();
   },
-  mounted(){
-    // this.jumpGameBGM = new Audio(require("../../assets/sound/JumpGameBGM.mp3")); // path to file
-    // this.jumpGameBGM.volume = 0.2;
-    // this.jumpGameBGM.loop = true;
-
-
-    console.log(this.jumpGameBGM);
-
-  },
-
-
   destroyed() {
-    let stream = this.video.elt.srcObject
-    stream.getTracks()[0].stop()
-    console.log("끄기");
+    let stream = this.video.elt.srcObject;
+    stream.getTracks()[0].stop();
     this.jumpGameBGM.pause();
-    
+
     this.jumpGameBGM = null;
     this.jumpSound = null;
     // this.$forceUpdate();

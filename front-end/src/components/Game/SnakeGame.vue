@@ -164,12 +164,14 @@ export default {
       firstStart: true,
       gamestatus: false,
 
-      countDown: 20,
+      countDown: 25,
       score: 0,
       speed: 22,
       levelChange: false,
       level: "",
       snake: null,
+      snakeGameBGM : null,
+      failSound: null,
     };
   },
   components: {
@@ -277,7 +279,7 @@ export default {
 
         // Level2
         if (that.score >= 400 && that.score < 800) {
-          that.speed = 21;
+          that.speed = 20;
           that.countDown = 18;
           if (that.score == 400) {
             that.level = "Level 2";
@@ -323,7 +325,7 @@ export default {
             }, 1000);
           }
         } else {
-          that.countDown = 20;
+          that.countDown = 25;
         }
 
         that.pickLocation(sketch);
@@ -387,18 +389,19 @@ export default {
         sketch.text(this.countDown, 270 + this.snakeCanvasWidth, 50);
 
         if (this.countDown == 0) {
-          this.end_time = this.timeNow();
-          this.game_score = this.score;
+          that.end_time = this.timeNow();
+          that.game_score = this.score;
           that.modal = true;
           that.score = 0;
           that.gamestatus = false;
-          // that.s = new Snake(
-          //   sketch,
-          //   that.scl,
-          //   that.snakeCanvasWidth,
-          //   that.height,
-          //   that.food
-          // );
+          that.failSound = new Audio(
+            require("../../assets/sound/fail.mp3")
+          ); // path to file
+          that.failSound.volume = 0.2;
+          // this.jumpGameBGM.muted =true;
+          that.snakeGameBGM.volume = 0.03;
+          that.failSound.play();
+
         }
 
         sketch.translate(this.videoWidth, 0);
@@ -515,8 +518,8 @@ export default {
     },
     doClose() {
       this.score = 0;
-      this.speed = 24;
-      this.countDown = 20;
+      this.speed = 22;
+      this.countDown = 25;
       this.countDownTimer();
       this.closeModal();
       this.gamestatus = true;
@@ -527,6 +530,7 @@ export default {
         this.height,
         this.food
       );
+      this.snakeGameBGM.volume = 0.2;
     },
 
     doCloseTutorial() {
@@ -578,7 +582,14 @@ export default {
     this.Tutorial = true;
     this.gamestatus = true;
     this.countDownTimer();
-    var that = this;
+    this.snakeGameBGM = new Audio(
+      require("../../assets/sound/SnakeGameBGM.mp3")
+    ); // path to file
+    this.snakeGameBGM.volume = 0.2;
+    // this.jumpGameBGM.muted =true;
+    this.snakeGameBGM.loop = true;
+    this.snakeGameBGM.autoplay = true;
+    this.snakeGameBGM.play();
   },
   mounted() {
     this.start_time = this.timeNow();
@@ -589,7 +600,9 @@ export default {
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
-    console.log(this.sketch);
+
+    this.snakeGameBGM.pause();
+    this.snakeGameBGM = null;
   },
 };
 </script>
