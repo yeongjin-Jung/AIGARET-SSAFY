@@ -71,6 +71,11 @@
     </WristTouchGameTutorial> -->
 
     <Loading v-if="loading"></Loading>
+    <GameLevelModal v-if="levelChange">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow">
+        {{ level }}
+      </p>
+    </GameLevelModal>
   </div>
 </template>
 
@@ -82,6 +87,7 @@ import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import $ from "jquery";
 import GameFinishModal from "./GameFinishModal";
+import GameLevelModal from "./GameLevelModal";
 // import WristTouchGameTutorial from './WristTouchGameTutorial'
 import Loading from "./loding";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
@@ -121,6 +127,9 @@ export default {
       mouse: null,
       touchGameBGM: null,
       failSound: null,
+      LevelNum: 1,
+      levelChange: false,
+      level: "",
     };
   },
   components: {
@@ -131,6 +140,7 @@ export default {
     Hooper,
     Slide,
     HooperPagination,
+    GameLevelModal,
   },
   methods: {
     setup(sketch) {
@@ -139,14 +149,14 @@ export default {
       this.sketch = sketch;
       sketch.createCanvas(this.window_width, this.window_height);
       sketch.background(0);
-      
-      this.video = sketch.createCapture(sketch.VIDEO, 
-      stream => {
-        this.localStream = stream
-      },
-      err => {
 
-      });
+      this.video = sketch.createCapture(
+        sketch.VIDEO,
+        (stream) => {
+          this.localStream = stream;
+        },
+        (err) => {}
+      );
 
       this.video.size(this.window_width, this.window_height);
       this.video.hide();
@@ -188,13 +198,45 @@ export default {
       console.log("Model Loaded");
     },
     chanege(x) {
+      var that = this;
+      this.score += 10;
+      if (that.score == 300) {
+        that.LevelNum = 2;
+        that.level = "Level 2";
+        that.levelChange = true;
+        setTimeout(function () {
+          that.levelChange = false;
+        }, 1000);
+      } else if (that.score == 700) {
+        that.LevelNum = 3;
+        that.level = "Level 3";
+        that.levelChange = true;
+        setTimeout(function () {
+          that.levelChange = false;
+        }, 1000);
+      } else if (that.score == 1200) {
+        that.LevelNum = 4;
+        that.level = "Level 4";
+        that.levelChange = true;
+        setTimeout(function () {
+          that.levelChange = false;
+        }, 1000);
+      }
       this.position_x = Math.floor(Math.random() * 800 + 100);
       this.position_y = Math.floor(Math.random() * 300 + 100);
       if (this.position_x >= 300 && this.position_x <= 700) {
         this.chanege(x);
       }
-      this.score += 10;
-      this.countDown = 10;
+      if (this.LevelNum == 1) {
+        this.countDown = 10;
+      } else if (this.LevelNum == 2) {
+        this.countDown = 8;
+      } else if (this.LevelNum == 3) {
+        this.countDown = 6;
+      } else if (this.LevelNum == 4) {
+        this.countDown = 4;
+      }
+      
     },
     countDownTimer() {
       if (this.countDown > 0) {
@@ -246,10 +288,9 @@ export default {
           this.game_score = this.score;
           this.modal = true;
           this.score = 0;
+          this.LevelNum = 1;
           this.gamestatus = false;
-          this.failSound = new Audio(
-            require("../../assets/sound/fail.mp3")
-          ); // path to file
+          this.failSound = new Audio(require("../../assets/sound/fail.mp3")); // path to file
           this.failSound.volume = 0.2;
           // this.jumpGameBGM.muted =true;
           this.touchGameBGM.volume = 0.03;
@@ -336,8 +377,6 @@ export default {
         } else {
           this.loading = false;
         }
-
-        console.log("로딩중");
       }
     },
     closeModal() {
@@ -417,15 +456,16 @@ export default {
     this.start_time = this.timeNow();
   },
   destroyed() {
-    let stream = this.video.elt.srcObject
-    stream.getTracks()[0].stop()
-    
+    let stream = this.video.elt.srcObject;
+    stream.getTracks()[0].stop();
+
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
 
     this.touchGameBGM.pause();
     this.touchGameBGM = null;
+    window.location.reload();
   },
 };
 </script>

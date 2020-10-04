@@ -595,14 +595,14 @@ export default {
     this.start_time = this.timeNow();
   },
   destroyed() {
-    let stream = this.video.elt.srcObject
-    stream.getTracks()[0].stop()
+    // let stream = this.video.elt.srcObject
+    // stream.getTracks()[0].stop()
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
-
     this.snakeGameBGM.pause();
     this.snakeGameBGM = null;
+    window.location.reload();
   },
 };
 </script>
