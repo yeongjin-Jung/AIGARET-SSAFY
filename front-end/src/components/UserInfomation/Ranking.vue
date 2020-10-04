@@ -1,14 +1,15 @@
 <template>
   <v-container fluid>
-    <v-card>
+    <!-- <v-card style="background-color: transparent;"> -->
       <v-tabs
-        background-color="white"
-        color="deep-purple accent-4"
+        background-color="transparent"
+        color="#53cde2"
         centered
+        fixed-tabs
       >
-        <v-tab>WristTouchGame</v-tab>
-        <v-tab>SnakeGame</v-tab>
-        <v-tab>JumpGame</v-tab>
+        <v-tab style="color: white;">WristTouchGame</v-tab>
+        <v-tab style="color: white;">SnakeGame</v-tab>
+        <v-tab style="color: white;">JumpGame</v-tab>
 
         <v-tab-item
           v-for="n in 3"
@@ -17,7 +18,7 @@
           <RankDetail :tabIndex="n"/>
         </v-tab-item>
       </v-tabs>
-    </v-card>
+    <!-- </v-card> -->
   </v-container>
 </template>
 
@@ -33,5 +34,7 @@ export default {
 </script>
 
 <style>
-
+.theme--light.v-tabs-items {
+  background-color: transparent;
+}
 </style>

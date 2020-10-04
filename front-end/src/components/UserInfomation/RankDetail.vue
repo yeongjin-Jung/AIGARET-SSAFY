@@ -1,8 +1,8 @@
 <template>
-  <v-row no-gutters class="fill-height text-center" color="black">
-    <v-col cols="5" align-self="center" style="border: white 3px dashed;"> <!-- 2분할 -->
+  <v-row no-gutters class="fill-height text-center">
+    <v-col cols="5" align-self="center"> <!-- 2분할 -->
       <v-row no-gutters justify="center"> <!-- 4분할 -->
-        <v-col cols="6" style="border: gray 3px dashed; display: flex; align-items: center; justify-content: center; height: 40vh;">
+        <v-col cols="6" style="display: flex; align-items: center; justify-content: center; height: 40vh;">
         <!-- cols="6" 으로 가운데 정렬 효과 -->
           
           <v-col style="border: black 3px dashed;"> <!-- v-col > v-col, 횡 => 종 변화 -->
@@ -25,7 +25,7 @@
         </v-col>
       </v-row>
       <v-row no-gutters justify="center"> <!-- 4분할 -->
-        <v-col cols="6" style="border: gray 3px dashed; display: flex; align-items: center; justify-content: center; height: 40vh;">
+        <v-col cols="6" style="display: flex; align-items: center; justify-content: center; height: 40vh;">
         <!-- cols="6" 으로 가운데 정렬 효과 -->
           <div style="border: black 3px dashed;">
             최고점수(선택한게임의 역대 나의 최고점수)

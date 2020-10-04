@@ -503,6 +503,7 @@ export default {
     },
     doClose() {
       this.score = 0;
+      this.speed = 24;
       this.countDown = 20;
       this.countDownTimer();
       this.closeModal();
