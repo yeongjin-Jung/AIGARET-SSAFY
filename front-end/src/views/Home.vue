@@ -95,9 +95,8 @@ export default {
         .catch((err) => console.log(err.response))
     }
   },
-  mounted () {
+  mounted() {
     this.getGameInfo()
-    // console.log('user_pk:' + this.$store.state.userInfo.id)
   }
 }
 </script>

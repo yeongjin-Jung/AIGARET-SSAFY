@@ -4,16 +4,16 @@
       <div id="outer" class="row">
 
         <!-- 왼쪽 div 영역(div_inner_left) -->
-        <div id="div_inner_left" class="col-md-4" style="height: 100px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap; height: ">
+        <div id="div_inner_left" class="col-md-4" style="height: 100px; padding-top: 120px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
 
           <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
-          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center">
+          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center; margin-bottom: 5px">
             <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
             <v-img :src="image" width="400px" height="300px" style=""></v-img>
           </div>
 
-          <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경과 사진 변경 버튼이 있음. -->
-          <div id="div_inner_left_second" style="">
+          <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경, 사진 변경, 목표시간 변경 버튼이 있음. -->
+          <div id="div_inner_left_second" style="margin-bottom: 5px">
             
             <!-- 1. 비밀번호 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
@@ -21,7 +21,7 @@
                 <v-btn width="133px" class="mx-1" dark v-bind="attrs" v-on="on" style="background: #53cde2">
                   <v-icon>mdi-account-edit</v-icon>
                 </v-btn>
-              </template>
+              </template>s
 
               <v-card>
                 <ValidationObserver v-slot="{ invalid }">
@@ -155,8 +155,8 @@
           
           <!-- 달성률 영역-->
           <div style="text-align: center">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률(이번 주 플레이 시간 / {{ goal_time }})</p>
-            <v-progress-linear center rounded value="70" height="30" color="yellow" style="width: 50%; display: inline-block">80/100 달성</v-progress-linear>
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.mypageStore.total_time / 3600) }} / {{ goal_time }})</p>
+            <v-progress-linear center rounded :value="progressValue" height="30" color="#FF0084" style="width: 50%; display: inline-block">{{ progressValue }}% 달성</v-progress-linear>
           </div>
 
           <!-- 캘린더 OR 통계 영역 -->
@@ -168,7 +168,8 @@
             
             <div v-if="item == 1">
               <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
-              <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
+              <!-- <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/> -->
+              <LineChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
               <PieChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
             </div>  
           </div>
@@ -194,17 +195,22 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import $ from 'jquery'
 import * as faceapi from 'face-api.js'
+import moment from 'moment'
 
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed } from 'vee-validate/dist/rules'
 
 import BarChart from '@/components/Account/BarChart'
+import LineChart from '@/components/Account/LineChart'
 import PieChart from '@/components/Account/PieChart'
 import Calendar from '@/components/Account/Calendar'
+
+const userStore = 'userStore'
+const mypageStore = 'mypageStore'
 
 extend('required', {
   ...required,
@@ -227,6 +233,7 @@ export default {
     ValidationProvider,
 
     BarChart,
+    LineChart,
     PieChart,
     Calendar
   },
@@ -259,28 +266,40 @@ export default {
 
       isCaptured: false,
 
-      img: this.$store.state.userInfo.profile_image,
       base64Encoded: '',
 
       newGoalTime: 1,
       rules: [
         v => v != 0 || '최소 1시간 이상으로 설정해주세요.',
       ],
+
+      date: {
+        'start_date': '',
+        'end_date': ''
+      },
     }
   },
 
   computed: {
-    image() {
-      return this.$store.state.userInfo.profile_image
-    },
+    ...mapGetters(userStore, ['image', 'goal_time']),
+    ...mapGetters(mypageStore, ['progressValue']),
 
-    goal_time() {
-      return this.$store.state.userInfo.goal_time
-    }
+    // image() {
+    //   return this.$store.state.userInfo.profile_image
+    // },
+
+    // goal_time() {
+    //   return this.$store.state.userInfo.goal_time
+    // },
+
+    // progressValue() {
+    //   return this.$store.getters.progressValue
+    // }
   },
 
   methods: {
-    ...mapActions(['changePassword', 'changeImage', 'changeGoalTime']),
+    ...mapActions(userStore, ['changePassword', 'changeImage', 'changeGoalTime']),
+    ...mapActions(mypageStore, ['getAchievePercent']),
 
     videoStart () {
       this.videoFlag = true
@@ -364,10 +383,20 @@ export default {
   },
 
   mounted () {
-    // console.log('Info.vue mounted.')
-    // console.log('this.video', this.video)
-    // console.log('this.canvas', this.canvas)
-    // console.log("this.img : ", this.img)
+    let prevSunday = moment().day(0).year() + "-" + ((moment().day(0).month()+1) >= 10 ? (moment().day(0).month()+1) : ('0' + (moment().day(0).month()+1))) + "-" + ((moment().day(0).date()) >= 10 ? (moment().day(0).date()) : ('0' + (moment().day(0).date())))
+    let nextSunday = moment().day(7).year() + "-" + ((moment().day(7).month()+1) >= 10 ? (moment().day(7).month()+1) : ('0' + (moment().day(7).month()+1))) + "-" + ((moment().day(7).date()) >= 10 ? (moment().day(7).date()) : ('0' + (moment().day(7).date())))
+    
+    this.date.start_date = prevSunday
+    this.date.end_date = nextSunday
+
+    this.getAchievePercent(this.date).then(() => {
+      // console.log("total_time : ", this.$store.state.total_time)
+      // console.log("goal_time : ", this.goal_time)
+      
+      // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
+      // console.log('this.progressValue : ', this.progressValue)
+    })
+
   },
 
   updated () {

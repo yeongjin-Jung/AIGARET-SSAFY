@@ -15,11 +15,35 @@
 import $ from 'jquery'
 import { mapActions } from 'vuex';
 
+const mypageStore = 'mypageStore'
+
 export default {
   name: "Calendar",
   data() {
     return {
-      gameRecords: this.$store.state.gameRecords
+      gameRecords: this.$store.state.mypageStore.gameRecords
+    }
+  },
+
+  methods: {
+    ...mapActions(mypageStore, ['getRecords']),
+
+    test() {
+      alert('test')
+      console.log("test")
+    },
+
+    secondsToHms(d) {
+      d = Number(d);
+      var h = Math.floor(d / 3600);
+      var m = Math.floor(d % 3600 / 60);
+      var s = Math.floor(d % 3600 % 60);
+
+      var hDisplay = h > 0 ? h + (h == 1 ? "시간 " : "시간 ") : "";
+      var mDisplay = m > 0 ? m + (m == 1 ? "분 " : "분 ") : "";
+      var sDisplay = s > 0 ? s + (s == 1 ? "초" : "초") : "";
+
+      return hDisplay + mDisplay + sDisplay; 
     }
   },
 
@@ -425,28 +449,6 @@ export default {
             modal.hide();
         });
 }
-  },
-
-  methods: {
-    ...mapActions(['getRecords']),
-
-    test() {
-      alert('test')
-      console.log("test")
-    },
-
-    secondsToHms(d) {
-      d = Number(d);
-      var h = Math.floor(d / 3600);
-      var m = Math.floor(d % 3600 / 60);
-      var s = Math.floor(d % 3600 % 60);
-
-      var hDisplay = h > 0 ? h + (h == 1 ? "시간 " : "시간 ") : "";
-      var mDisplay = m > 0 ? m + (m == 1 ? "분 " : "분 ") : "";
-      var sDisplay = s > 0 ? s + (s == 1 ? "초" : "초") : "";
-
-      return hDisplay + mDisplay + sDisplay; 
-    }
   }
 };
 </script>

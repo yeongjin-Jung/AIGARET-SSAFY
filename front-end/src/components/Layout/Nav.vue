@@ -1,14 +1,14 @@
 <template>
   <v-system-bar app color="orange" style="height: 5vh;">
     <router-link to="/" style="text-decoration: none;">
-      <v-btn icon style="margin-left: 10px; height:3.5vh; margin-top: 1px; margin-left: 10px;"><v-icon style="font-size: 5vh;" >mdi-home</v-icon></v-btn>
+      <v-btn icon tile style="width: 5vh; height: 5vh;"><v-icon style="font-size: 5vh;" >mdi-home</v-icon></v-btn>
     </router-link>
     <p
       style="font-size: 4.4vh; white-space:nowrap; font-weight: 600; margin-top: 16px; margin-left: 10px; display:inline; font-family: CookieRun-Bold;"
     >AIGARET</p>
     <v-spacer></v-spacer>
     <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
-      {{ $store.state.userInfo.name }}님 환영합니다.
+      {{ $store.state.userStore.userInfo.name }}님 환영합니다.
     </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"
@@ -20,6 +20,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
+const userStore = 'userStore'
+
 export default {
   name: 'Nav',
 
@@ -28,6 +32,11 @@ export default {
       date: null,
       dateTime: null
     }
+  },
+  mounted() {
+    // console.log('this.$store.state : ', this.$store.state)
+    // console.log('this.$store.state.userStore : ', this.$store.state.userStore)
+    // console.log('tihs.$store.state.userStore.userInfo.name : ', this.$store.state.userStore.userInfo.name)
   },
 
   methods: {
@@ -78,9 +87,10 @@ export default {
   },
 
   computed: {
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
-    }
+    ...mapGetters(userStore, ['isLoggedIn']),
+    // isLoggedIn() {
+    //   return this.$store.getters.isLoggedIn;
+    // }
   },
 
   created() {

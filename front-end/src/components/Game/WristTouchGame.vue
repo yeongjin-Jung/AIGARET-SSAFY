@@ -33,7 +33,7 @@
           @click="
             doClose();
             sendGameData();
-            restart();
+            reStartTime();
           "
           style="
             background-color: red;
@@ -111,9 +111,11 @@ export default {
       gamestatus: false,
       sketch: null,
 
+      // record
       start_time: null,
       end_time: null,
       game_score: 0,
+
       cat_face: null,
       cat_foot: null,
       mouse: null,
@@ -346,12 +348,12 @@ export default {
       var time = new Date().toString("ko-KR");
       return date.slice(0, 10) + " " + time.slice(16, 24);
     },
-    restart() {
+    reStartTime() {
       this.start_time = this.timeNow();
     },
     sendGameData() {
       const gameData = {
-        userId: this.$store.state.userInfo.userid,
+        userId: this.$store.state.userStore.userInfo.userid,
         gameNo: this.$route.query.gameNo,
         startTime: this.start_time,
         endTime: this.end_time,
@@ -361,7 +363,7 @@ export default {
       axios
         .post(
           SERVER.URL +
-            `games/${this.$route.query.gameNo}/users/${this.$store.state.userInfo.userid}/records/`,
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userStore.userInfo.userid}/`,
           gameData,
           {
             headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
@@ -384,8 +386,6 @@ export default {
   },
   mounted() {
     this.start_time = this.timeNow();
-    // console.log(this.timeNow())
-    // console.log(this.$store.state.userInfo)
   },
   destroyed() {
     this.sketch.remove();

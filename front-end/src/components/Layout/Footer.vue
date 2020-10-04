@@ -2,15 +2,17 @@
   <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 3vh;">
     <v-row justify="center">
         
-        <router-link to="/info" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn id="info" elevation="0" style="height:14.5vh; width:7vw;"></v-btn>
+        <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" style="height:14.5vh; width:7vw;"></v-btn>
         </router-link>
         
-        <router-link to="/rank" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn id="rank" elevation="0" style="height:15.6vh; width:7.2vw;"><div></div></v-btn>
+        <router-link id="rank" to="/rank" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" style="height:15.6vh; width:7vw;"><div></div></v-btn>
         </router-link>
 
-        <v-btn id="logout" elevation="0" @click="logout()" style="height:15.2vh; width:7vw; margin-left:1.5vw; margin-right:1.5vw;" ></v-btn>
+        <router-link id="logout" to="" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" @click="logout()" style="height:15.2vh; width:7vw;" ></v-btn>
+        </router-link>
 
     </v-row>
   </v-container>
@@ -18,6 +20,8 @@
 
 <script>
 import { mapActions } from 'vuex';
+
+const userStore = 'userStore'
 
 export default {
   name: 'Footer',
@@ -29,7 +33,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['logout']),
+    ...mapActions(userStore, ['logout']),
   }
 }
 </script>

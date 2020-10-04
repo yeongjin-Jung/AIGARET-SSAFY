@@ -3,7 +3,7 @@
     <v-row style="text-align: center;">
       <!-- 로그인 -->
       <v-flex> 
-        <v-form>
+        <v-form ref="form">
           <p style="text-align: center; margin-bottom: 0px; height: 13vh; font-size:11vh; font-family: CookieRun-Bold;">AIGARET</p>
           <p style="text-align: center; font-size:3vh; font-family: CookieRun-Regular; font-weight: 500;">AI Game Rehabilitation Trainer</p>
           <p style="text-align: center; font-size:4vh; font-family: CookieRun-Regular; font-weight: 500;">-나만의 재활치료-</p>
@@ -31,6 +31,8 @@ import { mapState, mapActions } from 'vuex'
 
 import Signup from './Signup'
 import FaceLogin from './FaceLogin'
+
+const userStore = 'userStore'
 
 extend('required', {
   ...required,
@@ -73,9 +75,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'login'
-    ]),
+    ...mapActions(userStore, ['login']),
 
     startVideo (val) {
       navigator.getUserMedia(

@@ -43,7 +43,11 @@
       <!-- /footer -->
       <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
         <button
-          @click="doClose"
+          @click="
+            doClose();
+            sendGameData();
+            reStartTime();
+          "
           style="
             background-color: red;
             height: 8vh;
@@ -98,6 +102,9 @@
 </template>
 
 <script>
+import SERVER from "@/api/server.js";
+import axios from "axios";
+
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import $ from "jquery";
@@ -143,6 +150,11 @@ export default {
 
       leftBuffer: null,
       rightBuffer: null,
+
+      // record
+      start_time: null,
+      end_time: null,
+      game_score: 0,
 
       // 컴포넌트 관련
       modal: false,
@@ -375,6 +387,8 @@ export default {
         sketch.text(this.countDown, 270 + this.snakeCanvasWidth, 50);
 
         if (this.countDown == 0) {
+          this.end_time = this.timeNow();
+          this.game_score = this.score;
           that.modal = true;
           that.score = 0;
           that.gamestatus = false;
@@ -496,6 +510,7 @@ export default {
     },
     doClose() {
       this.score = 0;
+      this.speed = 24;
       this.countDown = 20;
       this.countDownTimer();
       this.closeModal();
@@ -518,12 +533,50 @@ export default {
       this.gamestatus = true;
       this.firstStart = false;
     },
+    timeNow() {
+      var date = new Date().toISOString();
+      var time = new Date().toString("ko-KR");
+      return date.slice(0, 10) + " " + time.slice(16, 24);
+    },
+    reStartTime() {
+      this.start_time = this.timeNow();
+    },
+    sendGameData() {
+      const gameData = {
+        userId: this.$store.state.userStore.userInfo.userid,
+        gameNo: this.$route.query.gameNo,
+        startTime: this.start_time,
+        endTime: this.end_time,
+        gameScore: this.game_score,
+      };
+      console.log(gameData)
+      axios
+        .post(
+          SERVER.URL +
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userStore.userInfo.userid}/`,
+          gameData,
+          {
+            headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("데이터가 생성되었습니다.");
+          } else {
+            console.log("201말고 뭐가 오지?");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
   },
   created() {
     this.Tutorial = true;
     this.gamestatus = true;
     this.countDownTimer();
     var that = this;
+  },
+  mounted() {
+    this.start_time = this.timeNow();
   },
   destroyed() {
     this.sketch.remove();
