@@ -103,7 +103,7 @@ export default {
   name: "JumpGame",
   data: function () {
     return {
-      sketchObj: null,
+      sketch: null,
       classifier: {},
       mobilenet: null,
       video: null,
@@ -184,7 +184,7 @@ export default {
   methods: {
     setup(sketch) {
       var that = this;
-      this.sketchObj = sketch;
+      this.sketch = sketch;
 
       sketch.createCanvas(
         this.canvasWidth + this.videoWidth,
@@ -523,9 +523,12 @@ export default {
   destroyed() {
     let stream = this.video.elt.srcObject;
     stream.getTracks()[0].stop();
-    localStorage.clear();
-    this.jumpGameBGM.pause();
 
+    this.sketch.remove();
+    this.sketch.noLoop();
+    this.sketch.clear();
+
+    this.jumpGameBGM.pause();
     this.jumpGameBGM = null;
     this.jumpSound = null;
     window.location.reload();
