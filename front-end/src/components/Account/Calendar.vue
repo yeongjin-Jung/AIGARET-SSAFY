@@ -56,9 +56,9 @@ export default {
     let todayDate = y + "-" + (m >= 10 ? m : '0' + m) + "-" + (d >= 10 ? d : '0' + d)
     this.getRecords(todayDate).then( () => {
       console.log('!!!!!!!!!!!!')
-      this.gameRecords = this.$store.state.gameRecords
+      this.gameRecords = this.$store.state.mypageStore.gameRecords
       console.log('this.gameRecords -> ', this.gameRecords)
-      console.log('this.$store.state.gameRecords -> ', this.$store.state.gameRecords)  
+      console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
     })
     
     // setTimeout(() => {
