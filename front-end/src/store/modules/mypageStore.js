@@ -46,8 +46,10 @@ const mypageStore = {
     },
 
     async getAchievePercent({ state, commit }, data) {
+      console.log(data)
       await axios.post(SERVER.URL + SERVER.ROUTES.getAchievePercent, data)
       .then(res => {
+        
         console.log(res)
         commit('SET_TOTAL_TIME', res.data.total_time)
       })

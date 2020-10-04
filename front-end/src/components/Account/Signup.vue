@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="880" height="900" persistent>
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
-
+    
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" class="ml-5" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
@@ -16,12 +16,12 @@
             <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
 
             <v-card-text>
-              <v-form class="ma-4">
+              <v-form class="ma-4" ref="form">
                 <ValidationObserver>
                   <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
                     <v-text-field id="id" v-model="signupData.username" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
-                        <v-btn outlined small rounded @click="checkIdDuplicate(signupData.username)">중복확인</v-btn>
+                        <v-btn outlined small rounded color="error" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true">중복확인</v-btn>
                       </template>
                     </v-text-field>
                   </ValidationProvider>
@@ -50,7 +50,7 @@
                   <v-text-field v-model="signupData.goal_time" :error-messages="errors" label="일주일 목표시간" name="goal_time" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
                 
-              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
@@ -61,8 +61,8 @@
       </div>
 
       <!-- 오른쪽 웹캠 div -->
-      
-      <div id="div_right" style="background: #fcfeff; text-align: center; height:100%; padding-top:50px;">
+      <!-- height: 717-->
+      <div id="div_right" style="background: #fcfeff; text-align: center; height:717px; padding-top:90px;">
 
         <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
@@ -95,7 +95,7 @@ import * as faceapi from './face-api-min'
 import { extend, ValidationObserver, setInteractionMode, ValidationProvider } from 'vee-validate'
 import { required, email, max, min, regex, confirmed, numeric } from 'vee-validate/dist/rules'
 
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 const canvas = require('canvas')
 
@@ -129,6 +129,7 @@ extend('numeric', {
   message: '{_field_} 값은 숫자여야 합니다.'
 })
 
+const userStore = 'userStore'
 
 export default {
   name: 'Signup',
@@ -158,7 +159,11 @@ export default {
 
       isCaptured: false,
       timerId: null,
-      videoFLag: false
+      videoFLag: false,
+
+      isIdDuplicatedCheck: false,
+
+      localStream: ''
     }
   },
 
@@ -175,11 +180,25 @@ export default {
   },
   
   computed: {
-    ...mapState(['isIdDuplicated'])
+    ...mapGetters(userStore, ['isIdDuplicated'])
+  },
+
+  updated () {
+    console.log('Signup.vue updated.')
+
+    if (this.videoFlag == true) {
+      this.video = document.getElementById('video')
+      this.canvas = document.getElementById('canvas')
+
+      this.faceDetect()
+    } else {
+      this.video = null
+      this.canvas = null
+    }
   },
 
   methods: {
-    ...mapActions(['signup']),
+    ...mapActions(userStore, ['signup', 'checkIdDuplicate']),
     
     movePage() {
       this.$router.push({name: "Login"})
@@ -272,28 +291,15 @@ export default {
       if (this.timerId != null) { clearInterval(this.timerId) }
       setTimeout(() => {
         this.dialog = false
+        this.videoFlag = false
+        this.clearForm() 
       }, 500)
+    },
 
-      this.videoFlag = false
+    clearForm() {
+      this.$refs.form.reset()
     }
   },
-
-  mounted() {
-  },
-
-  updated () {
-    console.log('Signup.vue updated.')
-
-    if (this.videoFlag == true) {
-      this.video = document.getElementById('video')
-      this.canvas = document.getElementById('canvas')
-
-      this.faceDetect()
-    } else {
-      this.video = null
-      this.canvas = null
-    }
-  }
 }
 </script>
 

@@ -47,21 +47,52 @@ class RecordView(APIView):
         # count 확인
         count = 100
         try:
-            count = int(request.GET['count']) if 0 <= int(request.GET['count']) <= 100 else 100
+            count = int(request.GET['count'])
         except KeyError:
             print('KeyError: count 값이 존재하지 않습니다.')
         except ValueError:
             print('ValueError: count 값이 숫자가 아닙니다.')
+            return Response({'ValueError': 'count값이 유효하지 않습니다.\ncount: %s' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
+        if count > 100:
+            return Response({'KeyError': 'count값이 너무 큽니다.\ncount: %s > 100' % count}, status=status.HTTP_400_BAD_REQUEST)
 
         # sort 요청 확인
-        sort_method = 'lastest'
         try:
             sort_method = request.GET['sort']
-        except ValueError:
+        except:
             print('KeyError: sort 값이 존재하지 않습니다.')
+        if sort_method != 'high' and sort_method != 'lastest':
+            return Response({'ValueError': 'sort값이 유효하지 않습니다.\nsort: %s\n"high" 또는 "lastest"로 요청하세요' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
         
-        week_method = request.GET['week']
+        # week 요청 확인
+        try:
+            week_method = request.GET['week']
+            if week_method.lower() == 'true':
+                week_method = True
+            elif week_method.lower() == 'false':
+                week_method = False
+            else:
+                return Response({'ValueError': 'week값이 유효하지 않습니다.\nweek: %s\n"true" 또는 "false"로 요청하세요' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            print('ValueError: week 값이 존재하지 않습니다.')
+            week_method = False
         
+        # 쿼리 성능이슈 존재 가능
+        ####################################################
+        if user_pk:
+            records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk))
+        else:
+            records = Record.objects.filter(Q(game_id=game_pk))
+
+        if sort_method == 'high':
+            records = records.order_by('-score')
+        
+        if week_method:
+            from_monday = date.today().weekday()
+            records = records.filter(start_time__gte=date.today()-timedelta(days=from_monday))
+        ####################################################
+        
+        '''
         if sort_method == 'high':
             from_monday = date.today().weekday()
             if user_pk is None:
@@ -75,8 +106,8 @@ class RecordView(APIView):
                 records = Record.objects.filter(Q(game_id=game_pk)).order_by('-start_time')[:count]
             else:
                 records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk)).order_by('-start_time')[:count]
-
-        serializer = RecordSerializer(records, many=True)
+        '''
+        serializer = RecordSerializer(records[:count], many=True)
         return Response(serializer.data)
     
     @permission_classes([IsAuthenticatedOrReadOnly])

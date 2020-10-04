@@ -280,6 +280,40 @@ export default {
     }
   },
 
+  mounted () {
+    let prevSunday = moment().day(0).year() + "-" + ((moment().day(0).month()+1) >= 10 ? (moment().day(0).month()+1) : ('0' + (moment().day(0).month()+1))) + "-" + ((moment().day(0).date()) >= 10 ? (moment().day(0).date()) : ('0' + (moment().day(0).date())))
+    let nextSunday = moment().day(7).year() + "-" + ((moment().day(7).month()+1) >= 10 ? (moment().day(7).month()+1) : ('0' + (moment().day(7).month()+1))) + "-" + ((moment().day(7).date()) >= 10 ? (moment().day(7).date()) : ('0' + (moment().day(7).date())))
+    
+    this.date.start_date = prevSunday
+    this.date.end_date = nextSunday
+
+    this.getAchievePercent(this.date).then(() => {
+      // console.log("total_time : ", this.$store.state.total_time)
+      // console.log("goal_time : ", this.goal_time)
+      
+      // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
+      // console.log('this.progressValue : ', this.progressValue)
+    })
+  },
+
+  updated () {
+    console.log('Info.vue updated.')
+    console.log('updated - videoFlag : ', this.videoFlag)
+
+    if (this.videoFlag == true) {
+      this.video = document.getElementById('video')
+      this.canvas = document.getElementById('canvas')
+
+      this.faceDetect()
+    } else {
+      this.video = null
+      this.canvas = null
+
+      console.log('video tag : ', this.video)
+      console.log('canvas tag : ', this.canvas)
+    }
+  },
+
   computed: {
     ...mapGetters(userStore, ['image', 'goal_time']),
     ...mapGetters(mypageStore, ['progressValue']),
@@ -380,42 +414,7 @@ export default {
     clearForm() {
       this.$refs.form.reset()
     }
-  },
-
-  mounted () {
-    let prevSunday = moment().day(0).year() + "-" + ((moment().day(0).month()+1) >= 10 ? (moment().day(0).month()+1) : ('0' + (moment().day(0).month()+1))) + "-" + ((moment().day(0).date()) >= 10 ? (moment().day(0).date()) : ('0' + (moment().day(0).date())))
-    let nextSunday = moment().day(7).year() + "-" + ((moment().day(7).month()+1) >= 10 ? (moment().day(7).month()+1) : ('0' + (moment().day(7).month()+1))) + "-" + ((moment().day(7).date()) >= 10 ? (moment().day(7).date()) : ('0' + (moment().day(7).date())))
-    
-    this.date.start_date = prevSunday
-    this.date.end_date = nextSunday
-
-    this.getAchievePercent(this.date).then(() => {
-      // console.log("total_time : ", this.$store.state.total_time)
-      // console.log("goal_time : ", this.goal_time)
-      
-      // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
-      // console.log('this.progressValue : ', this.progressValue)
-    })
-
-  },
-
-  updated () {
-    console.log('Info.vue updated.')
-    console.log('updated - videoFlag : ', this.videoFlag)
-
-    if (this.videoFlag == true) {
-      this.video = document.getElementById('video')
-      this.canvas = document.getElementById('canvas')
-
-      this.faceDetect()
-    } else {
-      this.video = null
-      this.canvas = null
-
-      console.log('video tag : ', this.video)
-      console.log('canvas tag : ', this.canvas)
-    }
-  },
+  }
 }
 </script>
 

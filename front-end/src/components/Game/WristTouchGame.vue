@@ -139,7 +139,14 @@ export default {
       this.sketch = sketch;
       sketch.createCanvas(this.window_width, this.window_height);
       sketch.background(0);
-      this.video = sketch.createCapture(sketch.VIDEO);
+      
+      this.video = sketch.createCapture(sketch.VIDEO, 
+      stream => {
+        this.localStream = stream
+      },
+      err => {
+
+      });
 
       this.video.size(this.window_width, this.window_height);
       this.video.hide();
@@ -410,6 +417,9 @@ export default {
     this.start_time = this.timeNow();
   },
   destroyed() {
+    let stream = this.video.elt.srcObject
+    stream.getTracks()[0].stop()
+    
     this.sketch.remove();
     this.sketch.noLoop();
     this.sketch.clear();
