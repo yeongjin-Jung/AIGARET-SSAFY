@@ -6,7 +6,7 @@
       <v-btn v-bind="attrs" v-on="on" class="ml-5" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 600px;">
+    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 658.400px;">
 
       <div id="div_left" style="margin:auto; text-align:center">
 
@@ -21,13 +21,14 @@
                   <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
                     <v-text-field id="id" v-model="signupData.username" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
-                        <v-btn outlined small rounded color="error" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true">중복확인</v-btn>
+                        <v-btn outlined small rounded color="error" :disabled="signupData.username == ''" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true; isIdDuplicatedCheckBtnCliked = true">중복확인</v-btn>
                       </template>
                     </v-text-field>
                   </ValidationProvider>
                 </ValidationObserver>
                 
-                <v-alert dense outlined type="error" v-if="isIdDuplicated">이미 가입된 아이디입니다.</v-alert>
+                <v-alert dense outlined type="error" v-show="showAlert && isIdDuplicated" style="font-size: 20px">이미 가입된 아이디입니다.</v-alert>
+                <v-alert dense outlined type="success" v-show="showAlert && !isIdDuplicated && isIdDuplicatedCheckBtnCliked" style="font-size: 20px">사용 가능한 아이디입니다.</v-alert>
 
                 <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 4 }">
                   <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
@@ -62,7 +63,7 @@
 
       <!-- 오른쪽 웹캠 div -->
       <!-- height: 717-->
-      <div id="div_right" style="background: #fcfeff; text-align: center; height:717px; padding-top:90px;">
+      <div id="div_right" style="background: #fcfeff; text-align: center; padding-top:90px;">
 
         <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
@@ -162,7 +163,7 @@ export default {
       videoFLag: false,
 
       isIdDuplicatedCheck: false,
-
+      isIdDuplicatedCheckBtnCliked: false,
       localStream: ''
     }
   },
@@ -180,7 +181,7 @@ export default {
   },
   
   computed: {
-    ...mapGetters(userStore, ['isIdDuplicated'])
+    ...mapGetters(userStore, ['isIdDuplicated', 'showAlert'])
   },
 
   updated () {
@@ -292,7 +293,8 @@ export default {
       setTimeout(() => {
         this.dialog = false
         this.videoFlag = false
-        this.clearForm() 
+        this.clearForm()
+        this.$store.state.userStore.showAlert = false
       }, 500)
     },
 

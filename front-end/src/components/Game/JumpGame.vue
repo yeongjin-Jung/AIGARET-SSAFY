@@ -40,7 +40,6 @@
         <button
           @click="
             doClose();
-            sendGameData();
             reStartTime();
           "
           style="
@@ -278,27 +277,27 @@ export default {
             that.classifier.addImage("jump");
             that.jumpPoseCollecting = true;
             console.log("점프사진 수집중");
-          }, 10 * (i + 1));
+          }, 3 * (i + 1));
         }
         setTimeout(function () {
           that.jumpPoseCollecting = false;
           console.log("점프사진 수집완료");
-        }, 3000);
+        }, 2000);
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-        for (var i = 0; i < 60; i++) {
+        for (var i = 0; i < 40; i++) {
           setTimeout(function () {
             that.classifier.addImage("noJump");
             that.NojumpPoseCollecting = true;
             console.log("런닝사진 수집중");
-          }, 10 * (i + 1));
+          }, 5 * (i + 1));
         }
         setTimeout(function () {
           that.NojumpPoseCollecting = false;
           console.log("런닝사진 수집완료");
-        }, 3000);
+        }, 2000);
       });
 
       this.gameStart = sketch.select("#gameStart");
@@ -353,7 +352,7 @@ export default {
       var that = this;
       var jumpSoundFlag = true;
 
-      if (this.confidence >= 0.99 && this.label == "jump") {
+      if (this.confidence >= 0.9 && this.label == "jump") {
         this.unicorn.jump();
         if (this.unicorn.y == 600 && this.gameState == true) {
           this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
@@ -407,7 +406,7 @@ export default {
           this.scrollBg = 0;
         }
 
-        if (sketch.random(1) < 0.75 && sketch.frameCount % 70 == 0) {
+        if (sketch.random(1) < 0.75 && sketch.frameCount % 80 == 0) {
           this.trains.push(
             new Train(
               sketch,
@@ -452,6 +451,7 @@ export default {
           if (this.unicorn.collide(t)) {
             this.end_time = this.timeNow();
             this.game_score = this.score;
+            this.sendGameData()
             this.modal = true;
             this.restart = true;
             this.gameState = false;
@@ -487,6 +487,7 @@ export default {
       this.scroll = 10;
       this.trains = [];
       this.gameState = false;
+      this.jumpGameBGM.volume = 0.2;
     },
 
     countDownTimer() {
@@ -527,7 +528,7 @@ export default {
           if (res.status === 201) {
             console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("201말고 뭐가 오지?");
+            console.log("Error No: " + res.status);
           }
         })
         .catch((err) => console.log(err));

@@ -16,6 +16,7 @@ const userStore = {
       'profile_image': localStorage.getItem('profile_image')
     },
     isIdDuplicated: false,
+    showAlert: false
   },
 
   getters: {
@@ -41,6 +42,10 @@ const userStore = {
     goal_time(state) {
       return state.userInfo.goal_time
     },
+
+    showAlert(state) {
+      return state.showAlert
+    }
   },
 
   mutations: {
@@ -104,6 +109,7 @@ const userStore = {
 
     SET_ID_DUPLICATED(state, data) {
       state.isIdDuplicated = data
+      state.showAlert = true
     }
   },
 
