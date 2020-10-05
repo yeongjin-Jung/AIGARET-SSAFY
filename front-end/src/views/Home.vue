@@ -111,7 +111,7 @@ export default {
 .v-card:not(.on-minimize) {
   width: 30vw;
   height: 50vh;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
 /* -----------한세트----------- */

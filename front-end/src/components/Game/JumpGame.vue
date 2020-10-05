@@ -29,7 +29,7 @@
           font-size: 17vh;
           color: white;
           font-weight: 500;
-          margin-top: 20vh;
+          margin-top: 25vh;
         "
       >
         Game Over
@@ -73,6 +73,23 @@
         >
           다시학습하기
         </button>
+        <router-link to="/" style="text-decoration: none">
+          <button
+            style="
+              background-color: red;
+              height: 8vh;
+              border-radius: 12px;
+              width: 10vw;
+              font-size: 4vh;
+              font-weight: 600;
+              color: yellow;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
+          >
+            끝내기
+          </button>
+        </router-link>
       </template>
     </GameFinishModal>
     <Loading v-if="loading"></Loading>
@@ -438,6 +455,12 @@ export default {
             this.modal = true;
             this.restart = true;
             this.gameState = false;
+
+            this.failSound = new Audio(require("../../assets/sound/fail.mp3")); // path to file
+            this.failSound.volume = 0.2;
+            // this.jumpGameBGM.muted =true;
+            this.jumpGameBGM.volume = 0.03;
+            this.failSound.play();
           }
         }
 
@@ -452,8 +475,8 @@ export default {
     doClose() {
       this.score = 0;
       this.closeModal();
-
       this.restartGame();
+      this.jumpGameBGM.volume = 0.2;
     },
 
     doReTrain() {
@@ -511,7 +534,6 @@ export default {
     },
   },
   created() {
-
     window.addEventListener("keydown", this.jump);
     this.jumpGameBGM = new Audio(require("../../assets/sound/JumpGameBGM.mp3")); // path to file
     this.jumpGameBGM.volume = 0.2;

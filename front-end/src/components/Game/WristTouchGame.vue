@@ -43,6 +43,23 @@
         >
           다시시작
         </button>
+        <router-link to="/" style="text-decoration: none">
+          <button
+            style="
+              background-color: red;
+              height: 8vh;
+              border-radius: 12px;
+              width: 10vw;
+              font-size: 4vh;
+              font-weight: 600;
+              color: yellow;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
+          >
+            끝내기
+          </button>
+        </router-link>
       </template>
     </GameFinishModal>
     <!-- <WristTouchGameTutorial @close="doCloseTutorial" v-if="Tutorial">
@@ -232,7 +249,6 @@ export default {
       } else if (this.LevelNum == 4) {
         this.countDown = 4;
       }
-      
     },
     countDownTimer() {
       if (this.countDown > 0) {

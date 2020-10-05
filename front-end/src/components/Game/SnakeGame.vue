@@ -60,6 +60,23 @@
         >
           다시시작
         </button>
+        <router-link to="/" style="text-decoration: none">
+          <button
+            style="
+              background-color: red;
+              height: 8vh;
+              border-radius: 12px;
+              width: 10vw;
+              font-size: 4vh;
+              font-weight: 600;
+              color: yellow;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
+          >
+            끝내기
+          </button>
+        </router-link>
       </template>
     </GameFinishModal>
 
@@ -170,7 +187,7 @@ export default {
       levelChange: false,
       level: "",
       snake: null,
-      snakeGameBGM : null,
+      snakeGameBGM: null,
       failSound: null,
     };
   },
@@ -394,14 +411,11 @@ export default {
           that.modal = true;
           that.score = 0;
           that.gamestatus = false;
-          that.failSound = new Audio(
-            require("../../assets/sound/fail.mp3")
-          ); // path to file
+          that.failSound = new Audio(require("../../assets/sound/fail.mp3")); // path to file
           that.failSound.volume = 0.2;
           // this.jumpGameBGM.muted =true;
-          that.snakeGameBGM.volume = 0.03;
+          that.snakeGameBGM.volume = 0.05;
           that.failSound.play();
-
         }
 
         sketch.translate(this.videoWidth, 0);
@@ -419,10 +433,10 @@ export default {
           // );
           sketch.image(
             that.snake,
-            that.pose.nose.x - this.snakeCanvasWidth - 0.35* d,
-            that.pose.nose.y ,
-            0.9*d ,
-            0.9*d
+            that.pose.nose.x - this.snakeCanvasWidth - 0.35 * d,
+            that.pose.nose.y,
+            0.9 * d,
+            0.9 * d
           );
           sketch.fill(0, 0, 255);
 
@@ -501,10 +515,9 @@ export default {
           sketch.text("점수 : " + this.score, -170, 40);
         }
       } else {
-        if(this.gamestatus == true){
+        if (this.gamestatus == true) {
           this.loading = true;
-        }
-        else{
+        } else {
           this.loading = false;
         }
       }
@@ -558,7 +571,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      console.log(gameData)
+      console.log(gameData);
       axios
         .post(
           SERVER.URL +
