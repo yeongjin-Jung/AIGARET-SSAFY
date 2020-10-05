@@ -95,7 +95,7 @@ export default {
 
 .v-card:not(.on-minimize) {
   width: 30vw;
-  height: 50vh;
+  height: 34.5vh;
   margin-bottom: 50px;
 }
 

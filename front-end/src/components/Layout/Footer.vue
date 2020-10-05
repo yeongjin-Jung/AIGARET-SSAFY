@@ -1,17 +1,17 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 3vh;">
+  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 6vh;">
     <v-row justify="center">
         
-        <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn icon elevation="0" style="height:14.5vh; width:7vw;"></v-btn>
+        <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.8vw; margin-right:1.8vw;">
+          <v-btn icon elevation="0" style="height:18vh; width:8.7vw;"></v-btn>
         </router-link>
         
-        <router-link id="rank" to="/rank" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn icon elevation="0" style="height:15.6vh; width:7vw;"><div></div></v-btn>
+        <router-link id="rank" to="/rank" style="text-decoration: none; margin-left:2vw; margin-right:1.8vw;">
+          <v-btn icon elevation="0" style="height:19.4vh; width:8.9vw;"><div></div></v-btn>
         </router-link>
 
-        <router-link id="logout" to="" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
-          <v-btn icon elevation="0" @click="logout()" style="height:15.2vh; width:7vw;" ></v-btn>
+        <router-link id="logout" to="" style="text-decoration: none; margin-left:1.8vw; margin-right:1.8vw;">
+          <v-btn icon elevation="0" @click="logout()" style="height:18vh; width:8.9vw;" ></v-btn>
         </router-link>
 
     </v-row>
