@@ -1,10 +1,13 @@
-
 <script>
 //Importing Line class from the vue-chartjs wrapper
 import { Line } from "vue-chartjs";
+import axios from 'axios'
+import SERVER from '@/api/server'
+import moment from 'moment'
 
 export default {
   extends: Line,
+
   data() {
     return {
       chartData: {
@@ -118,16 +121,40 @@ export default {
             fontSize : 15,
             fontStyle: "bold",
           },
-        },
-        responsive: true,
-        maintainAspectRatio: false,
-      },
-    };
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      }
+    }
   },
-  mounted() {
-    this.renderChart(this.chartData, this.options);
-  },
-};
+
+  mounted () {
+    const today = moment().year() 
+      + '-'
+      + ((moment().month()+1) >= 10 ? (moment().month()+1) : ('0' + (moment().month()+1)))
+      + '-'
+      + ((moment().date()) >= 10 ? (moment().date()) : ('0' + (moment().date()))) 
+    
+    // console.log('today : ', today)
+    const data = {
+      'today': today
+    }
+
+    axios.post(SERVER.URL + SERVER.ROUTES.getLineData, data)
+    .then(res => {
+    console.log("line chart response : ", res)
+
+    this.chartData.datasets[0].data.push()
+
+    // this.renderChart(this.chartData, this.options);
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
+    this.renderChart(this.chartData, this.options)
+  }
+}
 </script>
 
 <style>
