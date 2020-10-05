@@ -210,7 +210,7 @@ export default {
       this.video.hide();
 
       this.snake = sketch.createImg(
-        "https://user-images.githubusercontent.com/53737175/94985813-a6670480-0594-11eb-807d-6bb9303e20c4.png"
+        "https://user-images.githubusercontent.com/53737175/95085712-8da84b80-075a-11eb-8084-ebd1e4166401.png"
       );
       this.snake.hide();
 
@@ -435,8 +435,8 @@ export default {
             that.snake,
             that.pose.nose.x - this.snakeCanvasWidth - 0.35 * d,
             that.pose.nose.y,
-            0.9 * d,
-            0.9 * d
+            0.7 * d,
+            0.7 * d
           );
           sketch.fill(0, 0, 255);
 
