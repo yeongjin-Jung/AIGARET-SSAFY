@@ -65,13 +65,6 @@ export default {
         setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
       }
     })
-    
-    // setTimeout(() => {
-    //   this.gameRecords = this.$store.state.gameRecords
-    //   console.log('this.gameRecords -> ', this.gameRecords)
-    //   console.log('this.$store.state.gameRecords -> ', this.$store.state.gameRecords)  
-    // }, 100);
-
 
     const setCalendarData = (year, month) => {
       let calHtml = "";
@@ -121,19 +114,24 @@ export default {
             console.log(stamp)
           }
 
+          // #FFFFBB : 노란색
+          // #FFB3BB : 빨간색
+          // #BBFFC9 : 초록색
+          // #B9E1FF : 보라색
+
           // 달력상 저번달 일자 표시
           if (i == 0 && j < firstDayName) {
             if (j == 0) {
-              calHtml += `<div style='background-color: #FFFFBB; height: 66px' class='calendar__day horizontalGutter'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter'>
                           </div>`;
             } else if (j == 6) {
-              calHtml += `<div style='background-color: #FFFFBB; height: 66px' class='calendar__day'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day'>
                           </div>`;
             } else {
-              calHtml += `<div style='background-color: #FFFFBB; height: 66px' class='calendar__day horizontalGutter'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter'>
                           </div>`;
             }
           }
@@ -315,16 +313,16 @@ export default {
           // 다음 달(달력상 나머지 공간)
           else if (startDayCount > lastDay) {
             if (j == 0) {
-              calHtml += `<div style='background-color:#B9E1FF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
                           </div>`;
             } else if (j == 6) {
-              calHtml += `<div style='background-color:#B9E1FF; height: 66px' class='calendar__day verticalGutter'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day verticalGutter'>
                           </div>`;
             } else {
-              calHtml += `<div style='background-color:#B9E1FF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
-                            <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
+              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
                           </div>`;
             }
           }
@@ -398,7 +396,7 @@ export default {
         `
           <h1>${ clickedDate }</h1>
           <hr>
-          ${ totaltime == 0 ? `기록이 없습니다. 기록을 측정해 주세요!` : `<h2>총 운동시간 : ${ totaltime }</h2><br>
+          ${ totaltime == 0 ? `<h2>해당 날짜에 기록이 존재하지 않습니다.</h2><br>` : `<h2>총 운동시간 : ${ totaltime }</h2><br>
           <h3>손목 터치 게임 : ${ wristTouchGameScore == 0 ? `기록이 없습니다.` : `${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>` } 
           <h3>스네이크 게임 : ${ snakeGameScore == 0 ? `기록이 없습니다.` : `${ snakeGameTime }, 총 스코어 ${ snakeGameScore }점</h3>` }
           <h3>점프 게임 : ${ jumpGameScore == 0 ? `기록이 없습니다.` : `${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>` }`}

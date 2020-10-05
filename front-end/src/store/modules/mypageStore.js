@@ -13,7 +13,12 @@ const mypageStore = {
 
   getters: {
     progressValue(state) {
-      let retValue = (parseInt(state.total_time / 3600) / userStore.state.userInfo.goal_time * 100).toFixed(1)
+      // console.log('TOTAL_TIME : ', parseInt(state.total_time / 60))
+      // console.log('GOAL_TIME : ', userStore.state.userInfo.goal_time * 60)
+      // console.log('TOTAL / GOAL : ', (parseInt(state.total_time / 60) / (userStore.state.userInfo.goal_time * 60) * 100).toFixed(1))
+
+      let retValue = (parseInt(state.total_time / 60) / (userStore.state.userInfo.goal_time * 60) * 100).toFixed(1)
+      // console.log('retValue : ', retValue)
       return retValue
     }
   },
