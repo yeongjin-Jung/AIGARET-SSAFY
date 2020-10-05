@@ -40,7 +40,6 @@
         <button
           @click="
             doClose();
-            sendGameData();
             reStartTime();
           "
           style="
@@ -452,6 +451,7 @@ export default {
           if (this.unicorn.collide(t)) {
             this.end_time = this.timeNow();
             this.game_score = this.score;
+            this.sendGameData()
             this.modal = true;
             this.restart = true;
             this.gameState = false;
@@ -527,7 +527,7 @@ export default {
           if (res.status === 201) {
             console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("201말고 뭐가 오지?");
+            console.log("Error No: " + res.status);
           }
         })
         .catch((err) => console.log(err));
