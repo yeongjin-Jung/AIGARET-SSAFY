@@ -106,7 +106,7 @@ export default {
               gridLines: {
                 display: false,
               },
-              
+              fontSize: 40
             },
           ],
         },

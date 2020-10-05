@@ -58,14 +58,14 @@ export default {
     icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
     items: [
       {
-        img: 'https://user-images.githubusercontent.com/53737175/95045013-e73d5580-071b-11eb-9272-1ebe1246c6ce.jpg'
+        img: 'https://user-images.githubusercontent.com/53737175/95080191-ae6ca300-0752-11eb-96fc-6ae89915c35c.png'
       },
       {
         img:
-          'https://user-images.githubusercontent.com/53737175/95045190-62067080-071c-11eb-8316-0daaad348b16.jpg'
+          'https://user-images.githubusercontent.com/53737175/95080219-b88ea180-0752-11eb-8746-30dc4ed37f00.png'
       },
       {
-        img: 'https://lorempixel.com/output/abstract-q-c-640-480-6.jpg'
+        img: 'https://user-images.githubusercontent.com/53737175/95080228-bd535580-0752-11eb-94cb-8adee98e6abd.png'
       },
     ],
     transparent: 'rgba(255, 255, 255, 0)',
