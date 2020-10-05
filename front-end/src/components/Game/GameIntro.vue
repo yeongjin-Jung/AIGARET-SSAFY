@@ -1,7 +1,7 @@
 <template>
   <div class="d-inline-block mx-auto" style="width: 100%; height:45vh;">
     <v-container fluid style="max-height: 100%;">
-      <v-row style="height:42.5vh;" justify="center">
+      <v-row style="height:40vh;" justify="center">
         <v-col cols="6">
           <iframe :src="`https://youtube.com/embed/${gameInfo.game_video}`" width="70%" height="100%" allowfullscreen></iframe>
         </v-col>

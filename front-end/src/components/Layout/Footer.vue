@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 6vh;">
+  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 1.5vh;">
     <v-row justify="center">
         
         <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.8vw; margin-right:1.8vw;">

@@ -192,7 +192,7 @@ export default {
       this.cat_foot.hide();
 
       this.mouse = sketch.createImg(
-        "https://user-images.githubusercontent.com/53737175/94952939-b7c2f900-0521-11eb-98a9-b562fbbaaf5d.png"
+        "https://user-images.githubusercontent.com/53737175/95081770-02788700-0755-11eb-85e4-8ec7049deb42.png"
       );
       this.mouse.hide();
 
