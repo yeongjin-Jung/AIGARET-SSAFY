@@ -2,7 +2,7 @@
 
 AIGARET(AI Game Rehabilitation Trainer)은 신체 움직임을 통해 조작할 수 있는 게임으로 집에서 가볍게 즐길 수 있는 재활 트레이닝 프로그램입니다.
 
-
+test
 
 ## 프로젝트 기획 배경
 
