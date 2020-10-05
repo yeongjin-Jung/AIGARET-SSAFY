@@ -162,7 +162,7 @@
           <!-- 캘린더 OR 통계 영역 -->
           <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 675.844px">
             <div v-if="item == 0">
-              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 10분 이상)</p>&emsp;
               <Calendar style=""/>
             </div>
             
@@ -293,12 +293,14 @@ export default {
       
       // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
       // console.log('this.progressValue : ', this.progressValue)
+
+      console.log('this.$store.state.mypageStore.total_time : ', this.$store.state.mypageStore.total_time)
     })
   },
 
   updated () {
-    console.log('Info.vue updated.')
-    console.log('updated - videoFlag : ', this.videoFlag)
+    // console.log('Info.vue updated.')
+    // console.log('updated - videoFlag : ', this.videoFlag)
 
     if (this.videoFlag == true) {
       this.video = document.getElementById('video')
@@ -309,8 +311,8 @@ export default {
       this.video = null
       this.canvas = null
 
-      console.log('video tag : ', this.video)
-      console.log('canvas tag : ', this.canvas)
+      // console.log('video tag : ', this.video)
+      // console.log('canvas tag : ', this.canvas)
     }
   },
 
