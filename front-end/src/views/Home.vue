@@ -25,7 +25,7 @@
                         <v-icon :class="{ 'show-btns': hover }" color="transparent">{{ icon }}</v-icon>
                       </v-btn>
                     </div> -->
-                  </v-row>\
+                  </v-row>
                 </v-card-title>
               </v-img>
             </v-card>
@@ -34,7 +34,7 @@
       </v-slide-item>
     </v-slide-group>
 
-    <v-expand-transition >
+    <v-expand-transition>
       <v-sheet v-if="model != null" style="height: 50vh; background-color: rgba(0,0,0,0);">
         <GameIntro :gameInfo="gameInfo[model]" />
       </v-sheet>
