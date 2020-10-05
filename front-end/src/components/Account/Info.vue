@@ -132,29 +132,14 @@
 
           <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더, 통계 버튼 위치. -->
           <div id="div_left_third" style="width: 90%;">
-            <!-- <v-list dense style="background: transparent">
-              <v-list-item-group v-model="item" color="#c4c3c0">
-                <v-list-item v-for="(item, i) in items" :key="i">
-
-                  <v-list-item-icon>
-                    <v-icon v-text="item.icon"></v-icon>
-                  </v-list-item-icon>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.text" style="font-family: CookieRun-Bold"></v-list-item-title>
-                  </v-list-item-content>
-
-                </v-list-item>
-              </v-list-item-group>
-            </v-list> -->
               <v-btn-toggle v-model="btnIdx" mandatory style="width: 100%; display: block">
-                <v-btn class="dribbble" style="width: 100%;">
-                    <v-icon>mdi-calendar</v-icon>
-                    <span style="font-size: 20px">캘린더</span>
+                <v-btn class="facebook" style="width: 100%;">
+                    <v-icon color="white">mdi-calendar</v-icon>
+                    <span style="font-size: 20px; color: white">캘린더</span>
                 </v-btn>
-                <v-btn class="dribbble" style="width: 100%;">
-                  <v-icon>mdi-chart-box</v-icon>
-                  <span style="font-size: 20px">통계</span>
+                <v-btn class="facebook" style="width: 100%;">
+                  <v-icon color="white">mdi-chart-box</v-icon>
+                  <span style="font-size: 20px; color: white">통계</span>
                 </v-btn>
               </v-btn-toggle>
           </div>
@@ -165,19 +150,19 @@
           
           <!-- 달성률 영역-->
           <div style="text-align: center">
-            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">일주일 달성률({{ parseInt($store.state.mypageStore.total_time / 3600) }} / {{ goal_time }})</p>
-            <v-progress-linear center rounded :value="progressValue" height="30" color="#FF0084" style="width: 50%; display: inline-block">{{ progressValue }}% 달성</v-progress-linear>
+            <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">&#127919;한 주동안 얼마나 했을까?({{ parseInt($store.state.mypageStore.total_time / 60) }}분 / {{ goal_time * 60 }}분)</p>
+            <v-progress-linear center rounded :value="progressValue" height="35" color="#FF0084" style="width: 100%; display: inline-block; font-size: 30px">&#128293;목표 달성까지 {{ 100 - progressValue }}%&#128293;</v-progress-linear>
           </div>
 
           <!-- 캘린더 OR 통계 영역 -->
           <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 700.844px">
             <div v-if="btnIdx == 0">
-              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp3.png" width="50px" /> : 10분 이상, <img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
-              <Calendar style=""/>
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">&#128198;캘린더(<img src="../../assets/stamp3.png" width="50px" /> : 10분 이상, <img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
+              <Calendar style="padding-top: 0px"/>
             </div>
             
             <div v-if="btnIdx == 1">
-              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">&#128200;통계</p>&emsp;
               <!-- <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/> -->
               <LineChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
               <PieChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
