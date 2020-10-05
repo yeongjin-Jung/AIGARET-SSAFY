@@ -151,16 +151,15 @@ class MonthlyGameTimeView(APIView):
                     game_record.append({"game":game_name, "time":time})
                 monthly_record = {"date":year_month, "record":game_record}
                 data["records"].append(monthly_record)
-        for m in range(1, month):
-            for m in range(1, month+1):
-                year_month = str(year) + '-' + str(m).zfill(2)
-                game_record = []
-                for game_pk in range(1, game_count+1):
-                    game_name = Game.objects.get(id=game_pk).game_name
-                    total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk, start_time__year=year, start_time__month=m).aggregate(Sum('play_time'))
-                    time = total_time["play_time__sum"] if total_time["play_time__sum"] else 0
-                    game_record.append({"game":game_name, "time":time})
-                monthly_record = {"date":year_month, "record":game_record}
-                data["records"].append(monthly_record)
+        for m in range(1, month+1):
+            year_month = str(year) + '-' + str(m).zfill(2)
+            game_record = []
+            for game_pk in range(1, game_count+1):
+                game_name = Game.objects.get(id=game_pk).game_name
+                total_time = Record.objects.filter(user_id=self.request.user.pk, game_id=game_pk, start_time__year=year, start_time__month=m).aggregate(Sum('play_time'))
+                time = total_time["play_time__sum"] if total_time["play_time__sum"] else 0
+                game_record.append({"game":game_name, "time":time})
+            monthly_record = {"date":year_month, "record":game_record}
+            data["records"].append(monthly_record)
         # print(data)
         return JsonResponse(data, safe=False)

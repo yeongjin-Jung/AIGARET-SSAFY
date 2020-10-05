@@ -19,6 +19,7 @@ const mypageStore = 'mypageStore'
 
 export default {
   name: "Calendar",
+
   data() {
     return {
       gameRecords: this.$store.state.mypageStore.gameRecords
@@ -27,11 +28,6 @@ export default {
 
   methods: {
     ...mapActions(mypageStore, ['getRecords']),
-
-    test() {
-      alert('test')
-      console.log("test")
-    },
 
     secondsToHms(d) {
       d = Number(d);
@@ -54,11 +50,18 @@ export default {
     let d = today.getDate()
 
     let todayDate = y + "-" + (m >= 10 ? m : '0' + m) + "-" + (d >= 10 ? d : '0' + d)
+
     this.getRecords(todayDate).then( () => {
-      console.log('!!!!!!!!!!!!')
+      // console.log('!!!!!!!!!!!!')
       this.gameRecords = this.$store.state.mypageStore.gameRecords
-      console.log('this.gameRecords -> ', this.gameRecords)
-      console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
+      // console.log('this.gameRecords -> ', this.gameRecords)
+      // console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
+
+      if (today.getMonth() + 1 < 10) {
+        setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
+      } else {
+        setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
+      }
     })
     
     // setTimeout(() => {
@@ -83,7 +86,8 @@ export default {
       const todayMonth = today.getMonth();
       const todayDate = today.getDate();
 
-      const stamp = '/img/stamp.833cb0bc.png'
+      const stamp1 = '/img/stamp.833cb0bc.png'
+      const stamp3 = '/img/stamp3.a4969661.png'
 
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>일</span></div>`;
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>월</span></div>`;
@@ -93,9 +97,18 @@ export default {
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>금</span></div>`;
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day verticalGutter'><span>토</span></div>`;
 
+      let stamp
+
       for (let i = 0; i < 6; i++) {
         for (let j = 0; j < 7; j++) {
-          
+          if(startDayCount <= today.getDate()) {
+            // console.log('startDayCount : ', startDayCount)
+            // console.log('today.getDate() : ', today.getDate())
+            // console.log('this.gameRecords[startDayCount-1].totaltime : ', this.gameRecords[startDayCount-1].totaltime)
+
+            stamp = this.gameRecords[startDayCount-1].totaltime >= 600 ? stamp1 : stamp3
+          }
+
           // 달력상 저번달 일자 표시
           if (i == 0 && j < firstDayName) {
             if (j == 0) {
@@ -338,11 +351,7 @@ export default {
       return fixNum;
     };
 
-    if (today.getMonth() + 1 < 10) {
-      setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
-    } else {
-      setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
-    }
+
 
     let self = this
     $(document).on('click', '.div_can_click', function(e) {
@@ -395,10 +404,10 @@ export default {
         `
           <h1>${ clickedDate }</h1>
           <hr>
-          <h2>총 운동시간 : ${ totaltime }</h2><br>
-          <h3>손목 터치 게임 : ${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>
-          <h3>스네이크 게임 : ${ snakeGameTime }, 총 스코어 ${ snakeGameScore }점</h3>
-          <h3>점프 게임 : ${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>
+          ${ totaltime == 0 ? `기록이 없습니다. 기록을 측정해 주세요!` : `<h2>총 운동시간 : ${ totaltime }</h2><br>
+          <h3>손목 터치 게임 : ${ wristTouchGameScore == 0 ? `기록이 없습니다.` : `${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>` } 
+          <h3>스네이크 게임 : ${ snakeGameScore == 0 ? `기록이 없습니다.` : `${ snakeGameTime }, 총 스코어 ${ snakeGameScore }점</h3>` }
+          <h3>점프 게임 : ${ jumpGameScore == 0 ? `기록이 없습니다.` : `${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>` }`}
         `
 
       $('#modal_content').empty()
