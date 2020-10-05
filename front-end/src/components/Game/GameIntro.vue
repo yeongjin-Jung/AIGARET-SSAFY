@@ -12,7 +12,7 @@
             <div style="font-size: 3vh;">{{ gameInfo.game_description }}</div>
           </v-row>
           <v-row class="pa-4" justify="center" align="end">
-            <router-link :to="{ name: gameInfo.game_name, query: { gameNo: gameInfo.id }}" style="text-decoration: none;">
+            <router-link :to="`/game/${ gameInfo.id }`" style="text-decoration: none;">
               <v-btn text style="height: 10vh; width:10vw; background:yellow;">
                 <span class="routerLink mr-2 ml-2">게임시작</span>
               </v-btn>
