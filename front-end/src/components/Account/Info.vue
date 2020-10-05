@@ -132,7 +132,7 @@
 
           <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더, 통계 버튼 위치. -->
           <div id="div_left_third" style="width: 90%;">
-            <v-list dense style="background: transparent">
+            <!-- <v-list dense style="background: transparent">
               <v-list-item-group v-model="item" color="#c4c3c0">
                 <v-list-item v-for="(item, i) in items" :key="i">
 
@@ -146,7 +146,17 @@
 
                 </v-list-item>
               </v-list-item-group>
-            </v-list>
+            </v-list> -->
+              <v-btn-toggle v-model="btnIdx" mandatory style="width: 100%; display: block">
+                <v-btn class="dribbble" style="width: 100%;">
+                    <v-icon>mdi-calendar</v-icon>
+                    <span style="font-size: 20px">캘린더</span>
+                </v-btn>
+                <v-btn class="dribbble" style="width: 100%;">
+                  <v-icon>mdi-chart-box</v-icon>
+                  <span style="font-size: 20px">통계</span>
+                </v-btn>
+              </v-btn-toggle>
           </div>
         </div>
 
@@ -160,13 +170,13 @@
           </div>
 
           <!-- 캘린더 OR 통계 영역 -->
-          <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 675.844px">
-            <div v-if="item == 0">
-              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
+          <div id="div_inner_right_first" class="ma-2" style="background: transparent; height: 700.844px">
+            <div v-if="btnIdx == 0">
+              <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">캘린더(<img src="../../assets/stamp3.png" width="50px" /> : 10분 이상, <img src="../../assets/stamp.png" width="50px" /> : 30분 이상)</p>&emsp;
               <Calendar style=""/>
             </div>
             
-            <div v-if="item == 1">
+            <div v-if="btnIdx == 1">
               <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold;">통계</p>&emsp;
               <!-- <BarChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/> -->
               <LineChart class="ma-5" style="width: 400px; height: 450px; display: inline-block"/>
@@ -277,6 +287,7 @@ export default {
         'start_date': '',
         'end_date': ''
       },
+      btnIdx: 0
     }
   },
 
@@ -431,4 +442,91 @@ export default {
 body {
   overflow: hidden
 }
+
+.facebook {
+    background: #99b6df;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#99b6df), to(#638ec8));
+    background: -moz-linear-gradient(#99b6df, #638ec8);
+    background: linear-gradient(#99b6df, #638ec8);
+    border: solid 1px #6d94ce;
+    border-bottom: solid 3px #3867ac;
+    box-shadow: inset 0 0 0 1px #bbcfeb;
+    color: #fff;
+    text-shadow: 0 1px 0 #3c61ab; }
+    
+.facebook:hover {
+    background: #638ec8;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#638ec8), to(#99b6df));
+    background: -moz-linear-gradient(#638ec8, #99b6df);
+    background: linear-gradient(#638ec8, #99b6df);
+    border: solid 1px #6d94ce;
+    border-bottom: solid 3px #3867ac;
+    box-shadow: inset 0 0 0 1px #bbcfeb; }
+    
+.facebook:active {
+    background: #638ec8;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#638ec8), to(#99b6df));
+    background: -moz-linear-gradient(#638ec8, #99b6df);
+    background: linear-gradient(#638ec8, #99b6df);
+    border: solid 1px #6d94ce;
+    box-shadow: inset 0 10px 15px 0 #4176c4; 
+}
+
+.rss {
+    background: #f6c696;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f6c696), to(#e9893d));
+    background: -moz-linear-gradient(#f6c696, #e9893d);
+    background: linear-gradient(#f6c696, #e9893d);
+    border: solid 1px #a1681b;
+    border-bottom: solid 3px #a1671d;
+    box-shadow: inset 0 0 0 1px #f1bb8f;
+    color: #fff;
+    text-shadow: 0 1px 0 #a1671d; }
+    
+.rss:hover {
+    background: #e9893d;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e9893d), to(#f6c696));
+    background: -moz-linear-gradient(#e9893d, #f6c696);
+    background: linear-gradient(#e9893d, #f6c696);
+    border: solid 1px #a1681b;
+    border-bottom: solid 3px #a1671d;
+    box-shadow: inset 0 0 0 1px #f1bb8f; }
+    
+.rss:active {
+    background: #e9893d;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e9893d), to(#f6c696));
+    background: -moz-linear-gradient(#e9893d, #f6c696);
+    background: linear-gradient(#e9893d, #f6c696);
+    border: solid 1px #a1681b;
+    box-shadow: inset 0 10px 15px 0 #a1671d;
+}
+
+.dribbble {
+    background: #f1a4c1;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#f1a4c1), to(#e675a0));
+    background: -moz-linear-gradient(#f1a4c1, #e675a0);
+    background: linear-gradient(#f1a4c1, #e675a0);
+    border: solid 1px #e98eb0;
+    border-bottom: solid 3px #cc4a79;
+    box-shadow: inset 0 0 0 1px #f6c2d7;
+    color: #fff;
+    text-shadow: 0 1px 0 #d64570; }
+    
+.dribbble:hover {
+    background: #e675a0;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e675a0), to(#f1a4c1));
+    background: -moz-linear-gradient(#e675a0, #f1a4c1);
+    background: linear-gradient(#e675a0, #f1a4c1);
+    border: solid 1px #e98eb0;
+    border-bottom: solid 3px #cc4a79;
+    box-shadow: inset 0 0 0 1px #f6c2d7; }
+    
+.dribbble:active {
+    background: #e675a0;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#e675a0), to(#f1a4c1));
+    background: -moz-linear-gradient(#e675a0, #f1a4c1);
+    background: linear-gradient(#e675a0, #f1a4c1);
+    border: solid 1px #e98eb0;
+    box-shadow: inset 0 10px 15px 0 #e05285; }
+
 </style>

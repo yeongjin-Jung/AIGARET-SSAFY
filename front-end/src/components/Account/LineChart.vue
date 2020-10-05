@@ -96,17 +96,6 @@ export default {
       // datasets[0] : 손목
       // datasets[1] : 스네이크
       // datasets[2] : 점프
-      
-      // idx번째 날짜
-      console.log('Date : ', res.data.records[idx].date)
-
-      // idx번째 데이터
-      console.log('WristTouchGameTime : ', res.data.records[idx].record[0].time)
-      console.log('SnakeGameTime : ', res.data.records[idx].record[1].time)
-      console.log('JumpGameTime : ', res.data.records[idx].record[2].time)
-
-      console.log(typeof res.data.records[idx].date)
-      console.log(typeof res.data.records[idx].record[0].time)
 
       // 1. 각 달을 날짜 label 배열에 추가.
       this.chartData.labels.push(res.data.records[idx].date)
@@ -115,13 +104,7 @@ export default {
       this.chartData.datasets[0].data.push(res.data.records[idx].record[0].time)
       this.chartData.datasets[1].data.push(res.data.records[idx].record[1].time)
       this.chartData.datasets[2].data.push(res.data.records[idx].record[2].time)
-
     }
-
-      console.log('this.chartData.labels : ', this.chartData.labels)
-      console.log('this.chartData.datasets[0].data : ', this.chartData.datasets[0].data)
-      console.log('this.chartData.datasets[1].data : ', this.chartData.datasets[1].data)
-      console.log('this.chartData.datasets[2].data : ', this.chartData.datasets[2].data)
 
       this.renderChart(this.chartData, this.options)
     })
