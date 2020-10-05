@@ -1,43 +1,59 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid class="text-center">
-    <v-row no-gutters align="center" justify="center">
-      <v-col v-for="(icon, index) in icons" :key="index" cols="1" align="center">
-        <router-link :to="icon.url" style="text-decoration: none;">
-          <v-btn fab color="#edf9fc"><v-icon>{{ icon.img }}</v-icon></v-btn>
+  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 3vh;">
+    <v-row justify="center">
+        
+        <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" style="height:14.5vh; width:7vw;"></v-btn>
         </router-link>
-      </v-col>
+        
+        <router-link id="rank" to="/rank" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" style="height:15.6vh; width:7vw;"><div></div></v-btn>
+        </router-link>
+
+        <router-link id="logout" to="" style="text-decoration: none; margin-left:1.5vw; margin-right:1.5vw;">
+          <v-btn icon elevation="0" @click="logout()" style="height:15.2vh; width:7vw;" ></v-btn>
+        </router-link>
+
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
+const userStore = 'userStore'
+
 export default {
   name: 'Footer',
-
+  
   data () {
     return {
-      activeBtn: 1,
-      icons: [
-        {
-          title: 'Profile',
-          img: 'mdi-card-account-details',
-          url: 'info'
-        },
-        {
-          title: 'Report',
-          img: 'mdi-history',
-          url: 'report'
-        },
-        {
-          title: 'Settings',
-          img: 'mdi-application-cog',
-          url: '/'
-        }
-      ]
+      //
     }
+  },
+
+  methods: {
+    ...mapActions(userStore, ['logout']),
   }
 }
 </script>
 
 <style>
+#logout {
+background-image: url("../../assets/menuButton/logout-red.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
+
+#info {
+background-image: url("../../assets/menuButton/info-blue.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
+
+#rank {
+background-image: url("../../assets/menuButton/rank-green.png");
+background-size : cover;
+background-color: rgba( 255, 255, 255, 0 );
+}
 </style>

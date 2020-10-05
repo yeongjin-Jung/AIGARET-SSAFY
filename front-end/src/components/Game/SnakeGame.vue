@@ -1,6 +1,15 @@
 <template>
-  <div style="width: 100vw; height: 85vh; text-align: center">
-    <v-btn
+  <div
+    style="
+      width: 98vw;
+      height: 95vh;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      text-align: center;
+    "
+  >
+    <!-- <v-btn
       @click="Tutorial = !Tutorial"
       text
       style="
@@ -14,14 +23,19 @@
       <p style="font-weight: 1000; font-size: 2.5vh; margin-top: 2vh">
         게임조작법
       </p>
-    </v-btn>
-    <p style="font-size: 5vh; font-weight: 700">스네이크 게임</p>
+    </v-btn> -->
+    <!-- <p style="font-size: 5vh; font-weight: 700">스네이크 게임</p> -->
     <vue-p5 @setup="setup" @draw="draw"></vue-p5>
 
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
       <p
-        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+        style="
+          font-size: 17vh;
+          color: white;
+          font-weight: 500;
+          margin-top: 30vh;
+        "
       >
         Game Over
       </p>
@@ -29,7 +43,11 @@
       <!-- /footer -->
       <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
         <button
-          @click="doClose"
+          @click="
+            doClose();
+            sendGameData();
+            reStartTime();
+          "
           style="
             background-color: red;
             height: 8vh;
@@ -42,10 +60,27 @@
         >
           다시시작
         </button>
+        <router-link to="/" style="text-decoration: none">
+          <button
+            style="
+              background-color: red;
+              height: 8vh;
+              border-radius: 12px;
+              width: 10vw;
+              font-size: 4vh;
+              font-weight: 600;
+              color: yellow;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
+          >
+            끝내기
+          </button>
+        </router-link>
       </template>
     </GameFinishModal>
 
-    <SnakeGameTutorial @close="doCloseTutorial" v-if="Tutorial">
+    <!-- <SnakeGameTutorial @close="doCloseTutorial" v-if="Tutorial">
       <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
       <hooper style="margin-top: -3vh">
         <slide></slide>
@@ -73,18 +108,27 @@
           닫기
         </button>
       </template>
-    </SnakeGameTutorial>
+    </SnakeGameTutorial> -->
     <Loading v-if="loading"></Loading>
+    <GameLevelModal v-if="levelChange">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow">
+        {{ level }}
+      </p>
+    </GameLevelModal>
   </div>
 </template>
 
 <script>
+import SERVER from "@/api/server.js";
+import axios from "axios";
+
 import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import $ from "jquery";
 import GameFinishModal from "./GameFinishModal";
 import { Snake } from "../../api/game/snake/snake";
 import SnakeGameTutorial from "./SnakeGameTutorial";
+import GameLevelModal from "./GameLevelModal";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
 import Loading from "./loding";
 import "../../assets/hooper.css";
@@ -124,6 +168,11 @@ export default {
       leftBuffer: null,
       rightBuffer: null,
 
+      // record
+      start_time: null,
+      end_time: null,
+      game_score: 0,
+
       // 컴포넌트 관련
       modal: false,
       Tutorial: false,
@@ -134,7 +183,12 @@ export default {
 
       countDown: 25,
       score: 0,
-      speed: 27,
+      speed: 22,
+      levelChange: false,
+      level: "",
+      snake: null,
+      snakeGameBGM: null,
+      failSound: null,
     };
   },
   components: {
@@ -145,21 +199,21 @@ export default {
     Hooper,
     Slide,
     HooperPagination,
+    GameLevelModal,
   },
   methods: {
     setup(sketch) {
       this.sketch = sketch;
       sketch.createCanvas(this.snakeCanvasWidth + this.videoWidth, this.height);
 
-      // this.leftBuffer = sketch.createGraphics(
-      //   this.snakeCanvasWidth,
-      //   this.height
-      // );
-      // this.rightBuffer = sketch.createGraphics(this.videoWidth, this.height);
-
       this.video = sketch.createCapture(sketch.VIDEO);
       this.video.size(this.videoWidth, this.videoHeight);
       this.video.hide();
+
+      this.snake = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/94985813-a6670480-0594-11eb-807d-6bb9303e20c4.png"
+      );
+      this.snake.hide();
 
       this.poseNet = ml5.poseNet(this.video, this.modelReady());
       var that = this;
@@ -187,10 +241,9 @@ export default {
         width: "100%",
         "text-align": "center",
         position: "absolute",
-        left: "1vw",
-        top: "12vh",
+        height: "95vh",
       });
-      $("#defaultCanvas0").css({ width: "85vw", height: "75vh" });
+      $("#defaultCanvas0").css({ width: "100vw", height: "95vh" });
     },
 
     modelReady() {
@@ -240,13 +293,58 @@ export default {
 
       if (this.s.eat(this.food)) {
         that.score += 100;
-        that.countDown = 25;
+
         // Level2
-        if (that.score == 500) {
-          that.speed = 22;
-        } else if (that.score == 1000) {
-          that.speed = 17;
+        if (that.score >= 400 && that.score < 800) {
+          that.speed = 20;
+          that.countDown = 18;
+          if (that.score == 400) {
+            that.level = "Level 2";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
         }
+        // Level3
+        else if (that.score >= 800 && that.score < 1200) {
+          that.speed = 17;
+          that.countDown = 15;
+          if (that.score == 800) {
+            that.level = "Level 3";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        }
+        // Level4
+        else if (that.score >= 1200 && that.score < 2000) {
+          that.speed = 12;
+          that.countDown = 13;
+          if (that.score == 1200) {
+            that.level = "Level 4";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        }
+        // Level5
+        else if (that.score >= 2000) {
+          that.speed = 10;
+          that.countDown = 10;
+          if (that.score == 2000) {
+            that.level = "Final";
+            that.levelChange = true;
+            setTimeout(function () {
+              that.levelChange = false;
+            }, 1000);
+          }
+        } else {
+          that.countDown = 25;
+        }
+
         that.pickLocation(sketch);
       }
       // snake
@@ -308,16 +406,16 @@ export default {
         sketch.text(this.countDown, 270 + this.snakeCanvasWidth, 50);
 
         if (this.countDown == 0) {
-          this.modal = true;
-          this.score = 0;
-          this.gamestatus = false;
-          this.s = new Snake(
-            sketch,
-            this.scl,
-            this.snakeCanvasWidth,
-            this.height,
-            this.food
-          );
+          that.end_time = this.timeNow();
+          that.game_score = this.score;
+          that.modal = true;
+          that.score = 0;
+          that.gamestatus = false;
+          that.failSound = new Audio(require("../../assets/sound/fail.mp3")); // path to file
+          that.failSound.volume = 0.2;
+          // this.jumpGameBGM.muted =true;
+          that.snakeGameBGM.volume = 0.05;
+          that.failSound.play();
         }
 
         sketch.translate(this.videoWidth, 0);
@@ -328,10 +426,17 @@ export default {
           const eyeL = that.pose.leftEye;
           const d = sketch.dist(eyeR.x, eyeR.y, eyeL.x, eyeL.y);
           sketch.fill(255, 0, 0);
-          sketch.ellipse(
-            that.pose.nose.x - this.snakeCanvasWidth,
-            that.pose.nose.y + 15,
-            d - 25
+          // sketch.ellipse(
+          //   that.pose.nose.x - this.snakeCanvasWidth,
+          //   that.pose.nose.y + 15,
+          //   d - 25
+          // );
+          sketch.image(
+            that.snake,
+            that.pose.nose.x - this.snakeCanvasWidth - 0.35 * d,
+            that.pose.nose.y,
+            0.9 * d,
+            0.9 * d
           );
           sketch.fill(0, 0, 255);
 
@@ -339,60 +444,82 @@ export default {
             (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.upPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.upPosition_y &&
-              that.pose.nose.y + 15 < that.upPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.upPosition_y &&
+              that.pose.nose.y + 23 < that.upPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.upPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.upPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.upPosition_y &&
-              that.pose.nose.y + 15 < that.upPosition_y + 50)
+              that.pose.nose.y + 23 > that.upPosition_y &&
+              that.pose.nose.y + 23 < that.upPosition_y + 50)
           ) {
             this.label = "top";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.downPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.downPosition_y &&
-              that.pose.nose.y + 15 < that.downPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.downPosition_y &&
+              that.pose.nose.y + 23 < that.downPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.downPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.downPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.downPosition_y &&
-              that.pose.nose.y + 15 < that.downPosition_y + 50)
+              that.pose.nose.y + 23 > that.downPosition_y &&
+              that.pose.nose.y + 23 < that.downPosition_y + 50)
           ) {
             this.label = "down";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.leftPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.leftPosition_y &&
-              that.pose.nose.y + 15 < that.leftPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.leftPosition_y &&
+              that.pose.nose.y + 23 < that.leftPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.leftPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.leftPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.leftPosition_y &&
-              that.pose.nose.y + 15 < that.leftPosition_y + 50)
+              that.pose.nose.y + 23 > that.leftPosition_y &&
+              that.pose.nose.y + 23 < that.leftPosition_y + 50)
           ) {
             this.label = "left";
           } else if (
             (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.rightPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.rightPosition_y &&
-              that.pose.nose.y + 15 < that.rightPosition_y + 50) ||
+              that.pose.nose.y + 23 > that.rightPosition_y &&
+              that.pose.nose.y + 23 < that.rightPosition_y + 50) ||
             (that.pose.nose.x - this.snakeCanvasWidth > that.rightPosition_x &&
               that.pose.nose.x - this.snakeCanvasWidth <
                 that.rightPosition_x + 50 &&
-              that.pose.nose.y + 15 > that.rightPosition_y &&
-              that.pose.nose.y + 15 < that.rightPosition_y + 50)
+              that.pose.nose.y + 23 > that.rightPosition_y &&
+              that.pose.nose.y + 23 < that.rightPosition_y + 50)
           ) {
             this.label = "right";
           }
         } else {
           sketch.image(this.video, -this.snakeCanvasWidth, 0);
+          sketch.textStyle(sketch.BOLD);
+          sketch.translate(this.window_width, 0);
+          sketch.scale(-1, 1);
+          sketch.textSize(35);
+          sketch.fill(255, 0, 0);
+          sketch.text("포즈를 인식할 수 없습니다", -80, 200);
+
+          //카운트다운
+          sketch.textSize(50);
+          sketch.textStyle(sketch.NORMAL);
+          sketch.fill(0, 255, 255);
+          sketch.text(that.countDown, 70, 50);
+
+          // 점수판
+          sketch.textSize(30);
+          sketch.textStyle(sketch.BOLD);
+          sketch.fill(255, 0, 0);
+          sketch.text("점수 : " + this.score, -170, 40);
         }
       } else {
-        this.loading = true;
+        if (this.gamestatus == true) {
+          this.loading = true;
+        } else {
+          this.loading = false;
+        }
       }
     },
     closeModal() {
@@ -404,10 +531,19 @@ export default {
     },
     doClose() {
       this.score = 0;
-      this.countDown = 20;
+      this.speed = 22;
+      this.countDown = 25;
       this.countDownTimer();
       this.closeModal();
       this.gamestatus = true;
+      this.s = new Snake(
+        this.sketch,
+        this.scl,
+        this.snakeCanvasWidth,
+        this.height,
+        this.food
+      );
+      this.snakeGameBGM.volume = 0.2;
     },
 
     doCloseTutorial() {
@@ -419,9 +555,67 @@ export default {
       this.gamestatus = true;
       this.firstStart = false;
     },
+    timeNow() {
+      var date = new Date().toISOString();
+      var time = new Date().toString("ko-KR");
+      return date.slice(0, 10) + " " + time.slice(16, 24);
+    },
+    reStartTime() {
+      this.start_time = this.timeNow();
+    },
+    sendGameData() {
+      const gameData = {
+        userId: this.$store.state.userStore.userInfo.userid,
+        gameNo: this.$route.query.gameNo,
+        startTime: this.start_time,
+        endTime: this.end_time,
+        gameScore: this.game_score,
+      };
+      console.log(gameData);
+      axios
+        .post(
+          SERVER.URL +
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userStore.userInfo.userid}/`,
+          gameData,
+          {
+            headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("데이터가 생성되었습니다.");
+          } else {
+            console.log("201말고 뭐가 오지?");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
   },
   created() {
     this.Tutorial = true;
+    this.gamestatus = true;
+    this.countDownTimer();
+    this.snakeGameBGM = new Audio(
+      require("../../assets/sound/SnakeGameBGM.mp3")
+    ); // path to file
+    this.snakeGameBGM.volume = 0.2;
+    // this.jumpGameBGM.muted =true;
+    this.snakeGameBGM.loop = true;
+    this.snakeGameBGM.autoplay = true;
+    this.snakeGameBGM.play();
+  },
+  mounted() {
+    this.start_time = this.timeNow();
+  },
+  destroyed() {
+    // let stream = this.video.elt.srcObject
+    // stream.getTracks()[0].stop()
+    this.sketch.remove();
+    this.sketch.noLoop();
+    this.sketch.clear();
+    this.snakeGameBGM.pause();
+    this.snakeGameBGM = null;
+    window.location.reload();
   },
 };
 </script>

@@ -2,81 +2,35 @@
   <div
     style="
       width: 98.5vw;
-      height: 79vh;
+      height: 94.9vh;
       position: absolute;
-      top: 0.2vh;
+      top: 0px;
       text-align: center;
       left: 0px;
     "
   >
-    <v-btn
-      id="gameStart"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >게임시작</v-btn
+    <vue-p5 @setup="setup" @draw="draw"> </vue-p5>
+    <a href="#" class="button twitter" id="gameStart" style="left: 0px"
+      ><p>게임시작</p></a
     >
-    <v-btn
-      id="poseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >점프포즈</v-btn
+    <a href="#" class="button twitter" id="poseSave" style="left: 25vw"
+      ><p>점프화면캡처</p></a
     >
-    <v-btn
-      id="noPoseSave"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >노점프포즈</v-btn
+    <a href="#" class="button twitter" id="noPoseSave" style="left: 50vw"
+      ><p>런닝화면캡처</p></a
     >
-    <v-btn
-      id="poseTrain"
-      style="
-        margin-left: 1vw;
-        margin-right: 1vw;
-        margin-top: 2vh;
-        height: 4vh;
-        width: 6vw;
-        font-size: 2vh;
-      "
-      >포즈학습</v-btn
+    <a href="#" class="button twitter" id="poseTrain" style="left: 75vw"
+      ><p>포즈학습</p></a
     >
-    <v-btn
-      @click="Tutorial = !Tutorial"
-      text
-      style="
-        position: absolute;
-        top: 2vh;
-        left: 1vw;
-        height: 5vh;
-        font-size: 2vh;
-        width: 8vw;
-        background: yellow;
-      "
-      >게임조작법</v-btn
-    >
-    <vue-p5 @setup="setup" @draw="draw"></vue-p5>
-
     <GameFinishModal @close="closeModal" v-if="modal">
       <!-- default 슬롯 콘텐츠 -->
       <p
-        style="font-size: 17vh; color: white; font-weight: 500; margin-top: 7vh"
+        style="
+          font-size: 17vh;
+          color: white;
+          font-weight: 500;
+          margin-top: 25vh;
+        "
       >
         Game Over
       </p>
@@ -84,7 +38,11 @@
       <!-- /footer -->
       <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
         <button
-          @click="doClose"
+          @click="
+            doClose();
+            sendGameData();
+            reStartTime();
+          "
           style="
             background-color: red;
             height: 8vh;
@@ -115,51 +73,44 @@
         >
           다시학습하기
         </button>
+        <router-link to="/" style="text-decoration: none">
+          <button
+            style="
+              background-color: red;
+              height: 8vh;
+              border-radius: 12px;
+              width: 10vw;
+              font-size: 4vh;
+              font-weight: 600;
+              color: yellow;
+              margin-left: 10px;
+              margin-right: 10px;
+            "
+          >
+            끝내기
+          </button>
+        </router-link>
       </template>
     </GameFinishModal>
-    <JumpGameTutorial @close="doCloseTutorial" v-if="Tutorial">
-      <p style="font-size: 7vh; color: black; font-weight: 800">게임조작법</p>
-      <hooper style="margin-top: -3vh">
-        <slide></slide>
-        <slide></slide>
-        <slide></slide>
-        <slide></slide>
-        <slide></slide>
-        <slide></slide>
-
-        <hooper-pagination slot="hooper-addons"></hooper-pagination>
-      </hooper>
-
-      <template slot="footer" style="background-color: rgba(0, 0, 0, 1)">
-        <button
-          @click="doCloseTutorial"
-          style="
-            background-color: red;
-            border-radius: 12px;
-            width: 10vw;
-            font-size: 4vh;
-            font-weight: 600;
-            color: yellow;
-          "
-        >
-          닫기
-        </button>
-      </template>
-    </JumpGameTutorial>
-
     <Loading v-if="loading"></Loading>
+    <GameLevelModal v-if="levelChange">
+      <p style="font-size: 15vh; color: black; font-weight: 800; color: yellow">
+        {{ level }}
+      </p>
+    </GameLevelModal>
   </div>
 </template>
 
 <script>
-import VueP5 from "vue-p5";
+import SERVER from "@/api/server.js";
+import axios from "axios";
 
-// import p5_dom from "./p5_dom_min";
-// import p5_sound from "./p5_sound_min";
+import VueP5 from "vue-p5";
 import ml5 from "ml5";
 import { Jumper } from "../../api/game/running/Jumper";
 import { Train } from "../../api/game/running/Train";
-import JumpGameTutorial from "./JumpGameTutorial";
+import GameLevelModal from "./GameLevelModal";
+
 import GameFinishModal from "./GameFinishModal";
 import Loading from "./loding";
 import { Hooper, Slide, Pagination as HooperPagination } from "hooper";
@@ -169,14 +120,14 @@ export default {
   name: "JumpGame",
   data: function () {
     return {
-      sketchObj: null,
+      sketch: null,
       classifier: {},
       mobilenet: null,
       video: null,
       label: "",
 
       score: null,
-      scroll: 15,
+      scroll: 10,
       scrollBg: 0,
       trains: [],
       unicorn: null,
@@ -187,26 +138,28 @@ export default {
       videoCanvas: null,
       canvasWidth: 1150,
       canvasHeight: 800,
-      videoWidth: 1200,
+      videoWidth: 1130,
       videoHeight: 800,
-      countDown : 5,
+      countDown: 5,
+
+      // record
+      start_time: null,
+      end_time: null,
+      game_score: 0,
 
       // preload
       music: null,
       ding: null,
       whistle: null,
       bg: null,
-      train: null,
+      obstacle: null,
       jumper: null,
 
-      // posenet
+      // classification
       featureExtractor: null,
-      classifier: null,
       targetLabel: "jump",
-      classificationResult: null,
 
       // js File
-      unicorn: null,
       key: null,
 
       // train
@@ -216,20 +169,24 @@ export default {
       trainButton: null,
       state: "waiting",
       jumpPoseCollecting: false,
-      NojumpPoseCollecting : false,
-      reCollecting : false,
+      NojumpPoseCollecting: false,
+      training: false,
+      reCollecting: false,
+      loss: null,
       // game
       modal: false,
       score: 0,
       loading: false,
-      Tutorial: false,
       gameStart: false,
       firstStart: true,
 
       confidence: null,
 
-      //
+      levelChange: false,
       removeCanvas: false,
+      sound: null,
+      jumpGameBGM: null,
+      jumpSound: null,
     };
   },
   components: {
@@ -239,26 +196,28 @@ export default {
     HooperPagination,
     GameFinishModal,
     Loading,
-    JumpGameTutorial,
+    GameLevelModal,
   },
   methods: {
     setup(sketch) {
       var that = this;
-      this.sketchObj = sketch;
+      this.sketch = sketch;
+
       sketch.createCanvas(
         this.canvasWidth + this.videoWidth,
         this.canvasHeight
       );
-      this.train = sketch.createImg(
-        "http://www.memozee.com/FILES/047/jinsuk.729.%ED%8F%AC%EC%BC%93%EB%AA%AC.jpg"
+
+      this.obstacle = sketch.createImg(
+        "https://user-images.githubusercontent.com/53737175/95007583-4d5aa780-064c-11eb-84b5-676cb9fc7ac1.png"
       );
       this.bg = sketch.createImg(
         "https://cdn.hipwallpaper.com/m/34/80/7xuaw6.jpg"
       );
       this.jumper = sketch.createImg(
-        "https://supermariorun.com/assets/img/hero/hero_chara_mario_update_pc.png"
+        "https://user-images.githubusercontent.com/53737175/94998253-79920c00-05eb-11eb-814f-99ae41ccc470.png"
       );
-      this.train.hide();
+      this.obstacle.hide();
       this.bg.hide();
       this.jumper.hide();
 
@@ -284,11 +243,11 @@ export default {
         width: "98.4vw",
         "text-align": "center",
         position: "absolute",
-        top: "10vh",
+        top: "0px",
         left: 0,
       });
 
-      $("#defaultCanvas0").css({ width: "99vw", height: "78vh" });
+      $("#defaultCanvas0").css({ width: "98.9vw", height: "84vh" });
     },
 
     modelLoaded() {
@@ -312,36 +271,40 @@ export default {
 
     setupButton(sketch) {
       var that = this;
-      // left button
       this.poseSave = sketch.select("#poseSave");
       this.poseSave.mousePressed(function () {
-        setTimeout(function () {
-          that.classifier.addImage("jump");
-          that.jumpPoseCollecting = true;
-
+        for (var i = 0; i < 80; i++) {
           setTimeout(function () {
-            that.jumpPoseCollecting = false;
-            console.log("점프사진 수집완료");
-          }, 5000);
-        }, 100);
+            that.classifier.addImage("jump");
+            that.jumpPoseCollecting = true;
+            console.log("점프사진 수집중");
+          }, 10 * (i + 1));
+        }
+        setTimeout(function () {
+          that.jumpPoseCollecting = false;
+          console.log("점프사진 수집완료");
+        }, 3000);
       });
 
       this.noPoseSave = sketch.select("#noPoseSave");
       this.noPoseSave.mousePressed(function () {
-      setTimeout(function () {
-          that.classifier.addImage("noJump");
-          that.NojumpPoseCollecting = true;
-
+        for (var i = 0; i < 60; i++) {
           setTimeout(function () {
-            that.NojumpPoseCollecting = false;
-            console.log("슬라이드사진 수집완료");
-          }, 5000);
-        }, 100);
+            that.classifier.addImage("noJump");
+            that.NojumpPoseCollecting = true;
+            console.log("런닝사진 수집중");
+          }, 10 * (i + 1));
+        }
+        setTimeout(function () {
+          that.NojumpPoseCollecting = false;
+          console.log("런닝사진 수집완료");
+        }, 3000);
       });
 
       this.gameStart = sketch.select("#gameStart");
       this.gameStart.mousePressed(function () {
         that.gameState = true;
+        that.start_time = that.timeNow();
       });
 
       // train button
@@ -356,12 +319,15 @@ export default {
 
     whileTraining(loss) {
       var that = this;
+      this.loss = loss;
 
       if (loss == null) {
         that.classifier.classify(that.gotResults);
-        // console.log(that.gotResults);
+        that.training = false;
+        console.log("학습이 완료 되었습니다.");
       } else {
         console.log(loss);
+        that.training = true;
       }
     },
     restartGame() {
@@ -369,33 +335,31 @@ export default {
         this.restart = false;
         this.score = 0;
         this.scrollBg = 0;
-        this.scroll = 15;
+        this.scroll = 10;
         this.trains = [];
         this.gameState = true;
         // this.sketchObj.loop();
       }
     },
-    jump(sketch) {
-      // if (this.restart) {
-      //   this.restart = false;
-      //   this.score = 0;
-      //   this.scrollBg = 0;
-      //   this.scroll = 10;
-      //   this.trains = [];
-      //   this.sketchObj.loop();
-      // }
-      if (event.key == " ") {
-        this.unicorn.jump();
-        return false;
-      }
-    },
+    // jump(sketch) {
+    //   if (event.key == " ") {
+    //     this.unicorn.jump();
+    //     this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
+    //     this.jumpSound.play();
+    //     return false;
+    //   }
+    // },
     draw(sketch) {
       var that = this;
+      var jumpSoundFlag = true;
 
       if (this.confidence >= 0.99 && this.label == "jump") {
         this.unicorn.jump();
+        if (this.unicorn.y == 600 && this.gameState == true) {
+          this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
+          this.jumpSound.play();
+        }
       }
-
       sketch.image(this.bg, -this.scrollBg, 0, this.canvasWidth, sketch.height);
       sketch.translate(this.canvasWidth * 2 + this.videoWidth, 0);
       sketch.scale(-1, 1);
@@ -413,14 +377,21 @@ export default {
         sketch.textSize(80);
         sketch.textStyle(sketch.BOLD);
         sketch.fill(255, 0, 0);
-        sketch.text("점프사진 수집중", 1450, 100);
+        sketch.text("점프사진 수집중...", 1450, 100);
       }
 
       if (this.NojumpPoseCollecting == true) {
         sketch.textSize(80);
         sketch.textStyle(sketch.BOLD);
         sketch.fill(255, 0, 0);
-        sketch.text("슬라이드사진 수집중", 1350, 100);
+        sketch.text("런닝사진 수집중...", 1350, 100);
+      }
+
+      if (this.training == true) {
+        sketch.textSize(80);
+        sketch.textStyle(sketch.BOLD);
+        sketch.fill(255, 0, 0);
+        sketch.text("학습중...", 1550, 100);
       }
 
       if (this.gameState) {
@@ -440,7 +411,7 @@ export default {
           this.trains.push(
             new Train(
               sketch,
-              this.train,
+              this.obstacle,
               this.canvasWidth,
               sketch.height,
               this.scroll
@@ -454,23 +425,42 @@ export default {
 
         sketch.fill(255);
         sketch.textStyle(sketch.NORMAL);
-        sketch.textSize(60);
+        sketch.textSize(85);
         sketch.textFont("monospace");
-        sketch.text(`Score: ${this.score}`, 15, 60);
+        sketch.text(`Score: ${this.score}`, 15, 80);
+
+        if (this.score == 500) {
+          that.scroll = 18;
+          that.level = "Level 2";
+          that.levelChange = true;
+          setTimeout(function () {
+            that.levelChange = false;
+          }, 600);
+        } else if (this.score == 1000) {
+          that.scroll = 24;
+          that.level = "Level 3";
+          that.levelChange = true;
+          setTimeout(function () {
+            that.levelChange = false;
+          }, 600);
+        }
 
         for (const t of this.trains) {
           t.move();
           t.show();
 
           if (this.unicorn.collide(t)) {
-            // sketch.noLoop();
-            // music.stop();
-            // let sound = sketch.random(failSounds);
-            // sound.play();
+            this.end_time = this.timeNow();
+            this.game_score = this.score;
+            this.modal = true;
+            this.restart = true;
+            this.gameState = false;
 
-            that.modal = true;
-            that.restart = true;
-            that.gameState = false;
+            this.failSound = new Audio(require("../../assets/sound/fail.mp3")); // path to file
+            this.failSound.volume = 0.2;
+            // this.jumpGameBGM.muted =true;
+            this.jumpGameBGM.volume = 0.03;
+            this.failSound.play();
           }
         }
 
@@ -481,15 +471,12 @@ export default {
     closeModal() {
       this.modal = false;
     },
-    CloseTutorial() {
-      this.Tutorial = false;
-    },
 
     doClose() {
       this.score = 0;
       this.closeModal();
-
       this.restartGame();
+      this.jumpGameBGM.volume = 0.2;
     },
 
     doReTrain() {
@@ -497,19 +484,9 @@ export default {
       this.restart = false;
       this.score = 0;
       this.scrollBg = 0;
-      this.scroll = 15;
+      this.scroll = 10;
       this.trains = [];
       this.gameState = false;
-
-    },
-
-    doCloseTutorial() {
-      this.Tutorial = false;
-      this.gameStart = true;
-      // if (this.firstStart == true) {
-      //   this.countDownTimer();
-      // }
-      this.firstStart = false;
     },
 
     countDownTimer() {
@@ -520,20 +497,136 @@ export default {
         }, 1000);
       }
     },
+    timeNow() {
+      var date = new Date().toISOString();
+      var time = new Date().toString("ko-KR");
+      return date.slice(0, 10) + " " + time.slice(16, 24);
+    },
+    reStartTime() {
+      this.start_time = this.timeNow();
+    },
+    sendGameData() {
+      const gameData = {
+        userId: this.$store.state.userStore.userInfo.userid,
+        gameNo: this.$route.query.gameNo,
+        startTime: this.start_time,
+        endTime: this.end_time,
+        gameScore: this.game_score,
+      };
+      console.log(gameData);
+      axios
+        .post(
+          SERVER.URL +
+            `games/${this.$route.query.gameNo}/records/users/${this.$store.state.userStore.userInfo.userid}/`,
+          gameData,
+          {
+            headers: { Authorization: `JWT ${this.$store.state.accessToken}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 201) {
+            console.log("데이터가 생성되었습니다.");
+          } else {
+            console.log("201말고 뭐가 오지?");
+          }
+        })
+        .catch((err) => console.log(err));
+    },
   },
-
   created() {
-    this.Tutorial = true;
     window.addEventListener("keydown", this.jump);
+    this.jumpGameBGM = new Audio(require("../../assets/sound/JumpGameBGM.mp3")); // path to file
+    this.jumpGameBGM.volume = 0.2;
+    // this.jumpGameBGM.muted =true;
+    this.jumpGameBGM.loop = true;
+    this.jumpGameBGM.autoplay = true;
+    this.jumpGameBGM.play();
   },
-  destroyed(){
-    console.log("끄기");
-  }
+  destroyed() {
+    let stream = this.video.elt.srcObject;
+    stream.getTracks()[0].stop();
+
+    this.sketch.remove();
+    this.sketch.noLoop();
+    this.sketch.clear();
+
+    this.jumpGameBGM.pause();
+    this.jumpGameBGM = null;
+    this.jumpSound = null;
+    window.location.reload();
+  },
 };
 </script>
 
 <style>
 #defaultCanvas0 {
   display: inline-block;
+}
+
+.button {
+  position: absolute;
+  bottom: 0vh;
+  margin-bottom: 0vh;
+  height: 11vh;
+  width: 25vw;
+  border-radius: 0px;
+  text-decoration: none;
+  display: table;
+}
+
+a.button.twitter {
+  background: #9fd6fa;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#9fd6fa),
+    to(#6bb9f7)
+  );
+  background: -moz-linear-gradient(#9fd6fa, #6bb9f7);
+  background: linear-gradient(#9fd6fa, #6bb9f7);
+  border: solid 1px #72bdf4;
+  border-bottom: solid 3px #4a9de1;
+  box-shadow: inset 0 0 0 1px #bfe4fc;
+  color: #fff;
+  text-shadow: 0 1px 0 #4598f3;
+}
+
+a.button.twitter:hover {
+  background: #6bb9f7;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#6bb9f7),
+    to(#9fd6fa)
+  );
+  background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
+  background: linear-gradient(#6bb9f7, #9fd6fa);
+  border: solid 1px #72bdf4;
+  border-bottom: solid 3px #4a9de1;
+  box-shadow: inset 0 0 0 1px #bfe4fc;
+}
+
+a.button.twitter:active {
+  background: #6bb9f7;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#6bb9f7),
+    to(#9fd6fa)
+  );
+  background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
+  background: linear-gradient(#6bb9f7, #9fd6fa);
+  border: solid 1px #72bdf4;
+  box-shadow: inset 0 10px 15px 0 #50aaf3;
+}
+
+a.button.twitter p {
+  font-family: CookieRun-Bold;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 3vw;
 }
 </style>

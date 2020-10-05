@@ -3,18 +3,15 @@
     
     <Nav />
     
-    <v-container fluid class="fill-height" id="container_login" v-if="!isLoggedIn">
-      <Login />
-    </v-container>
+    <Login v-if="!isLoggedIn" id="background_cover" />
     
-    <!-- <v-main id="mainApp" class="pa-4 text-center" style="border: white dashed; background-color: black;"><span style="color: white">App.vue > v-main</span> -->
-    <v-main id="mainApp" v-else> 
-      <v-container fluid class="fill-height">
+    <v-main v-if="isLoggedIn" id="background_cover"  style="padding-top: 5vh;"> 
+      <v-container fluid class="fill-height" style="padding-top: 0px; position:absolute; ">
         <router-view />
         <Footer />
       </v-container>
     </v-main>
-
+    
   </v-app>
 </template>
 
@@ -22,6 +19,10 @@
 import Nav from '@/components/Layout/Nav'
 import Footer from '@/components/Layout/Footer'
 import Login from '@/components/Account/Login'
+
+import { mapGetters } from 'vuex'
+
+const userStore = 'userStore'
 
 export default {
   name: "App",
@@ -33,9 +34,11 @@ export default {
   },
 
   computed: {
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
-    }
+    ...mapGetters(userStore, ['isLoggedIn']),
+
+    // isLoggedIn() {
+    //   return this.$store.getters.isLoggedIn;
+    // }
   }
 };
 </script>
@@ -46,15 +49,24 @@ export default {
   src: url("assets/CookieRun-Bold.ttf");
 }
 
-#mainApp {
-  background-image: url("assets/bluemoon.png");
-  background-size : cover;
+@font-face {
+  font-family: CookieRun-Regular;
+  src: url("assets/CookieRun-Regular.ttf");
 }
 
-#container_login{
-  background-image: url("assets/bluemoon.png");
-  background-size : cover;
-  // height: 85vh; 컴포넌트화로 무의미해진듯, 삭제예정
+@font-face {
+  font-family: NanumBarunGothic;
+  src: url("assets/NanumBarunGothic.ttf");
 }
 
+@font-face {
+  font-family: NanumBarunGothic-Bold;
+  src: url("assets/NanumBarunGothicBold.ttf");
+}
+
+#background_cover {
+  background-image: url("assets/bluemoon.png");
+  background-size : cover;
+  padding-top: 0px;
+}
 </style>

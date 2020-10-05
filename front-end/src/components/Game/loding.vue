@@ -1,5 +1,5 @@
 <template>
-  <div style="position: absolute; top:0; height: 100vh; width:100vw;">
+  <div style="position: absolute; top:0; height: 95vh; width:100vw;">
     <div class="body">
       <span>
         <span></span>
@@ -35,7 +35,7 @@ p {
   font-weight: 600;
   font-size: 40px;
   text-transform: uppercase;
-  left: 45%;
+  left: 42%;
   top: 45%;
   margin-left: -20px;
   color : yellow;
@@ -45,7 +45,7 @@ p {
   position: absolute;
   top: 40%;
   margin-left: -50px;
-  left: 50%;
+  left: 45%;
   animation: speeder .4s linear infinite;
 }
 .body > span {

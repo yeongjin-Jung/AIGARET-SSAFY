@@ -1,18 +1,14 @@
 <template>
-  <v-system-bar app color="orange" style="height: 5vh">
+  <v-system-bar app color="orange" style="height: 5vh;">
     <router-link to="/" style="text-decoration: none;">
-      <v-btn icon style="margin-left:20px;"><v-icon x-large>mdi-home</v-icon></v-btn>
+      <v-btn icon tile style="width: 5vh; height: 5vh;"><v-icon style="font-size: 5vh;" >mdi-home</v-icon></v-btn>
     </router-link>
-    <img
-      src="https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol.png"
-      style="margin-left: 40px; width: 3%; height: 90%;"
-    />
     <p
-      style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-top: 12px; margin-left: 15px; display:inline; font-family: CookieRun-Bold;"
-    >불타는 붕어빵</p>
+      style="font-size: 4.4vh; white-space:nowrap; font-weight: 600; margin-top: 16px; margin-left: 10px; display:inline; font-family: CookieRun-Bold;"
+    >AIGARET</p>
     <v-spacer></v-spacer>
-    <p v-if="isLoggedIn">
-      {{ $store.state.id}}님 환영합니다.
+    <p v-if="isLoggedIn" style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;">
+      {{ $store.state.userStore.userInfo.name }}님 환영합니다.
     </p>
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 50px; margin-top:16px;"
@@ -20,14 +16,14 @@
     <p
       style="font-size: 3.5vh; white-space:nowrap; font-weight: 600; margin-right: 20px; margin-top:16px;"
     >{{this.dateTime}}</p>
-    <v-btn v-if="isLoggedIn" @click="logout()">
-      로그아웃
-    </v-btn>
   </v-system-bar>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex'
+
+const userStore = 'userStore'
+
 export default {
   name: 'Nav',
 
@@ -37,19 +33,22 @@ export default {
       dateTime: null
     }
   },
+  mounted() {
+    // console.log('this.$store.state : ', this.$store.state)
+    // console.log('this.$store.state.userStore : ', this.$store.state.userStore)
+    // console.log('tihs.$store.state.userStore.userInfo.name : ', this.$store.state.userStore.userInfo.name)
+  },
 
   methods: {
-    ...mapActions(['logout']),
-
     getNow: function() {
       const today = new Date();
 
       this.date =
         today.getFullYear() +
         '-' +
-        (today.getMonth() + 1) +
+        ( (today.getMonth() + 1) < 10 ? '0' + (today.getMonth() + 1) : (today.getMonth() + 1) ) +
         '-' +
-        today.getDate()
+        ( today.getDate() < 10 ? '0' + today.getDate() : today.getDate() )
 
       var hour = 0
       var minute = 0
@@ -88,9 +87,10 @@ export default {
   },
 
   computed: {
-    isLoggedIn() {
-      return this.$store.getters.isLoggedIn;
-    }
+    ...mapGetters(userStore, ['isLoggedIn']),
+    // isLoggedIn() {
+    //   return this.$store.getters.isLoggedIn;
+    // }
   },
 
   created() {
