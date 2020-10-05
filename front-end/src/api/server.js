@@ -1,6 +1,6 @@
 export default {
-  URL: 'http://localhost:8000/api/',
-  // URL: 'https://j3b203.p.ssafy.io/api/',
+  // URL: 'http://localhost:8000/api/',
+  URL: 'https://j3b203.p.ssafy.io/api/',
   ROUTES: {
     // Account
     signup: 'rest-auth/signup/',
@@ -13,6 +13,7 @@ export default {
     getRecords: 'mypages/calendar/',
     changeGoalTime: 'mypages/goaltimechange/',
     getAchievePercent: 'mypages/achievepercent/',
+    getLineData: 'mypages/monthlygametime/',
     getPieData: 'mypages/totalgametime/',
 
     // Game

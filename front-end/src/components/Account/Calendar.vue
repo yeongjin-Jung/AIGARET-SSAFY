@@ -3,6 +3,8 @@
     <div id="calendar">
     </div>
 
+    <img src="/img/stamp3.a4969661.png" style="display: none">
+    <img src="../../assets/stamp3.png" style="display: none">
     <div id="my_modal" style="width: 600px">
       <div id="modal_content">
       </div>
@@ -54,8 +56,8 @@ export default {
     this.getRecords(todayDate).then( () => {
       // console.log('!!!!!!!!!!!!')
       this.gameRecords = this.$store.state.mypageStore.gameRecords
-      // console.log('this.gameRecords -> ', this.gameRecords)
-      // console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
+      console.log('this.gameRecords -> ', this.gameRecords)
+      console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
 
       if (today.getMonth() + 1 < 10) {
         setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
@@ -88,6 +90,7 @@ export default {
 
       const stamp1 = '/img/stamp.833cb0bc.png'
       const stamp3 = '/img/stamp3.a4969661.png'
+      // const stamp3 = '../../stamp3.png'
 
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>일</span></div>`;
       calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>월</span></div>`;
@@ -105,8 +108,9 @@ export default {
             // console.log('startDayCount : ', startDayCount)
             // console.log('today.getDate() : ', today.getDate())
             // console.log('this.gameRecords[startDayCount-1].totaltime : ', this.gameRecords[startDayCount-1].totaltime)
-
+            console.log(`${startDayCount}일 : ${ this.gameRecords[startDayCount-1].totaltime }초`)
             stamp = this.gameRecords[startDayCount-1].totaltime >= 600 ? stamp1 : stamp3
+            console.log(stamp)
           }
 
           // 달력상 저번달 일자 표시

@@ -2,6 +2,9 @@
 <script>
 //Importing Line class from the vue-chartjs wrapper
 import { Line } from "vue-chartjs";
+import axios from 'axios'
+import SERVER from '@/api/server'
+import moment from 'moment'
 
 export default {
     extends: Line,
@@ -61,6 +64,34 @@ export default {
       }
     },
     mounted () {
+      const today = moment().year() 
+        + '-'
+        + ((moment().month()+1) >= 10 ? (moment().month()+1) : ('0' + (moment().month()+1)))
+        + '-'
+        + ((moment().date()) >= 10 ? (moment().date()) : ('0' + (moment().date()))) 
+      
+      // console.log('today : ', today)
+      const data = {
+        'today': today
+      }
+      axios.post(SERVER.URL + SERVER.ROUTES.getLineData, data)
+      .then(res => {
+      console.log("line chart response : ", res)
+
+      // console.log("손목 터치 게임 : ", res.data.WristTouchGame.play_time__sum)
+      // console.log("스네이크 게임 : ", res.data.SnakeGame.play_time__sum)
+      // console.log("점프 게임 : ", res.data.JumpGame.play_time__sum)
+
+      // this.chartData.datasets[0].data.push(parseInt(res.data.WristTouchGame.play_time__sum / 60))
+      // this.chartData.datasets[0].data.push(parseInt(res.data.SnakeGame.play_time__sum / 60))
+      // this.chartData.datasets[0].data.push(parseInt(res.data.JumpGame.play_time__sum / 60))
+
+      // this.renderChart(this.chartData, this.options);
+    })
+    .catch(err => {
+      console.log(err)
+    })
+
       this.renderChart(this.chartData, this.options)
     }
   }
