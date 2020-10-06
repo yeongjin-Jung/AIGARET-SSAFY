@@ -4,7 +4,7 @@
       <v-row style="height:40vh;" justify="center">
         <v-col cols="6">
           <!-- <iframe :src="`https://youtube.com/embed/${gameInfo.game_video}`" width="70%" height="100%" allowfullscreen></iframe> -->
-          <iframe :src="`https://www.youtube.com/embed/SCGywrYpxbo`" width="70%" height="48%" allowfullscreen></iframe>
+          <iframe :src="`https://www.youtube.com/embed/SCGywrYpxbo`" width="70%" height="65%" allowfullscreen></iframe>
         </v-col>
 
         <v-col cols="6">
