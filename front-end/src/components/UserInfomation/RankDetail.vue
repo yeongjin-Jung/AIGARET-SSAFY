@@ -201,4 +201,9 @@ export default {
   font-family: CookieRun-Bold;
   font-size: 2.7vh;
 }
+
+.theme--light.v-tabs-items {
+  background-color: transparent !important
+}
+
 </style>

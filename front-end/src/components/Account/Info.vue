@@ -4,16 +4,16 @@
       <div id="outer" class="row">
 
         <!-- 왼쪽 div 영역(div_inner_left) -->
-        <div id="div_inner_left" class="col-md-4" style="height: 100px; padding-top: 120px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
+        <div id="div_inner_left" class="col-md-4" style="height: 100px; padding-top: 70px; background-color: transparent; display: flex; justify-content: center; flex-wrap: wrap">
 
           <!-- 왼쪽 첫 번째 div(div_left_first) : 내 프로필 사진이 보여짐. -->
-          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center; margin-bottom: 5px">
+          <div id="div_inner_left_first" style="width: 400px; height: 300px; background-color: transparent; text-align: center; margin-bottom: 15px">
             <!-- <v-img src="@/assets/ryan.png" width="400px" height="300px"></v-img> -->
             <v-img :src="image" width="400px" height="300px" style=""></v-img>
           </div>
 
           <!-- 왼쪽 두 번째 div(div_left_second) : 내 정보 변경, 사진 변경, 목표시간 변경 버튼이 있음. -->
-          <div id="div_inner_left_second" style="margin-bottom: 5px">
+          <div id="div_inner_left_second" style="margin-bottom: 15px">
             
             <!-- 1. 비밀번호 변경 다이얼로그 -->
             <v-dialog v-model="dialog_change_password" width="500" persistent>
@@ -98,7 +98,7 @@
                 </v-btn>
               </template>
 
-              <v-card>
+              <v-card id="slider">
                 <v-card-title class="headline justify-center" style="background: #BBBBFF">
                   <p class="ma-2" style="color: white; font-family: CookieRun-Bold">목표 시간 변경</p>
                 </v-card-title>
@@ -110,7 +110,7 @@
                     <v-slider
                       v-model="newGoalTime"
                       hint="일주일 목표 시간을 설정해주세요."
-                      max="168"
+                      max="24"
                       min="0"
                       label="일주일 목표 시간(시간)"
                       thumb-label
@@ -131,15 +131,23 @@
           </div>
 
           <!-- 왼쪽 세 번째 div(div_left_third) : 캘린더, 통계 버튼 위치. -->
-          <div id="div_left_third" style="width: 90%;">
-              <v-btn-toggle v-model="btnIdx" mandatory style="width: 100%; display: block">
-                <v-btn class="facebook" style="width: 100%;">
+          <div id="div_left_third" style="width: 90%; text-align: center;">
+              <v-btn-toggle v-model="btnIdx" mandatory style="width: 70%; display: inline-block; background: transparent">
+                <!-- <v-btn class="facebook" style="width: 100%;">
                     <v-icon color="white">mdi-calendar</v-icon>
                     <span style="font-size: 20px; color: white">캘린더</span>
                 </v-btn>
                 <v-btn class="facebook" style="width: 100%;">
                   <v-icon color="white">mdi-chart-box</v-icon>
                   <span style="font-size: 20px; color: white">통계</span>
+                </v-btn> -->
+                <v-btn class="button twitter" style="width: 100%; height: 80px; margin-bottom: 5px">
+                  <v-icon color="white" style="font-size: 3vw;">mdi-calendar</v-icon>
+                  <p style="padding-top: 8px">캘린더</p>
+                </v-btn>
+                <v-btn class="button twitter" style="width: 100%; height: 80px">
+                  <v-icon color="white" style="font-size: 3vw;">mdi-chart-box</v-icon>
+                  <p style="padding-top: 8px">통계</p>
                 </v-btn>
               </v-btn-toggle>
           </div>
@@ -151,7 +159,7 @@
           <!-- 달성률 영역-->
           <div style="text-align: center">
             <p class="text-md-left font-weight-bold" style="font-size: 2rem; font-family: CookieRun-Bold">&#127919;한 주동안 얼마나 했을까?({{ parseInt($store.state.mypageStore.total_time / 60) }}분 / {{ goal_time * 60 }}분)</p>
-            <v-progress-linear center rounded :value="progressValue" height="35" color="#FF0084" style="width: 100%; display: inline-block; font-size: 30px">&#128293;목표 달성까지 {{ 100 - progressValue }}%&#128293;</v-progress-linear>
+            <v-progress-linear id="MY_PROGRESS" center rounded :value="progressValue" height="35" color="#FF0084" style="width: 100%; display: inline-block; font-size: 30px">&#128293;목표 달성까지 {{ 100 - progressValue }}%&#128293;</v-progress-linear>
           </div>
 
           <!-- 캘린더 OR 통계 영역 -->
@@ -428,6 +436,10 @@ body {
   overflow: hidden
 }
 
+#slider {
+  overflow-x: hidden
+}
+
 .facebook {
     background: #99b6df;
     background: -webkit-gradient(linear, 0 0, 0 bottom, from(#99b6df), to(#638ec8));
@@ -513,5 +525,67 @@ body {
     background: linear-gradient(#e675a0, #f1a4c1);
     border: solid 1px #e98eb0;
     box-shadow: inset 0 10px 15px 0 #e05285; }
+
+.twitter {
+  background: #9fd6fa;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#9fd6fa),
+    to(#6bb9f7)
+  );
+  background: -moz-linear-gradient(#9fd6fa, #6bb9f7);
+  background: linear-gradient(#9fd6fa, #6bb9f7);
+  border: solid 1px #72bdf4;
+  border-bottom: solid 3px #4a9de1;
+  box-shadow: inset 0 0 0 1px #bfe4fc;
+  color: #fff;
+  text-shadow: 0 1px 0 #4598f3;
+}
+
+.twitter:hover {
+  background: #6bb9f7;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#6bb9f7),
+    to(#9fd6fa)
+  );
+  background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
+  background: linear-gradient(#6bb9f7, #9fd6fa);
+  border: solid 1px #72bdf4;
+  border-bottom: solid 3px #4a9de1;
+  box-shadow: inset 0 0 0 1px #bfe4fc;
+}
+
+.twitter:active {
+  background: #6bb9f7;
+  background: -webkit-gradient(
+    linear,
+    0 0,
+    0 bottom,
+    from(#6bb9f7),
+    to(#9fd6fa)
+  );
+  background: -moz-linear-gradient(#6bb9f7, #9fd6fa);
+  background: linear-gradient(#6bb9f7, #9fd6fa);
+  border: solid 1px #72bdf4;
+  box-shadow: inset 0 10px 15px 0 #50aaf3;
+}
+
+.twitter p {
+  font-family: CookieRun-Bold;
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 3vw;
+  color: white
+}
+
+#MY_PROGRESS :first-child {
+  opacity: 0.9 !important;
+  background-color: white !important
+}
 
 </style>

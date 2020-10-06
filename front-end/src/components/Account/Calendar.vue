@@ -85,13 +85,13 @@ export default {
       const stamp3 = '/img/stamp3.a4969661.png'
       // const stamp3 = '../../stamp3.png'
 
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>일</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>월</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>화</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>수</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>목</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day horizontalGutter'><span>금</span></div>`;
-      calHtml += `<div style='background-color: #e6e6e6; margin-bottom: 0.5%' class='calendar__day verticalGutter'><span>토</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">일</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">월</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">화</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">수</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">목</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day horizontalGutter'><span style="color: white; font-weight: bold">금</span></div>`;
+      calHtml += `<div style='background-color: #000000; margin-bottom: 0.5%; height: 35px' class='calendar__day verticalGutter'><span style="color: white; font-weight: bold">토</span></div>`;
 
       let stamp
 
@@ -123,15 +123,15 @@ export default {
           if (i == 0 && j < firstDayName) {
             if (j == 0) {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day horizontalGutter'>
                           </div>`;
             } else if (j == 6) {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day'>
                           </div>`;
             } else {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${ prevLastDay - (firstDayName - 1) + j }</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day horizontalGutter'>
                           </div>`;
             }
           }
@@ -140,13 +140,13 @@ export default {
           else if (i == 0 && j == firstDayName) {
             if (j == 0) {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${ month }-${ startDayCount }">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${ month }-${ startDayCount }">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -154,13 +154,13 @@ export default {
             }
             else if (j == 6) {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day div_can_click' id="${ year }-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -168,13 +168,13 @@ export default {
             }
             else {
               if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${ year }-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -186,18 +186,18 @@ export default {
           else if (i == 0 && j > firstDayName) {
             if (j == 0) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px' class='calendar__day horizontalGutter '>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px' class='calendar__day horizontalGutter '>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -205,19 +205,19 @@ export default {
             }
             else if (j == 6) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px' class='calendar__day'>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px' class='calendar__day'>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -226,19 +226,19 @@ export default {
 
             else {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px' class='calendar__day horizontalGutter'>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px' class='calendar__day horizontalGutter'>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                  calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                  calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day horizontalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                                 <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                                 <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                               </div>`;
@@ -250,19 +250,19 @@ export default {
           else if (i > 0 && startDayCount <= lastDay) {
             if (j == 0) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px'class='calendar__day horizontalGutter verticalGutter'>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px'class='calendar__day horizontalGutter verticalGutter'>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px'class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -270,19 +270,19 @@ export default {
             }
             else if (j == 6) {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px'class='calendar__day verticalGutter'>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px'class='calendar__day verticalGutter'>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
@@ -290,19 +290,19 @@ export default {
             }
             else {
               if(startDayCount > today.getDate()) {
-                calHtml += `<div style='background-color: #BBFFC9; height: 66px'class='calendar__day horizontalGutter verticalGutter'>
+                calHtml += `<div style='background-color: #FFFFFF; height: 60px'class='calendar__day horizontalGutter verticalGutter'>
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                             </div>`;
               }
               else if(startDayCount == today.getDate()) {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 66px' class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFB3BB; background-position: center center; height: 60px' class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                                 <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                                 <span id='${year}${month}${setFixDayCount(startDayCount++)}'></span>
                               </div>`;
               }
               else {
-                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #BBFFC9; background-position: center center; height: 66px' class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
+                calHtml += `<div style='background-image: url("${ stamp }");  background-size : 80px 70px; background-color: #FFFFFF; background-position: center center; height: 60px' class='calendar__day horizontalGutter verticalGutter div_can_click' id="${year}-${month}-${startDayCount}">
                               <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${startDayCount}</p>
                               <span id='${year}${month}${setFixDayCount(startDayCount++)}'>
                             </div>`;
@@ -314,15 +314,15 @@ export default {
           else if (startDayCount > lastDay) {
             if (j == 0) {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day horizontalGutter verticalGutter'>
                           </div>`;
             } else if (j == 6) {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day verticalGutter'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day verticalGutter'>
                           </div>`;
             } else {
               // <p style="margin-bottom: 0; padding-bottom: 0; padding-right: 15px; text-align: right;">${lastDayCount++}</p>
-              calHtml += `<div style='background-color: #FFFFFF; height: 66px' class='calendar__day horizontalGutter verticalGutter'>
+              calHtml += `<div style='background-color: #e6e6e6; height: 60px' class='calendar__day horizontalGutter verticalGutter'>
                           </div>`;
             }
           }
