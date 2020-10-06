@@ -9,7 +9,7 @@
           <div style="font-family: CookieRun-Bold">{{ dateNow }} ~ {{ dateNow6 }}</div>
         </v-col>
         <v-col style="width: 25vw; margin: 11vh auto 0; padding-bottom: 0; display: flex; justify-content: flex-end;">
-          <div style="font-family: CookieRun-Bold">AIGARET 최고점수: {{ gameData[0].score }}점 ({{ gameData[0].user }})</div>
+          <div style="font-family: CookieRun-Bold">AIGARET 역대최고점수: {{ gameData[0].score }}점 ({{ gameData[0].user }})</div>
         </v-col>
         <div v-if="gameDataWeek.length != 0">
           <v-col id="rankdiv" v-for="n in gameDataWeek.length" :key="n" style="width: 25vw; margin: 0 auto; display: flex; justify-content: space-around;">
@@ -39,16 +39,19 @@
         <v-col style="display: flex; justify-content: space-around; margin: 15vh auto 8vh;">
           <!-- <v-spacer></v-spacer> -->
           <v-col cols="6">
-            <div id="myrankfont">{{ myDataWeek[0].score }}점</div>
+            <div id="myrankfont" v-if="myDataWeek[0]">{{ myDataWeek[0].score }}점</div>
+            <div id="myrankfont" v-if="!myDataWeek[0]">주간최고점수</div>
           </v-col>
           <!-- <v-spacer></v-spacer> -->
           <v-col cols="3">
-            <div id="myrankfont">{{ myDataWeek[0].score/10 }}위</div>
+            <div id="myrankfont" v-if="myDataWeek[0]">{{ myDataWeek[0].score }}위</div>
+            <div id="myrankfont" v-if="!myDataWeek[0]">등수</div>
           </v-col>
           <!-- <v-spacer></v-spacer> -->
         </v-col>
         <v-col cols="6">
-          <div id="myrankfont">{{ myData[0].score }}점</div>
+          <div id="myrankfont" v-if="myData[0]">{{ myData[0].score }}점</div>
+          <div id="myrankfont" v-if="!myData[0]">역대최고점수</div>
         </v-col>
       </v-col>
     </v-col>
@@ -78,12 +81,13 @@ export default {
     tabIndex: Number,
   },
   methods: {
-    getGameData() {
+    getGameData() {  // 역대최고점수(전체)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
         params: {
-          sort: 'high',
+          week: false,
+          distinct: true,
           count: 1,
-          week: false
+          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
@@ -94,13 +98,13 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    getGameDataWeek() {
+    getGameDataWeek() {  // 주간최고점수(전체)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
         params: {
-          sort: 'high',
-          count: 5,
           week: true,
-          distinct: true
+          distinct: true,
+          count: 5,
+          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
@@ -111,12 +115,13 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    getMyGameData() {
+    getMyGameData() {  // 역대최고점수(본인)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/users/${this.$store.state.userStore.userInfo.userid}/`, {
         params: {
-          sort: 'high',
-          count: 1,
           week: false,
+          distinct: false,
+          count: 1,
+          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
@@ -127,12 +132,13 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    getMyGameDataWeek() {
+    getMyGameDataWeek() {  // 주간최고점수(본인)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/users/${this.$store.state.userStore.userInfo.userid}/`, {
         params: {
-          sort: 'high',
-          count: 1,
           week: true,
+          distinct: false,
+          count: 1,
+          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
