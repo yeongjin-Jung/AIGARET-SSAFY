@@ -18,7 +18,7 @@
             <v-card-text>
               <v-form class="ma-4" ref="form">
                 <ValidationObserver>
-                  <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
+                  <ValidationProvider mode="eager" v-slot="{ errors }" name="아이디" rules="required">
                     <v-text-field id="id" v-model="signupData.username" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
                         <v-btn outlined small rounded color="error" :disabled="signupData.username == ''" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true; isIdDuplicatedCheckBtnCliked = true">중복확인</v-btn>
@@ -30,15 +30,15 @@
                 <v-alert dense outlined type="error" v-show="showAlert && isIdDuplicated" style="font-size: 20px">이미 가입된 아이디입니다.</v-alert>
                 <v-alert dense outlined type="success" v-show="showAlert && !isIdDuplicated && isIdDuplicatedCheckBtnCliked" style="font-size: 20px">사용 가능한 아이디입니다.</v-alert>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 4 }">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="비밀번호" vid="confirmation" :rules="{ required: true, min: 4 }">
                   <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="PasswordConfirm" rules="required|confirmed:confirmation">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="비밀번호 확인" rules="required|confirmed:confirmation">
                   <v-text-field v-model="signupData.confirm_password" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Name" rules="required|max:10">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="이름" rules="required|max:10">
                   <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
@@ -51,7 +51,7 @@
                   <v-text-field v-model="signupData.goal_time" :error-messages="errors" label="일주일 목표시간" name="goal_time" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
                 
-              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); cancelChangingPicture()">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
@@ -102,7 +102,7 @@ const canvas = require('canvas')
 
 extend('required', {
   ...required,
-  message: '{_field_} 값은 반드시 입력해야 합니다.'
+  message: '{_field_}은(는) 반드시 입력해야 합니다.'
 })
 
 extend('regex', {
@@ -112,12 +112,12 @@ extend('regex', {
 
 extend('max', {
   ...max,
-  message: '{_field_} 값은 {length}자리 이하로 입력해주세요.'
+  message: '{_field_}은(는) {length}자리 이하로 입력해주세요.'
 })
 
 extend('min', {
   ...min,
-  message: '{_field_} 값은 최소 {length}자리 이상이어야 합니다.'
+  message: '{_field_}은(는) 최소 {length}자리 이상이어야 합니다.'
 })
 
 extend('confirmed', {
@@ -127,7 +127,7 @@ extend('confirmed', {
 
 extend('numeric', {
   ...numeric,
-  message: '{_field_} 값은 숫자여야 합니다.'
+  message: '{_field_}은(는) 숫자여야 합니다.'
 })
 
 const userStore = 'userStore'
