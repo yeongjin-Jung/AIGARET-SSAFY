@@ -6,7 +6,7 @@ from django.http import QueryDict
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from accounts.models import User
@@ -19,14 +19,14 @@ import datetime, time, json
 from datetime import date, timedelta
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthenticated])
 def index(request):
     games = Game.objects.all()
     serializer = GameSerializer(games, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthenticated])
 def detail(request, game_pk):
     game = get_object_or_404(Game, pk=game_pk)
     serializer = GameSerializer(game)
@@ -34,7 +34,7 @@ def detail(request, game_pk):
 
 
 class RecordView(APIView):
-    @permission_classes([IsAuthenticatedOrReadOnly])
+    @permission_classes([IsAuthenticated])
     def get(self, request, **kwargs):
         # url확인
         # game_pk, user_pk 확인
@@ -92,17 +92,8 @@ class RecordView(APIView):
         
         # 쿼리 성능이슈 존재 가능
         ####################################################
-        if user_pk:
-            records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk))
-        else:
-            records = Record.objects.filter(Q(game_id=game_pk))
-        
-        if week_method:
-            from_monday = date.today().weekday()
-            records = records.filter(start_time__gte=date.today()-timedelta(days=from_monday))
-
         if distinct:
-            if sort_method == 'high':
+            if week_method:
                 records = Record.objects.raw(
                     '''
                     SELECT a.* FROM games_record as a
@@ -112,21 +103,33 @@ class RecordView(APIView):
                         GROUP BY user_id
                     ) as b
                     ON a.user_id=b.id AND a.score = b.score
+                    WHERE date(a.start_time) >= date(curdate()) - weekday(curdate())
+                    ORDER BY score DESC
                     ''' % game_pk
                     )
             else:
                 records = Record.objects.raw(
                     '''
-                    SELECT * FROM games_record as a
-                    WHERE start_time = (
-                        SELECT MAX(start_time)
-                        FROM games_record as b
-                        WHERE a.id = b.id
-                        AND game_id = %s
-                    )
+                    SELECT a.* FROM games_record as a
+                    INNER JOIN (
+                        SELECT user_id as id, max(score) as score FROM games_record
+                        WHERE game_id = %s
+                        GROUP BY user_id
+                    ) as b
+                    ON a.user_id=b.id AND a.score = b.score
+                    ORDER BY score DESC
                     ''' % game_pk
                     )
         else:
+            if user_pk:
+                records = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk))
+            else:
+                records = Record.objects.filter(Q(game_id=game_pk))
+            
+            if week_method:
+                from_monday = date.today().weekday()
+                records = records.filter(start_time__gte=date.today()-timedelta(days=from_monday))
+
             if sort_method == 'high':
                 records = records.order_by('-score')
             else:
@@ -152,7 +155,7 @@ class RecordView(APIView):
         serializer = RecordSerializer(records[:count], many=True)
         return Response(serializer.data)
     
-    @permission_classes([IsAuthenticatedOrReadOnly])
+    @permission_classes([IsAuthenticated])
     def post(self, request, game_pk, user_pk, format=None):
         if not User.objects.filter(id=user_pk).exists():
             return Response({'err': '존재하지 않는 유저 입니다'})
@@ -167,7 +170,7 @@ class RecordView(APIView):
         return Response({'err': '암튼 에러임'})
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthenticated])
 def rank(request, game_pk):
     count = int(request.GET['count']) if 0 <= int(request.GET['count']) <= 100 else 100
     records = Record.objects.filter(game_id=game_pk).order_by('-score')[:count]
@@ -175,7 +178,7 @@ def rank(request, game_pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthenticated])
 def update_description(request):
     something = [
         {
