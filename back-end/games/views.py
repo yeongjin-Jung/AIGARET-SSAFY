@@ -86,6 +86,8 @@ class RecordView(APIView):
 
         if sort_method == 'high':
             records = records.order_by('-score')
+        else:
+            records = records.order_by('-start_time')
         
         if week_method:
             from_monday = date.today().weekday()
