@@ -157,6 +157,7 @@ const userStore = {
 
     logout({ commit }) {
       commit('LOGOUT')
+      router.push('/')
     },
 
     changePassword ({ state, commit }, userInfo) {
@@ -164,7 +165,6 @@ const userStore = {
       .then(res => {
         alert("비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인 해주세요.")
         commit('LOGOUT')
-        router.push('/')
       })
       .catch(err => {
         // console.log(err)
