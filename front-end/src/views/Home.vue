@@ -1,10 +1,10 @@
 <template>
   <v-container fluid class="text-center mb-16">
     <!-- <v-container fluid class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
-    <div v-if="gameInfo[model] == null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+    <div v-if="gameInfo[model] == null" style="font-size: 5vh; font-family: CookieRun-Bold; width : 35vw; height: 7.5vh">
       <MARQUEE scrollamount="15" style="width : 35vw; color: black;">게임을 선택해주세요</MARQUEE>
     </div>
-    <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+    <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-family: CookieRun-Bold; width : 35vw; height: 7.5vh">
       <MARQUEE scrollamount="15" style="width : 35vw;">{{ gameInfo[model].game_name }}</MARQUEE>
     </div>
     <v-slide-group v-model="model" show-arrows center-active>

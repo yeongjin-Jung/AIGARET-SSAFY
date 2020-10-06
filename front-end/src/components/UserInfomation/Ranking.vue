@@ -7,9 +7,9 @@
         centered
         fixed-tabs
       >
-        <v-tab style="color: white;">WristTouchGame</v-tab>
-        <v-tab style="color: white;">SnakeGame</v-tab>
-        <v-tab style="color: white;">JumpGame</v-tab>
+        <v-tab style="color: white; font-family: CookieRun-Bold; font-size: 3vh;">쥐를 잡자</v-tab>
+        <v-tab style="color: white; font-family: CookieRun-Bold; font-size: 3vh;">스네이크 게임</v-tab>
+        <v-tab style="color: white; font-family: CookieRun-Bold; font-size: 3vh;">환상의 점프</v-tab>
 
         <v-tab-item
           v-for="n in 3"
@@ -34,7 +34,5 @@ export default {
 </script>
 
 <style>
-.theme--light.v-tabs-items {
-  background-color: transparent;
-}
+
 </style>
