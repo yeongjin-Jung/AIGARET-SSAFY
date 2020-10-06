@@ -99,7 +99,8 @@ export default {
         params: {
           sort: 'high',
           count: 5,
-          week: true
+          week: true,
+          distinct: true
         },
       }).then((res) => {
           if (res.status === 200) {
