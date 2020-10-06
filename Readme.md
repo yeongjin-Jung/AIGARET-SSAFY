@@ -102,6 +102,9 @@ http://localhost:8080/game
  - 근골격계 질환: 경추, 흉추, 요추의 추간판 탈출증, LBP등 근골격계 질환으로 몸통 및 머리의 움직임 기능이 저하된 환자
  - 신경계 질환: 뇌졸중, 파킨슨병, 진행성 근이영양증, 치매, 뇌성마비, 발달장애, 외상 및 질환으로 인한 신경 손상 등 뇌신경계질환으로 몸통 및 머리의 Stability, Balance, 근지구력 및 인지능력에 저하를 겪은 환자
 
+#### :video_game: 게임 실행 화면
+![점프게임](/uploads/fb5b043e6303c552624149ace229d247/점프게임.png)
+
   ### 3. 환상의 점프
 
 ![jumpgame](/uploads/b50ce89fe21c69b6ae1ad576546c96ab/jumpgame.png)
@@ -123,4 +126,6 @@ http://localhost:8080/game
   #### :relaxed: 적응증
  전문가의 조언에 맞게 훈련 상황을 셋팅하여 다양한 질환에 적용이 가능합니다.
 
+#### :video_game: 게임 실행 화면
+![스네이크게임](/uploads/d0af576edc0ea6260827d38e8db05a6c/스네이크게임.png)
 
