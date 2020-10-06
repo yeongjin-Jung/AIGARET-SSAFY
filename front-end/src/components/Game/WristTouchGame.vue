@@ -313,7 +313,7 @@ export default {
         sketch.translate(this.window_width, 0);
         sketch.scale(-1, 1);
 
-        console.log(this.pose.rightWrist);
+        // console.log(this.pose.rightWrist);
 
         if (this.countDown == 0) {
           this.end_time = this.timeNow();

@@ -31,17 +31,17 @@ const routes = [
     component: () => import('../components/UserInfomation/Ranking.vue')
   },
   {
-    path: '/game/1',
+    path: '/game1/',
     name: 'WristTouchGame',
     component: () => import('../components/Game/WristTouchGame.vue')
   },
   {
-    path: '/game/2',
+    path: '/game2/',
     name: 'SnakeGame',
     component: () => import('../components/Game/SnakeGame.vue')
   },
   {
-    path: '/game/3',
+    path: '/game3/',
     name: 'JumpGame',
     component: () => import('../components/Game/JumpGame.vue')
   }
