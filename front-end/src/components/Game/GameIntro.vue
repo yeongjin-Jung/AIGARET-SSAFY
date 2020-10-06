@@ -8,10 +8,10 @@
 
         <v-col cols="6">
           <v-row class="flex-column ma-0" style="max-width: 100%; max-height: 100%; display: inline-block; vertical-align: middle; background-color: rgba(254,254,255,0.5);">
-            <div style="overflow: auto; height: 32vh; font-size: 3.5vh; font-family: CookieRun-Bold">
-              {{ gameInfo.game_description.slice(0, 220) }}
-              <br><br>
-              {{ gameInfo.game_description.slice(220,) }}
+            <div id="game_description" style="overflow: auto; height: 32vh; font-size: 3.5vh; font-family: CookieRun-Bold">
+              {{ effect }}
+              <br/>
+              {{ indication }}
             </div>
           </v-row>
           <v-row class="pt-2" justify="center" align="end">
@@ -33,6 +33,17 @@ export default {
   },
   props: {
     gameInfo: Object
+  },
+  computed: {
+    effect : function () {
+      var descriptArr = this.gameInfo.game_description.split('[적응증]')
+      return descriptArr[0]
+    },
+    indication : function () {
+      var descriptArr = this.gameInfo.game_description.split('[적응증]')
+      return '[적응증]'+ descriptArr[1]
+    }
   }
 }
+
 </script>
