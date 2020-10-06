@@ -5,6 +5,8 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import axios from 'axios'
 
+import userStore from './store/modules/userStore'
+
 Vue.config.productionTip = false
 
 axios.interceptors.request.use(
@@ -16,10 +18,27 @@ axios.interceptors.request.use(
     
     return config;
   },
+
   function (error) {
     // 오류 요청을 보내기전 수행할 일
     return Promise.reject(error);
-  });
+  }
+);
+
+axios.interceptors.response.use(
+  function(response) {
+    return response
+  },
+
+  function(error) {
+    if(error.response.status == 401) {
+      console.log('error.response.status : 401')
+      store.dispatch('userStore/logout')
+    }
+    else
+      return Promise.reject(error)
+  }
+)
 
 new Vue({
   router,

@@ -45,9 +45,7 @@ const mypageStore = {
         // console.log(res)
         commit('SET_RECORDS', res.data.records)
       })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch()
     },
 
     async getAchievePercent({ state, commit }, data) {
