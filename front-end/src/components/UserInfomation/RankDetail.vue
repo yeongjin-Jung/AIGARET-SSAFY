@@ -171,6 +171,10 @@ export default {
 </script>
 
 <style>
+.theme--light.v-tabs-items {
+  background-color: transparent;
+}
+
 #myrankboard {
   background-image: url("../../assets/rank/Myrank.png");
   background-size : 40vw 60vh;
