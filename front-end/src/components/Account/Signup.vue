@@ -341,6 +341,8 @@ div {
   font-size: 30px;
   color: black;
   line-height: 1.5;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .overlay {
