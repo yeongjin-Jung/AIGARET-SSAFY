@@ -51,8 +51,8 @@
             <div id="myrankfont" v-if="!myDataWeek[0]">주간최고점수</div>
           </v-col>
           <v-col cols="3">
-            <div id="myrankfont" v-if="myDataWeek[0]">{{ myDataWeek[0].score }}위</div>
-            <div id="myrankfont" v-if="!myDataWeek[0]">등수</div>
+            <div id="myrankfont" v-if="myRank">{{ myRank }}위</div>
+            <div id="myrankfont" v-if="!myRank">등수</div>
           </v-col>
         </v-col>
 
@@ -81,6 +81,7 @@ export default {
       gameDataWeek: [{}],
       myData: [{}],
       myDataWeek: [{}],
+      myRank: null,
       dateNow: null,
       dateNow6: null,
     }
@@ -180,6 +181,32 @@ export default {
         '-' +
         ( today6.getDate() < 10 ? '0' + today6.getDate() : today6.getDate() )
     },
+    getRank() {  // 주간최고점수랭킹
+      axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
+        params: {
+          week: true,
+          distinct: false,
+          count: 100,
+          sort: 'high',
+        },
+      }).then((res) => {
+          if (res.status === 200) {
+            const arr = res.data;
+            const N = arr.length;
+            for (let i = 0; i < N; i++) {
+              if (this.myDataWeek[0].score === arr[i].score) {
+                // console.log(i+1 + '위', arr[i].user)
+                this.myRank = i+1
+                break
+              }
+            }
+            this.myRank = '- '
+          } else {
+            console.log('ErrorNo: ', res.status);
+          };
+        })
+        .catch((err) => console.log(err));
+    },
   },
   mounted() {
     this.getGameData()
@@ -187,6 +214,7 @@ export default {
     this.getMyGameData()
     this.getMyGameDataWeek()
     this.getWeek()
+    this.getRank()
   },
 }
 </script>
