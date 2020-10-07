@@ -36,23 +36,31 @@
 
     <v-col cols="5" align-self="center"> <!-- 2분할 -->
       <v-col id="myrankboard" align="center" style="height: 60vh;">
-        <v-col style="display: flex; justify-content: space-around; margin: 15vh auto 8vh;">
-          <!-- <v-spacer></v-spacer> -->
+        <v-row>
+          <v-spacer></v-spacer>
+          <v-col cols="6">
+            <div style="white-space: nowrap; font-family: CookieRun-Bold; font-size: 3vh;">
+              {{ this.$store.state.userStore.userInfo.username }} 님의 점수
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-col style="display: flex; justify-content: space-around; margin: 7vh auto 8vh;">
           <v-col cols="6">
             <div id="myrankfont" v-if="myDataWeek[0]">{{ myDataWeek[0].score }}점</div>
             <div id="myrankfont" v-if="!myDataWeek[0]">주간최고점수</div>
           </v-col>
-          <!-- <v-spacer></v-spacer> -->
           <v-col cols="3">
             <div id="myrankfont" v-if="myDataWeek[0]">{{ myDataWeek[0].score }}위</div>
             <div id="myrankfont" v-if="!myDataWeek[0]">등수</div>
           </v-col>
-          <!-- <v-spacer></v-spacer> -->
         </v-col>
+
         <v-col cols="6">
           <div id="myrankfont" v-if="myData[0]">{{ myData[0].score }}점</div>
           <div id="myrankfont" v-if="!myData[0]">역대최고점수</div>
         </v-col>
+
       </v-col>
     </v-col>
 
