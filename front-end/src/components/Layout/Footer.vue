@@ -7,12 +7,18 @@
           <v-card class="rounded-xl" :elevation="hover ? 12 : 0" style="width: 6.5vw; height: 13vh; margin: 1vh 1.7vw;" color="transparent"></v-card>
         </router-link>
       </v-hover>
-      
-      <router-link id="rank" to="/rank" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
-      </router-link>
 
-      <router-link id="logout" to="" @click="logout()" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
-      </router-link>
+      <v-hover v-slot:default="{ hover }">
+        <router-link id="rank" to="/rank" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
+          <v-card class="rounded-xl" :elevation="hover ? 12 : 0" style="width: 6.5vw; height: 13vh; margin: 1vh 1.7vw;" color="transparent"></v-card>
+        </router-link>
+      </v-hover>
+
+      <v-hover v-slot:default="{ hover }">
+        <router-link id="logout" to="" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
+          <v-card class="rounded-xl" :elevation="hover ? 12 : 0" @click="logout()" style="width: 6.5vw; height: 13vh; margin: 1vh 1.7vw;" color="transparent"></v-card>
+        </router-link>
+      </v-hover>
 
     </v-row>
   </v-container>
