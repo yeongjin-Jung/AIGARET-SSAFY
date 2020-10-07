@@ -149,8 +149,14 @@ export default {
         })
         .catch((err) => console.log(err));
     },
-    timeNow() {
-      const today = new Date();
+    getWeek() {
+      const newDay = new Date();
+      const dayDelta = newDay.getDay() - 1
+      if (newDay.getDay() === 0) {  // 일요일인 경우
+        const dayDelta = 6
+      }
+      
+      const today = new Date(newDay.setDate(newDay.getDate() - dayDelta));
       this.dateNow =
         today.getFullYear() +
         '-' +
@@ -172,7 +178,7 @@ export default {
     this.getGameDataWeek()
     this.getMyGameData()
     this.getMyGameDataWeek()
-    this.timeNow()
+    this.getWeek()
   },
 }
 </script>

@@ -412,6 +412,14 @@ export default {
         }
       }
     },
+    musicPlay() {
+      this.touchGameBGM = new Audio(require("../../assets/sound/TouchGameBGM.mp3")); // path to file
+      this.touchGameBGM.volume = 0.2;
+      // this.jumpGameBGM.muted = true;
+      this.touchGameBGM.loop = true;
+      this.touchGameBGM.autoplay = true;
+      this.touchGameBGM.play();
+    },
     closeModal() {
       this.modal = false;
     },
@@ -478,16 +486,9 @@ export default {
     this.Tutorial = true;
     this.countDownTimer();
     this.gamestatus = true;
-    this.touchGameBGM = new Audio(
-      require("../../assets/sound/TouchGameBGM.mp3")
-    ); // path to file
-    this.touchGameBGM.volume = 0.2;
-    // this.jumpGameBGM.muted =true;
-    this.touchGameBGM.loop = true;
-    this.touchGameBGM.autoplay = true;
-    this.touchGameBGM.play();
   },
   mounted() {
+    this.musicPlay();
     this.start_time = this.timeNow();
   },
   destroyed() {
