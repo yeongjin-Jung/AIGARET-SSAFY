@@ -352,7 +352,7 @@ export default {
       var that = this;
       var jumpSoundFlag = true;
 
-      if (this.confidence >= 0.9 && this.label == "jump") {
+      if (this.confidence >= 0.97 && this.label == "jump") {
         this.unicorn.jump();
         if (this.unicorn.y == 600 && this.gameState == true) {
           this.jumpSound = new Audio(require("../../assets/sound/Jump.mp3")); // path to file
