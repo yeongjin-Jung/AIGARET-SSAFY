@@ -1,18 +1,18 @@
 <template>
-  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 1.5vh;">
-    <v-row justify="center">
+  <v-container v-if="this.$route.name == 'Home'" fluid style="position: absolute; bottom: 1vh;">
+    <v-row justify="center" style="height: 20vh;">
         
-        <router-link id="info" to="/info" style="text-decoration: none; margin-left:1.8vw; margin-right:1.8vw;">
-          <v-btn icon elevation="0" style="height:18vh; width:8.7vw;"></v-btn>
+      <v-hover v-slot:default="{ hover }">
+        <router-link id="info" to="/info" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
+          <v-card class="rounded-xl" :elevation="hover ? 12 : 0" style="width: 6.5vw; height: 13vh; margin: 1vh 1.7vw;" color="transparent"></v-card>
         </router-link>
-        
-        <router-link id="rank" to="/rank" style="text-decoration: none; margin-left:2vw; margin-right:1.8vw;">
-          <v-btn icon elevation="0" style="height:19.4vh; width:8.9vw;"><div></div></v-btn>
-        </router-link>
+      </v-hover>
+      
+      <router-link id="rank" to="/rank" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
+      </router-link>
 
-        <router-link id="logout" to="" style="text-decoration: none; margin-left:1.8vw; margin-right:1.8vw;">
-          <v-btn icon elevation="0" @click="logout()" style="height:18vh; width:8.9vw;" ></v-btn>
-        </router-link>
+      <router-link id="logout" to="" @click="logout()" style="text-decoration: none; margin: 2vh; width: 10vw; height: 17vh;">
+      </router-link>
 
     </v-row>
   </v-container>
@@ -41,19 +41,19 @@ export default {
 <style>
 #logout {
 background-image: url("../../assets/menuButton/logout-red.png");
-background-size : cover;
-background-color: rgba( 255, 255, 255, 0 );
+background-size : contain;
+background-position: center center;
 }
 
 #info {
 background-image: url("../../assets/menuButton/info-blue.png");
-background-size : cover;
-background-color: rgba( 255, 255, 255, 0 );
+background-size : contain;
+background-position: center center;
 }
 
 #rank {
 background-image: url("../../assets/menuButton/rank-green.png");
-background-size : cover;
-background-color: rgba( 255, 255, 255, 0 );
+background-size : contain;
+background-position: center center;
 }
 </style>
