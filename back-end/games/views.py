@@ -137,14 +137,14 @@ def get_rank(request, game_pk):
         return Response({'ValueError': 'count값이 유효하지 않습니다.\ncount: %s' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
     if count > 100:
         return Response({'KeyError': 'count값이 너무 큽니다.\ncount: %s > 100' % count}, status=status.HTTP_400_BAD_REQUEST)
-
+    print(week_method)
     if week_method:
-        ranking = Record.objects.filter(game_id=game_pk).order_by('-score').values('user_id').annotate(
+        from_monday = date.today().weekday()
+        ranking = Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday))).order_by('-score').values('user_id').annotate(
             score = aggregates.Max('score')
         )[:count]
     else:
-        from_monday = date.today().weekday()
-        ranking = Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday))).order_by('-score').values('user_id').annotate(
+        ranking = Record.objects.filter(game_id=game_pk).order_by('-score').values('user_id').annotate(
             score = aggregates.Max('score')
         )[:count]
 
