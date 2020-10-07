@@ -1,7 +1,7 @@
 <template>
   <v-row no-gutters class="fill-height text-center" justify="center">
     
-    <v-col cols="5" align-self="center"> <!-- 2분할 -->
+    <v-col cols="5" align-self="center">
       <v-col id="rankboard" style="height: 80vh;">
         <v-col style="width: 25vw; margin: 1vh auto 0; padding: 0; display: flex; justify-content: center">
           <div style="font-family: CookieRun-Bold">{{ dateNow }} ~ {{ dateNow6 }}</div>
@@ -32,7 +32,7 @@
       </v-col>
     </v-col>
 
-    <v-col cols="5" align-self="center"> <!-- 2분할 -->
+    <v-col cols="5" align-self="center">
       <v-col id="myrankboard" align="center" style="height: 60vh;">
         <v-row>
           <v-spacer></v-spacer>
@@ -106,12 +106,10 @@ export default {
         });
     },
     getGameDataWeek() {  // 주간최고점수(전체)
-      axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
+      axios.get(SERVER.URL + `games/${ this.tabIndex }/rank/`, {
         params: {
           week: true,
-          distinct: true,
           count: 5,
-          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
@@ -186,27 +184,24 @@ export default {
         ( today6.getDate() < 10 ? '0' + today6.getDate() : today6.getDate() )
     },
     getRank() {  // 주간최고점수랭킹
-      axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
+      axios.get(SERVER.URL + `games/${ this.tabIndex }/rank/`, {
         params: {
           week: true,
-          distinct: false,
           count: 100,
-          sort: 'high',
         },
       }).then((res) => {
           if (res.status === 200) {
             const arr = res.data;
             const N = arr.length;
             for (let i = 0; i < N; i++) {
-              if (this.myDataWeek[0] && this.myDataWeek[0].score === arr[i].score) {
+              if (this.$store.state.userStore.userInfo.username === arr[i].user) {
                 // console.log(i+1 + '위', arr[i].user)
                 this.myRank = i+1
-                break
               }
             }
-            if (this.myDataWeek[0]) {
-              this.myRank = '- '
-            }
+            // if (this.myDataWeek[0]) {
+            //   this.myRank = '- '
+            // }
           } else {
             console.log('ErrorNo: ', res.status);
           };
