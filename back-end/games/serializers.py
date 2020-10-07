@@ -23,6 +23,7 @@ class RecordSerializer(serializers.ModelSerializer):
     score = serializers.IntegerField(required=False)
     start_time = serializers.DateTimeField(required=False)
     play_time = serializers.IntegerField(required=False)
+    rank = serializers.IntegerField(required=False)
 
     # record 모델 작성시 추가로 필요한 부분
     # write_only = 모델 작성시에만 사용하겠다

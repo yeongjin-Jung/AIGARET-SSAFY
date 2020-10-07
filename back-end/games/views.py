@@ -137,7 +137,7 @@ def get_rank(request, game_pk):
         return Response({'ValueError': 'count값이 유효하지 않습니다.\ncount: %s' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
     if count > 100:
         return Response({'KeyError': 'count값이 너무 큽니다.\ncount: %s > 100' % count}, status=status.HTTP_400_BAD_REQUEST)
-    print(week_method)
+
     if week_method:
         from_monday = date.today().weekday()
         ranking = Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday))).order_by('-score').values('user_id').annotate(
@@ -153,4 +153,61 @@ def get_rank(request, game_pk):
         user = User.objects.get(id=uid)
         r['user'] = user
     serializer = RecordSerializer(ranking, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_my_rank(request, game_pk, user_pk):
+    try:
+        week_method = request.GET['week']
+        if week_method.lower() == 'true':
+            week_method = True
+        elif week_method.lower() == 'false':
+            week_method = False
+        else:
+            return Response({'ValueError': 'week값이 유효하지 않습니다.\nweek: %s\n"true" 또는 "false"로 요청하세요' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        print('ValueError: week 값이 존재하지 않습니다.')
+        week_method = False
+    
+    try:
+        count = int(request.GET['count'])
+    except KeyError:
+        print('KeyError: count 값이 존재하지 않습니다.')
+        count = 100
+    except ValueError:
+        print('ValueError: count 값이 숫자가 아닙니다.')
+        return Response({'ValueError': 'count값이 유효하지 않습니다.\ncount: %s' % request.GET['count']}, status=status.HTTP_400_BAD_REQUEST)
+    if count > 100:
+        return Response({'KeyError': 'count값이 너무 큽니다.\ncount: %s > 100' % count}, status=status.HTTP_400_BAD_REQUEST)
+
+
+    if week_method:
+        from_monday = date.today().weekday()
+        my_max_score_record = Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday)) & Q(user_id=user_pk)).order_by('-score').values('user_id').annotate(
+            score = aggregates.Max('score')
+        )
+        if not my_max_score_record:
+            return Response({'user': User.objects.get(id=user_pk).username, 'rank': None}) 
+        my_max_score = my_max_score_record[0]['score']
+        my_ranking = len(Record.objects.filter(Q(game_id=game_pk) & Q(start_time__gte=date.today()-timedelta(days=from_monday)) & Q(score__gt=my_max_score)).order_by('-score').values('user_id').annotate(
+            score = aggregates.Max('score')
+        )) + 1
+    else:
+        my_max_score_record = Record.objects.filter(Q(game_id=game_pk) & Q(user_id=user_pk)).order_by('-score').values('user_id').annotate(
+            score = aggregates.Max('score')
+        )
+        if not my_max_score_record:
+            return Response({'user': User.objects.get(id=user_pk).username, 'rank': None}) 
+        my_max_score = my_max_score_record[0]['score']
+        my_ranking = len(Record.objects.filter(Q(game_id=game_pk) & Q(score__gt=my_max_score)).order_by('-score').values('user_id').annotate(
+            score = aggregates.Max('score')
+        )) + 1
+    my_max_score_record = my_max_score_record[0]
+    uid = my_max_score_record.pop('user_id')
+    user = User.objects.get(id=uid)
+    my_max_score_record['user'] = user
+    my_max_score_record['rank'] = my_ranking
+    serializer = RecordSerializer(my_max_score_record)
     return Response(serializer.data)

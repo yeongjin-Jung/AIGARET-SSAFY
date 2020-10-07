@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:game_pk>/records/', views.RecordView.as_view(), name='rank'),
     # path('description/', views.update_description)
     path('<int:game_pk>/rank/', views.get_rank),
+    path('<int:game_pk>/rank/<int:user_pk>/', views.get_my_rank),
 ]
