@@ -162,24 +162,11 @@ export default {
 
     // NEW
     getMyWeeklyRank() {  // 주간랭킹(나)
-      axios.get(SERVER.URL + `games/${ this.tabIndex }/rank/`, {
+      axios.get(SERVER.URL + `games/${ this.tabIndex }/rank/${this.$store.state.userStore.userInfo.userid}/`, {
         params: {
           week: true,
-          count: 100,
         },
-      }).then((res) => {
-          if (res.status === 200) {
-            const arr = res.data;
-            const N = arr.length;
-
-            for (let i = 0; i < N; i++) {
-              if (this.$store.state.userStore.userInfo.username === arr[i].user) {
-                this.myWeeklyRank = i + 1
-                break
-              }
-            };
-          }
-        })
+      }).then((res) => { if (res.status === 200) { this.myWeeklyRank = res.data.rank; } })
         .catch((err) => console.error(err));
     },
     getWeeklyRank5() {  // 주간랭킹5위
@@ -210,7 +197,6 @@ export default {
     this.getMyBestScoreWeek()  // 내 최고점수(주간)
     this.getWeeklyRank5()  // 주간랭킹5위
     this.getBestScore()  // 게임최고점수
-    console.log(this.myWeeklyRank)
   },
 }
 </script>
