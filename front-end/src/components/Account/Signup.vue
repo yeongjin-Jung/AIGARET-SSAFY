@@ -1,17 +1,17 @@
 <template>
-  <v-dialog v-model="dialog" width="880" height="900" persistent>
+  <v-dialog v-model="dialog" width="400" height="900" persistent>
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
     
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" class="ml-5" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 658.400px;">
+    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 630px;">
 
       <div id="div_left" style="margin:auto; text-align:center">
 
         <ValidationObserver ref="observer" v-slot="{ invalid }">
-          <v-card width="50%" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
+          <v-card width="" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
 
             <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
 
@@ -51,7 +51,8 @@
                   <v-text-field v-model="signupData.goal_time" :error-messages="errors" label="일주일 목표시간" name="goal_time" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
                 
-              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); cancelChangingPicture()">회원가입</v-btn>
+              <!-- <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); cancelChangingPicture()">회원가입</v-btn> -->
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck" @click="signup(signupData)">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
@@ -63,7 +64,7 @@
 
       <!-- 오른쪽 웹캠 div -->
       <!-- height: 717-->
-      <div id="div_right" style="background: #fcfeff; text-align: center; padding-top:90px;">
+      <!-- <div id="div_right" style="background: #fcfeff; text-align: center; padding-top:90px;">
 
         <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
@@ -82,7 +83,7 @@
             <v-icon dark>mdi-refresh</v-icon>
           </v-btn>
         </div>
-      </div>
+      </div> -->
 
     </div>
 
@@ -97,6 +98,8 @@ import { extend, ValidationObserver, setInteractionMode, ValidationProvider } fr
 import { required, email, max, min, regex, confirmed, numeric } from 'vee-validate/dist/rules'
 
 import { mapState, mapActions, mapGetters } from 'vuex'
+
+import base64Encoded from './aigaret_logo'
 
 const canvas = require('canvas')
 
@@ -155,7 +158,7 @@ export default {
         password: '',
         confirm_password: '',
         goal_time: '',
-        profile_image: ''
+        profile_image: base64Encoded.key
       },
 
       isCaptured: false,
@@ -185,17 +188,17 @@ export default {
   },
 
   updated () {
-    console.log('Signup.vue updated.')
+    // console.log('Signup.vue updated.')
 
-    if (this.videoFlag == true) {
-      this.video = document.getElementById('video')
-      this.canvas = document.getElementById('canvas')
+    // if (this.videoFlag == true) {
+    //   this.video = document.getElementById('video')
+    //   this.canvas = document.getElementById('canvas')
 
-      this.faceDetect()
-    } else {
-      this.video = null
-      this.canvas = null
-    }
+    //   this.faceDetect()
+    // } else {
+    //   this.video = null
+    //   this.canvas = null
+    // }
   },
 
   methods: {
@@ -252,7 +255,7 @@ export default {
     clickedSignupBtn () {
       console.log('회원가입 버튼 클릭됨.')
 
-      this.videoStart()
+      // this.videoStart()
     },
 
     async faceDetect () {
@@ -287,15 +290,19 @@ export default {
     },
 
     cancelChangingPicture() {
-      this.isCaptured = false
-      this.localStream.getTracks()[0].stop()
-      if (this.timerId != null) { clearInterval(this.timerId) }
-      setTimeout(() => {
-        this.dialog = false
-        this.videoFlag = false
-        this.clearForm()
-        this.$store.state.userStore.showAlert = false
-      }, 500)
+      // this.isCaptured = false
+      // this.localStream.getTracks()[0].stop()
+      // if (this.timerId != null) { clearInterval(this.timerId) }
+      // setTimeout(() => {
+      //   this.dialog = false
+      //   this.videoFlag = false
+      //   this.clearForm()
+      //   this.$store.state.userStore.showAlert = false
+      // }, 500)
+
+      this.dialog = false
+      this.clearForm()
+      this.$store.state.userStore.showAlert = false
     },
 
     clearForm() {
