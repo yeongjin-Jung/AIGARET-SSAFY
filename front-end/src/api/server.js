@@ -1,6 +1,5 @@
 export default {
-  // URL: 'http://localhost:8000/api/',
-  URL: 'https://j3b203.p.ssafy.io/api/',
+  URL: 'https://aigaret.ga/api/',
   ROUTES: {
     // Account
     signup: 'rest-auth/signup/',
