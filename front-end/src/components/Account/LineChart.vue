@@ -15,7 +15,7 @@ export default {
         
         datasets: [
           {
-            label: "손목 터치 게임(분)",
+            label: "쥐를 잡자(분)",
             data: [],
             fill: false,
             borderColor: "rgba(255, 99, 132, 1)",
@@ -31,7 +31,7 @@ export default {
             borderWidth: 3,
           },
           {
-            label: "점프 게임(분)",
+            label: "환상의 점프(분)",
             data: [],
             fill: false,
             borderColor: "rgba(75, 192, 192, 1)",
@@ -101,9 +101,9 @@ export default {
       this.chartData.labels.push(res.data.records[idx].date)
 
       // 2. 각 달에 해당하는 게임 플레이 시간 data 배열에 추가.
-      this.chartData.datasets[0].data.push(res.data.records[idx].record[0].time)
-      this.chartData.datasets[1].data.push(res.data.records[idx].record[1].time)
-      this.chartData.datasets[2].data.push(res.data.records[idx].record[2].time)
+      this.chartData.datasets[0].data.push(parseInt(res.data.records[idx].record[0].time / 60))
+      this.chartData.datasets[1].data.push(parseInt(res.data.records[idx].record[1].time / 60))
+      this.chartData.datasets[2].data.push(parseInt(res.data.records[idx].record[2].time / 60))
     }
 
       this.renderChart(this.chartData, this.options)
