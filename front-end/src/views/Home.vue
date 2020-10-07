@@ -77,7 +77,9 @@ export default {
         .then((res) => {
           this.gameInfo = res.data
         })
-        .catch((err) => console.log(err.response))
+        .catch((err) => {
+          // console.log(err.response)
+        })
     }
   },
   mounted() {

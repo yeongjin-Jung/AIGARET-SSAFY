@@ -102,10 +102,12 @@ export default {
           if (res.status === 200) {
             this.gameData = res.data
           } else {
-            console.log('ErrorNo: ', res.status);
+            // console.log('ErrorNo: ', res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
     getGameDataWeek() {  // 주간최고점수(전체)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/`, {
@@ -119,10 +121,12 @@ export default {
           if (res.status === 200) {
             this.gameDataWeek = res.data
           } else {
-            console.log('ErrorNo: ', res.status);
+            // console.log('ErrorNo: ', res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
     getMyGameData() {  // 역대최고점수(본인)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/users/${this.$store.state.userStore.userInfo.userid}/`, {
@@ -136,10 +140,12 @@ export default {
           if (res.status === 200) {
             this.myData = res.data
           } else {
-            console.log('ErrorNo: ', res.status);
+            // console.log('ErrorNo: ', res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
     getMyGameDataWeek() {  // 주간최고점수(본인)
       axios.get(SERVER.URL + `games/${ this.tabIndex }/records/users/${this.$store.state.userStore.userInfo.userid}/`, {
@@ -153,10 +159,12 @@ export default {
           if (res.status === 200) {
             this.myDataWeek = res.data
           } else {
-            console.log('ErrorNo: ', res.status);
+            // console.log('ErrorNo: ', res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
     getWeek() {
       const newDay = new Date();
@@ -202,10 +210,12 @@ export default {
             }
             this.myRank = '- '
           } else {
-            console.log('ErrorNo: ', res.status);
+            // console.log('ErrorNo: ', res.status);
           };
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
   },
   mounted() {

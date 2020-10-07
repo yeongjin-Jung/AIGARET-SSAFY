@@ -253,14 +253,14 @@ export default {
     },
 
     clickedSignupBtn () {
-      console.log('회원가입 버튼 클릭됨.')
+      // console.log('회원가입 버튼 클릭됨.')
 
       // this.videoStart()
     },
 
     async faceDetect () {
-      console.log('this.video.width', this.video.width)
-      console.log('this.video.height', this.video.height)
+      // console.log('this.video.width', this.video.width)
+      // console.log('this.video.height', this.video.height)
 
       const video = this.video
       const canvas = this.canvas
@@ -274,7 +274,7 @@ export default {
       await faceapi.nets.faceExpressionNet.loadFromUri('/models')
 
       this.timerId = setInterval(async () => {
-        console.log('계속 도는 중.')
+        // console.log('계속 도는 중.')
         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)

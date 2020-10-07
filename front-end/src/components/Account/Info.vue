@@ -298,7 +298,7 @@ export default {
       // this.progressValue = (parseInt(this.$store.state.total_time / 3600) / this.goal_time * 100).toFixed(1)
       // console.log('this.progressValue : ', this.progressValue)
 
-      console.log('this.$store.state.mypageStore.total_time : ', this.$store.state.mypageStore.total_time)
+      // console.log('this.$store.state.mypageStore.total_time : ', this.$store.state.mypageStore.total_time)
     })
   },
 
@@ -364,7 +364,7 @@ export default {
       // console.log(canvas.toDataURL())
 
       const base64Encoded = canvas.toDataURL()
-      console.log(base64Encoded)
+      // console.log(base64Encoded)
       this.base64Encoded = base64Encoded
     },
 
@@ -377,8 +377,8 @@ export default {
     },
 
     async faceDetect () {
-      console.log('this.video.width', this.video.width)
-      console.log('this.video.height', this.video.height)
+      // console.log('this.video.width', this.video.width)
+      // console.log('this.video.height', this.video.height)
 
       const video = this.video
       const canvas = this.canvas
@@ -392,7 +392,7 @@ export default {
       await faceapi.nets.faceExpressionNet.loadFromUri('/models')
 
       this.timerId = setInterval(async () => {
-        console.log('계속 도는 중.')
+        // console.log('계속 도는 중.')
         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)

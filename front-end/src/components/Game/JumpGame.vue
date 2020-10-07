@@ -250,11 +250,11 @@ export default {
     },
 
     modelLoaded() {
-      console.log("MobileNet loaded!");
+      // console.log("MobileNet loaded!");
     },
 
     videoReady() {
-      console.log("webcam load... finished");
+      // console.log("webcam load... finished");
     },
 
     gotResults(err, result) {
@@ -276,12 +276,12 @@ export default {
           setTimeout(function () {
             that.classifier.addImage("jump");
             that.jumpPoseCollecting = true;
-            console.log("점프사진 수집중");
+            // console.log("점프사진 수집중");
           }, 3 * (i + 1));
         }
         setTimeout(function () {
           that.jumpPoseCollecting = false;
-          console.log("점프사진 수집완료");
+          // console.log("점프사진 수집완료");
         }, 2000);
       });
 
@@ -291,12 +291,12 @@ export default {
           setTimeout(function () {
             that.classifier.addImage("noJump");
             that.NojumpPoseCollecting = true;
-            console.log("런닝사진 수집중");
+            // console.log("런닝사진 수집중");
           }, 5 * (i + 1));
         }
         setTimeout(function () {
           that.NojumpPoseCollecting = false;
-          console.log("런닝사진 수집완료");
+          // console.log("런닝사진 수집완료");
         }, 2000);
       });
 
@@ -313,7 +313,7 @@ export default {
       });
     },
     finished(loss) {
-      console.log("학습");
+      // console.log("학습");
     },
 
     whileTraining(loss) {
@@ -323,9 +323,9 @@ export default {
       if (loss == null) {
         that.classifier.classify(that.gotResults);
         that.training = false;
-        console.log("학습이 완료 되었습니다.");
+        // console.log("학습이 완료 되었습니다.");
       } else {
-        console.log(loss);
+        // console.log(loss);
         that.training = true;
       }
     },
@@ -516,7 +516,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      console.log(gameData);
+      // console.log(gameData);
       axios
         .post(
           SERVER.URL +
@@ -528,12 +528,14 @@ export default {
         )
         .then((res) => {
           if (res.status === 201) {
-            console.log("데이터가 생성되었습니다.");
+            // console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("Error No: " + res.status);
+            // console.log("Error No: " + res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
   },
   created() {

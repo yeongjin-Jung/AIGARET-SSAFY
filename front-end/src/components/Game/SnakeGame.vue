@@ -246,10 +246,10 @@ export default {
     },
 
     modelReady() {
-      console.log("Model Loaded");
+      // console.log("Model Loaded");
     },
     videoReady() {
-      console.log("webcam load... finished");
+      // console.log("webcam load... finished");
     },
 
     countDownTimer() {
@@ -573,7 +573,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      console.log(gameData);
+      // console.log(gameData);
       axios
         .post(
           SERVER.URL +
@@ -585,12 +585,14 @@ export default {
         )
         .then((res) => {
           if (res.status === 201) {
-            console.log("데이터가 생성되었습니다.");
+            // console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("Error No: " + res.status);
+            // console.log("Error No: " + res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
   },
   created() {

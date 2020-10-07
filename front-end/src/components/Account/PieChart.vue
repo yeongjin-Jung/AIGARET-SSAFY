@@ -52,7 +52,7 @@ export default {
       this.renderChart(this.chartData, this.options);
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
   }
 };

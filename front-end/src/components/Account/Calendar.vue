@@ -56,8 +56,8 @@ export default {
     this.getRecords(todayDate).then( () => {
       // console.log('!!!!!!!!!!!!')
       this.gameRecords = this.$store.state.mypageStore.gameRecords
-      console.log('this.gameRecords -> ', this.gameRecords)
-      console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
+      // console.log('this.gameRecords -> ', this.gameRecords)
+      // console.log('this.$store.state.gameRecords -> ', this.$store.state.mypageStore.gameRecords)  
 
       if (today.getMonth() + 1 < 10) {
         setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
@@ -101,7 +101,7 @@ export default {
             // console.log('startDayCount : ', startDayCount)
             // console.log('today.getDate() : ', today.getDate())
             // console.log('this.gameRecords[startDayCount-1].totaltime : ', this.gameRecords[startDayCount-1].totaltime)
-            console.log(`${startDayCount}일 : ${ this.gameRecords[startDayCount-1].totaltime }초`)
+            // console.log(`${startDayCount}일 : ${ this.gameRecords[startDayCount-1].totaltime }초`)
             
             if(this.gameRecords[startDayCount-1].totaltime >= 1800)
               stamp = stamp1
@@ -111,7 +111,7 @@ export default {
               stamp = ''
             
             // stamp = this.gameRecords[startDayCount-1].totaltime >= 1800 ? stamp1 : stamp3
-            console.log(stamp)
+            // console.log(stamp)
           }
 
           // #FFFFBB : 노란색
@@ -371,7 +371,7 @@ export default {
 
       let idx = Number(strs[2])
 
-      console.log('self.gameRecords', self.gameRecords)
+      // console.log('self.gameRecords', self.gameRecords)
 
       // 전체 시간
       let totaltime = self.gameRecords[idx-1].totaltime

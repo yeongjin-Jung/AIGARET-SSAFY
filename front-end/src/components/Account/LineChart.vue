@@ -90,7 +90,7 @@ export default {
 
     axios.post(SERVER.URL + SERVER.ROUTES.getLineData, data)
     .then(res => {
-    console.log("line chart response : ", res)
+    // console.log("line chart response : ", res)
 
     for(var idx=0; idx<12; idx++) {
       // datasets[0] : 손목
@@ -109,7 +109,7 @@ export default {
       this.renderChart(this.chartData, this.options)
     })
     .catch(err => {
-      console.log(err)
+      // console.log(err)
     })
 
   }
