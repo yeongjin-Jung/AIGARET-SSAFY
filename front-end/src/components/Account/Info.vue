@@ -25,7 +25,7 @@
 
               <v-card>
                 <ValidationObserver v-slot="{ invalid }">
-                  <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                  <v-card-title class="headline justify-center" style="background: #005792">
                     <p class="ma-2" style="color: white; font-family: CookieRun-Bold">비밀번호 변경</p>
                   </v-card-title>
 
@@ -62,7 +62,7 @@
               </template>
 
               <v-card>
-                <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                <v-card-title class="headline justify-center" style="background: #005792">
                   <p class="ma-2" style="color: white; font-family: CookieRun-Bold">사진 변경</p>
                 </v-card-title>
 
@@ -99,7 +99,7 @@
               </template>
 
               <v-card id="slider">
-                <v-card-title class="headline justify-center" style="background: #BBBBFF">
+                <v-card-title class="headline justify-center" style="background: #005792">
                   <p class="ma-2" style="color: white; font-family: CookieRun-Bold">목표 시간 변경</p>
                 </v-card-title>
 
@@ -310,13 +310,10 @@ export default {
       this.video = document.getElementById('video')
       this.canvas = document.getElementById('canvas')
 
-      this.faceDetect()
+      // this.faceDetect()
     } else {
       this.video = null
       this.canvas = null
-
-      // console.log('video tag : ', this.video)
-      // console.log('canvas tag : ', this.canvas)
     }
   },
 
@@ -362,8 +359,7 @@ export default {
       $('#video').get(0).pause()
       var ctx = canvas.getContext('2d')
 
-      if (this.timerId != null) { clearInterval(this.timerId) }
-
+      // if (this.timerId != null) { clearInterval(this.timerId) }
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
       // console.log(canvas.toDataURL())
 
