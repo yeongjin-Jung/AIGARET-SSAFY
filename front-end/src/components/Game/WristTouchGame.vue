@@ -437,7 +437,9 @@ export default {
     //   this.firstStart = false
     // }
     timeNow() {
-      var date = new Date().toISOString();
+      var timezoneOffset = new Date().getTimezoneOffset() * 60000;
+      var timezoneDate = new Date(Date.now() - timezoneOffset);
+      var date = timezoneDate.toISOString();
       var time = new Date().toString("ko-KR");
       return date.slice(0, 10) + " " + time.slice(16, 24);
     },
