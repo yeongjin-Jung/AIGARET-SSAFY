@@ -15,7 +15,7 @@
         </v-row>
         <v-row no-gutters class="pt-2" justify="center">
           <router-link :to="{ path: `/game${ gameInfo.id }/`, query: { gameNo: gameInfo.id } }" style="text-decoration: none;">
-            <v-btn outlined style="width: 10vw; height: 8.5vh; font-family: CookieRun-Bold; background-color: yellow;">게임시작</v-btn>
+            <v-btn outlined style="width: 10vw; height: 8.5vh; font-size: 3vh; font-family: CookieRun-Bold; background-color: yellow;">게임시작</v-btn>
           </router-link>
         </v-row>
       </v-col>

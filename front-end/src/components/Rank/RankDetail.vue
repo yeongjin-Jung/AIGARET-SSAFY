@@ -1,8 +1,6 @@
 <template>
   <v-row no-gutters class="fill-height text-center" justify="center">
     
-    <!-- <v-spacer></v-spacer> -->
-    
     <v-col cols="5" align-self="center"> <!-- 2분할 -->
       <v-col id="rankboard" style="height: 80vh;">
         <v-col style="width: 25vw; margin: 1vh auto 0; padding: 0; display: flex; justify-content: center">
@@ -63,8 +61,6 @@
 
       </v-col>
     </v-col>
-
-    <!-- <v-spacer></v-spacer> -->
 
   </v-row>
 </template>
@@ -202,20 +198,20 @@ export default {
             const arr = res.data;
             const N = arr.length;
             for (let i = 0; i < N; i++) {
-              if (this.myDataWeek[0].score === arr[i].score) {
+              if (this.myDataWeek[0] && this.myDataWeek[0].score === arr[i].score) {
                 // console.log(i+1 + '위', arr[i].user)
                 this.myRank = i+1
                 break
               }
             }
-            this.myRank = '- '
+            if (this.myDataWeek[0]) {
+              this.myRank = '- '
+            }
           } else {
-            // console.log('ErrorNo: ', res.status);
+            console.log('ErrorNo: ', res.status);
           };
         })
-        .catch((err) => {
-          // console.log(err)
-        });
+        .catch((err) => console.error(err));
     },
   },
   mounted() {
