@@ -28,20 +28,20 @@ const routes = [
   {
     path: '/rank',
     name: 'Rank',
-    component: () => import('../components/UserInfomation/Ranking.vue')
+    component: () => import('../components/Rank/Ranking.vue')
   },
   {
-    path: '/WristTouchGame',
+    path: '/game1/',
     name: 'WristTouchGame',
     component: () => import('../components/Game/WristTouchGame.vue')
   },
   {
-    path: '/SnakeGame',
+    path: '/game2/',
     name: 'SnakeGame',
     component: () => import('../components/Game/SnakeGame.vue')
   },
   {
-    path: '/JumpGame',
+    path: '/game3/',
     name: 'JumpGame',
     component: () => import('../components/Game/JumpGame.vue')
   }

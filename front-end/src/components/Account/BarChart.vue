@@ -18,7 +18,7 @@ export default {
           "9월",
           "10월",
           "11월",
-          "12월"
+          "12월",
         ],
         datasets: [
           {
@@ -36,7 +36,7 @@ export default {
               "rgba(255, 206, 86, 1)",
               "rgba(75, 192, 192, 1)",
               "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)"
+              "rgba(255, 159, 64, 1)",
             ],
             borderColor: [
               "rgba(255,99,132,1)",
@@ -50,44 +50,44 @@ export default {
               "rgba(255, 206, 86, 1)",
               "rgba(75, 192, 192, 1)",
               "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)"
+              "rgba(255, 159, 64, 1)",
             ],
             pointBorderColor: "#2554FF",
-            data: [100, 30, 50, 85, 20, 45, 65, 55, 25, 75, 35, 20]
-          }
-        ]
+            data: [100, 30, 50, 85, 20, 45, 65, 55, 25, 75, 35, 20],
+          },
+        ],
       },
       options: {
         scales: {
           yAxes: [
             {
               ticks: {
-                beginAtZero: true
+                beginAtZero: true,
               },
               gridLines: {
-                display: true
-              }
-            }
+                display: true,
+              },
+            },
           ],
           xAxes: [
             {
               gridLines: {
-                display: false
-              }
-            }
-          ]
+                display: false,
+              },
+            },
+          ],
         },
         legend: {
-          display: true
+          display: true,
         },
         responsive: true,
-        maintainAspectRatio: false
-      }
+        maintainAspectRatio: false,
+      },
     };
   },
   mounted() {
     this.renderChart(this.chartData, this.options);
-  }
+  },
 };
 </script>
 

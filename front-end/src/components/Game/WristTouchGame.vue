@@ -28,7 +28,6 @@
         <button
           @click="
             doClose();
-            sendGameData();
             reStartTime();
           "
           style="
@@ -115,7 +114,7 @@ export default {
       poseNet: null,
       pose: null,
       skeleton: null,
-      position_x: 900,
+      position_x: 600,
       position_y: 500,
       window_width: 1000,
       window_height: 700,
@@ -193,7 +192,7 @@ export default {
       this.cat_foot.hide();
 
       this.mouse = sketch.createImg(
-        "https://user-images.githubusercontent.com/53737175/94952939-b7c2f900-0521-11eb-98a9-b562fbbaaf5d.png"
+        "https://user-images.githubusercontent.com/53737175/95081770-02788700-0755-11eb-85e4-8ec7049deb42.png"
       );
       this.mouse.hide();
 
@@ -208,7 +207,7 @@ export default {
       $("#defaultCanvas0").css({ width: "64vw", height: "95vh" });
     },
     modelReady() {
-      console.log("Model Loaded");
+      // console.log("Model Loaded");
     },
     chanege(x) {
       var that = this;
@@ -234,12 +233,27 @@ export default {
         setTimeout(function () {
           that.levelChange = false;
         }, 1000);
+      } else if (that.score == 1600) {
+        that.LevelNum = 5;
+        that.level = "Level 5";
+        that.levelChange = true;
+        setTimeout(function () {
+          that.levelChange = false;
+        }, 1000);
+      } else if (that.score == 2000) {
+        that.LevelNum = 6;
+        that.level = "Final";
+        that.levelChange = true;
+        setTimeout(function () {
+          that.levelChange = false;
+        }, 1000);
       }
-      this.position_x = Math.floor(Math.random() * 800 + 100);
+      this.position_x = Math.floor(Math.random() * 700 + 100);
       this.position_y = Math.floor(Math.random() * 300 + 100);
       if (this.position_x >= 300 && this.position_x <= 700) {
         this.chanege(x);
       }
+
       if (this.LevelNum == 1) {
         this.countDown = 10;
       } else if (this.LevelNum == 2) {
@@ -248,6 +262,10 @@ export default {
         this.countDown = 6;
       } else if (this.LevelNum == 4) {
         this.countDown = 4;
+      } else if (this.LevelNum == 5) {
+        this.countDown = 2;
+      } else if (this.LevelNum == 6) {
+        this.countDown = 1;
       }
     },
     countDownTimer() {
@@ -295,9 +313,12 @@ export default {
         sketch.translate(this.window_width, 0);
         sketch.scale(-1, 1);
 
+        // console.log(this.pose.rightWrist);
+
         if (this.countDown == 0) {
           this.end_time = this.timeNow();
           this.game_score = this.score;
+          this.sendGameData()
           this.modal = true;
           this.score = 0;
           this.LevelNum = 1;
@@ -391,6 +412,14 @@ export default {
         }
       }
     },
+    musicPlay() {
+      this.touchGameBGM = new Audio(require("../../assets/sound/TouchGameBGM.mp3")); // path to file
+      this.touchGameBGM.volume = 0.2;
+      // this.jumpGameBGM.muted = true;
+      this.touchGameBGM.loop = true;
+      this.touchGameBGM.autoplay = true;
+      this.touchGameBGM.play();
+    },
     closeModal() {
       this.modal = false;
     },
@@ -416,7 +445,9 @@ export default {
     //   this.firstStart = false
     // }
     timeNow() {
-      var date = new Date().toISOString();
+      var timezoneOffset = new Date().getTimezoneOffset() * 60000;
+      var timezoneDate = new Date(Date.now() - timezoneOffset);
+      var date = timezoneDate.toISOString();
       var time = new Date().toString("ko-KR");
       return date.slice(0, 10) + " " + time.slice(16, 24);
     },
@@ -431,7 +462,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      // console.log(gameData)
+      // console.log(gameData);
       axios
         .post(
           SERVER.URL +
@@ -443,28 +474,23 @@ export default {
         )
         .then((res) => {
           if (res.status === 201) {
-            console.log("데이터가 생성되었습니다.");
+            // console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("201말고 뭐가 오지?");
+            // console.log("Error No: " + res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
   },
   created() {
     this.Tutorial = true;
     this.countDownTimer();
     this.gamestatus = true;
-    this.touchGameBGM = new Audio(
-      require("../../assets/sound/TouchGameBGM.mp3")
-    ); // path to file
-    this.touchGameBGM.volume = 0.2;
-    // this.jumpGameBGM.muted =true;
-    this.touchGameBGM.loop = true;
-    this.touchGameBGM.autoplay = true;
-    this.touchGameBGM.play();
   },
   mounted() {
+    this.musicPlay();
     this.start_time = this.timeNow();
   },
   destroyed() {

@@ -71,8 +71,8 @@ export default {
     },
 
     async faceDetect() {
-      console.log("this.video.width", this.video.width);
-      console.log("this.video.height", this.video.height);
+      // console.log("this.video.width", this.video.width);
+      // console.log("this.video.height", this.video.height);
 
       let video = this.video;
       let canvas = this.canvas;
@@ -86,7 +86,7 @@ export default {
       await faceapi.nets.faceExpressionNet.loadFromUri("/models");
 
       this.timerId = setInterval(async () => {
-        console.log("계속 도는 중.");
+        // console.log("계속 도는 중.");
         const detections = await faceapi
           .detectAllFaces(video)
           .withFaceLandmarks()
@@ -115,7 +115,7 @@ export default {
   },
 
   updated() {
-    console.log("FaceLogin.vue updated.");
+    // console.log("FaceLogin.vue updated.");
 
     if (this.videoFlag == true) {
       this.video = document.getElementById("video");
@@ -126,8 +126,8 @@ export default {
       this.video = null;
       this.canvas = null;
 
-      console.log("video tag : ", this.video);
-      console.log("canvas tag : ", this.canvas);
+      // console.log("video tag : ", this.video);
+      // console.log("canvas tag : ", this.canvas);
     }
   }
 };

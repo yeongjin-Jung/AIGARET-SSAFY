@@ -1,10 +1,10 @@
 <template>
-  <v-container fluid class="text-center mb-16">
+  <v-container fluid class="text-center" style="margin-bottom: 16vh">
     <!-- <v-container fluid class="pa-4 text-center" style="border: white dashed"><span style="color: white">Home.vue</span> -->
-    <div v-if="gameInfo[model] == null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+    <div v-if="gameInfo[model] == null" style="font-size: 5vh; font-family: CookieRun-Bold; width : 35vw; height: 7.5vh">
       <MARQUEE scrollamount="15" style="width : 35vw; color: black;">게임을 선택해주세요</MARQUEE>
     </div>
-    <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-weight: 600; width : 35vw; height: 7.5vh">
+    <div v-if="gameInfo[model] != null" style="font-size: 5vh; font-family: CookieRun-Bold; width : 35vw; height: 7.5vh">
       <MARQUEE scrollamount="15" style="width : 35vw;">{{ gameInfo[model].game_name }}</MARQUEE>
     </div>
     <v-slide-group v-model="model" show-arrows center-active>
@@ -19,19 +19,13 @@
               <v-img :src="item.img" width="100vw" height="100%">
                 <v-card-title class="title white--text">
                   <v-row class="fill-height flex-column" justify="space-between">
-                    <p class="mt-4 subheading text-left">{{ item.title }}</p>
-
-                    <div>
-                      <p class="ma-0 body-1 font-weight-bold font-italic text-left">{{ item.text }}</p>
-                      <p class="caption font-weight-medium font-italic text-left">{{ item.subtext }}</p>
-                    </div>
 
                     <!-- <div class="align-self-center">
                       <v-btn v-for="(icon, index) in icons" :key="index" :class="{ 'show-btns': hover }" color="transparent" icon>
                         <v-icon :class="{ 'show-btns': hover }" color="transparent">{{ icon }}</v-icon>
                       </v-btn>
                     </div> -->
-                  </v-row>\
+                  </v-row>
                 </v-card-title>
               </v-img>
             </v-card>
@@ -40,7 +34,7 @@
       </v-slide-item>
     </v-slide-group>
 
-    <v-expand-transition >
+    <v-expand-transition>
       <v-sheet v-if="model != null" style="height: 50vh; background-color: rgba(0,0,0,0);">
         <GameIntro :gameInfo="gameInfo[model]" />
       </v-sheet>
@@ -64,23 +58,14 @@ export default {
     icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
     items: [
       {
-        title: 'New Releases',
-        text: "It's New Release Friday",
-        subtext: 'Newly released songs. Updated daily',
-        img: 'https://lorempixel.com/output/nightlife-q-c-640-480-5.jpg'
+        img: 'https://user-images.githubusercontent.com/53737175/95080191-ae6ca300-0752-11eb-96fc-6ae89915c35c.png'
       },
       {
-        title: 'Rock',
-        text: 'Greatest Rock Hits',
-        subtext: 'Lose yourself in rock tunes.',
         img:
-          'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80'
+          'https://user-images.githubusercontent.com/53737175/95080219-b88ea180-0752-11eb-8746-30dc4ed37f00.png'
       },
       {
-        title: 'Mellow Moods',
-        text: 'Ambient Bass',
-        subtext: 'Chill beats to mellow you out.',
-        img: 'https://lorempixel.com/output/abstract-q-c-640-480-6.jpg'
+        img: 'https://user-images.githubusercontent.com/53737175/95080228-bd535580-0752-11eb-94cb-8adee98e6abd.png'
       },
     ],
     transparent: 'rgba(255, 255, 255, 0)',
@@ -92,7 +77,9 @@ export default {
         .then((res) => {
           this.gameInfo = res.data
         })
-        .catch((err) => console.log(err.response))
+        .catch((err) => {
+          // console.log(err.response)
+        })
     }
   },
   mounted() {
@@ -110,7 +97,7 @@ export default {
 
 .v-card:not(.on-minimize) {
   width: 30vw;
-  height: 50vh;
+  height: 34.5vh;
   margin-bottom: 50px;
 }
 

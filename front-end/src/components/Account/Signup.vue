@@ -1,43 +1,44 @@
 <template>
-  <v-dialog v-model="dialog" width="880" height="900" persistent>
+  <v-dialog v-model="dialog" width="400" height="900" persistent>
   <!-- <v-dialog v-model="dialog"  height="1000px" persistent> -->
     
     <template v-slot:activator="{ on, attrs }">
       <v-btn v-bind="attrs" v-on="on" class="ml-5" style="max-width:100%; height:6vh; padding: 20px; color: white; outline:none; background-color: #324ec9" @click="clickedSignupBtn()"><span style="font-family:NanumBarunGothic; font-size:2.5vh; font-weight:bold;">회원가입</span></v-btn>
     </template>
 
-    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 600px;">
+    <div id="outer"  style="background-color: #fcfeff; margin-left:0; margin-right:0; justify-content: center; height: 630px;">
 
       <div id="div_left" style="margin:auto; text-align:center">
 
         <ValidationObserver ref="observer" v-slot="{ invalid }">
-          <v-card width="50%" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
+          <v-card width="" flat outlined style="background-color: #fcfeff; !important; border-color: white !important; float: left; height: 100%">
 
             <v-card-title class="justify-center" style="background-color: #005792; color: white; font-family: CookieRun-Bold;">회원가입</v-card-title>
 
             <v-card-text>
               <v-form class="ma-4" ref="form">
                 <ValidationObserver>
-                  <ValidationProvider mode="eager" v-slot="{ errors }" name="Id" rules="required">
+                  <ValidationProvider mode="eager" v-slot="{ errors }" name="아이디" rules="required">
                     <v-text-field id="id" v-model="signupData.username" :error-messages="errors" label="아이디" style="font-family: CookieRun-Regular; font-size:27px;" required>
                       <template v-slot:append-outer>
-                        <v-btn outlined small rounded color="error" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true">중복확인</v-btn>
+                        <v-btn outlined small rounded color="error" :disabled="signupData.username == ''" @click="checkIdDuplicate(signupData.username); isIdDuplicatedCheck = true; isIdDuplicatedCheckBtnCliked = true">중복확인</v-btn>
                       </template>
                     </v-text-field>
                   </ValidationProvider>
                 </ValidationObserver>
                 
-                <v-alert dense outlined type="error" v-if="isIdDuplicated">이미 가입된 아이디입니다.</v-alert>
+                <v-alert dense outlined type="error" v-show="showAlert && isIdDuplicated" style="font-size: 20px">이미 가입된 아이디입니다.</v-alert>
+                <v-alert dense outlined type="success" v-show="showAlert && !isIdDuplicated && isIdDuplicatedCheckBtnCliked" style="font-size: 20px">사용 가능한 아이디입니다.</v-alert>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Password" vid="confirmation" :rules="{ required: true, min: 4 }">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="비밀번호" vid="confirmation" :rules="{ required: true, min: 4 }">
                   <v-text-field v-model="signupData.password" :error-messages="errors" label="비밀번호" name="password" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="PasswordConfirm" rules="required|confirmed:confirmation">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="비밀번호 확인" rules="required|confirmed:confirmation">
                   <v-text-field v-model="signupData.confirm_password" :error-messages="errors" label="비밀번호 확인" name="passwordConfirm" type="password" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
-                <ValidationProvider mode="eager" v-slot="{ errors }" name="Name" rules="required|max:10">
+                <ValidationProvider mode="eager" v-slot="{ errors }" name="이름" rules="required|max:10">
                   <v-text-field v-model="signupData.name" :counter="10" :error-messages="errors" label="이름" required style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
 
@@ -50,7 +51,8 @@
                   <v-text-field v-model="signupData.goal_time" :error-messages="errors" label="일주일 목표시간" name="goal_time" style="font-family: CookieRun-Regular; font-size:27px;"></v-text-field>
                 </ValidationProvider>
                 
-              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); stopDetecting()">회원가입</v-btn>
+              <!-- <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck || !isCaptured" @click="signup(signupData); cancelChangingPicture()">회원가입</v-btn> -->
+              <v-btn color="primary" style="margin: 10px 10px" :disabled="invalid || isIdDuplicated || !isIdDuplicatedCheck" @click="signup(signupData)">회원가입</v-btn>
               <v-btn color="error" style="margin: 10px 10px" @click="cancelChangingPicture">돌아가기</v-btn>
             <!-- </div> -->
               </v-form>
@@ -62,7 +64,7 @@
 
       <!-- 오른쪽 웹캠 div -->
       <!-- height: 717-->
-      <div id="div_right" style="background: #fcfeff; text-align: center; height:717px; padding-top:90px;">
+      <!-- <div id="div_right" style="background: #fcfeff; text-align: center; padding-top:90px;">
 
         <div class="my-2" style="display: flex; justify-content: center; align-items: center;">
           <video id="video" width="400" height="300" autoplay muted style="background: black"></video>
@@ -81,7 +83,7 @@
             <v-icon dark>mdi-refresh</v-icon>
           </v-btn>
         </div>
-      </div>
+      </div> -->
 
     </div>
 
@@ -97,11 +99,13 @@ import { required, email, max, min, regex, confirmed, numeric } from 'vee-valida
 
 import { mapState, mapActions, mapGetters } from 'vuex'
 
+import base64Encoded from './aigaret_logo'
+
 const canvas = require('canvas')
 
 extend('required', {
   ...required,
-  message: '{_field_} 값은 반드시 입력해야 합니다.'
+  message: '{_field_}은(는) 반드시 입력해야 합니다.'
 })
 
 extend('regex', {
@@ -111,12 +115,12 @@ extend('regex', {
 
 extend('max', {
   ...max,
-  message: '{_field_} 값은 {length}자리 이하로 입력해주세요.'
+  message: '{_field_}은(는) {length}자리 이하로 입력해주세요.'
 })
 
 extend('min', {
   ...min,
-  message: '{_field_} 값은 최소 {length}자리 이상이어야 합니다.'
+  message: '{_field_}은(는) 최소 {length}자리 이상이어야 합니다.'
 })
 
 extend('confirmed', {
@@ -126,7 +130,7 @@ extend('confirmed', {
 
 extend('numeric', {
   ...numeric,
-  message: '{_field_} 값은 숫자여야 합니다.'
+  message: '{_field_}은(는) 숫자여야 합니다.'
 })
 
 const userStore = 'userStore'
@@ -154,7 +158,7 @@ export default {
         password: '',
         confirm_password: '',
         goal_time: '',
-        profile_image: ''
+        profile_image: base64Encoded.key
       },
 
       isCaptured: false,
@@ -162,7 +166,7 @@ export default {
       videoFLag: false,
 
       isIdDuplicatedCheck: false,
-
+      isIdDuplicatedCheckBtnCliked: false,
       localStream: ''
     }
   },
@@ -180,21 +184,21 @@ export default {
   },
   
   computed: {
-    ...mapGetters(userStore, ['isIdDuplicated'])
+    ...mapGetters(userStore, ['isIdDuplicated', 'showAlert'])
   },
 
   updated () {
-    console.log('Signup.vue updated.')
+    // console.log('Signup.vue updated.')
 
-    if (this.videoFlag == true) {
-      this.video = document.getElementById('video')
-      this.canvas = document.getElementById('canvas')
+    // if (this.videoFlag == true) {
+    //   this.video = document.getElementById('video')
+    //   this.canvas = document.getElementById('canvas')
 
-      this.faceDetect()
-    } else {
-      this.video = null
-      this.canvas = null
-    }
+    //   this.faceDetect()
+    // } else {
+    //   this.video = null
+    //   this.canvas = null
+    // }
   },
 
   methods: {
@@ -249,14 +253,14 @@ export default {
     },
 
     clickedSignupBtn () {
-      console.log('회원가입 버튼 클릭됨.')
+      // console.log('회원가입 버튼 클릭됨.')
 
-      this.videoStart()
+      // this.videoStart()
     },
 
     async faceDetect () {
-      console.log('this.video.width', this.video.width)
-      console.log('this.video.height', this.video.height)
+      // console.log('this.video.width', this.video.width)
+      // console.log('this.video.height', this.video.height)
 
       const video = this.video
       const canvas = this.canvas
@@ -270,7 +274,7 @@ export default {
       await faceapi.nets.faceExpressionNet.loadFromUri('/models')
 
       this.timerId = setInterval(async () => {
-        console.log('계속 도는 중.')
+        // console.log('계속 도는 중.')
         const detections = await faceapi.detectAllFaces(video).withFaceLandmarks().withFaceExpressions()
         const resizedDetections = faceapi.resizeResults(detections, displaySize)
         canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
@@ -286,14 +290,19 @@ export default {
     },
 
     cancelChangingPicture() {
-      this.isCaptured = false
-      this.localStream.getTracks()[0].stop()
-      if (this.timerId != null) { clearInterval(this.timerId) }
-      setTimeout(() => {
-        this.dialog = false
-        this.videoFlag = false
-        this.clearForm() 
-      }, 500)
+      // this.isCaptured = false
+      // this.localStream.getTracks()[0].stop()
+      // if (this.timerId != null) { clearInterval(this.timerId) }
+      // setTimeout(() => {
+      //   this.dialog = false
+      //   this.videoFlag = false
+      //   this.clearForm()
+      //   this.$store.state.userStore.showAlert = false
+      // }, 500)
+
+      this.dialog = false
+      this.clearForm()
+      this.$store.state.userStore.showAlert = false
     },
 
     clearForm() {
@@ -339,6 +348,8 @@ div {
   font-size: 30px;
   color: black;
   line-height: 1.5;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .overlay {

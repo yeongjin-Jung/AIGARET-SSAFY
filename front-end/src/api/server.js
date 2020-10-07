@@ -13,6 +13,7 @@ export default {
     getRecords: 'mypages/calendar/',
     changeGoalTime: 'mypages/goaltimechange/',
     getAchievePercent: 'mypages/achievepercent/',
+    getLineData: 'mypages/monthlygametime/',
     getPieData: 'mypages/totalgametime/',
 
     // Game

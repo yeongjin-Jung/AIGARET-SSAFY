@@ -45,7 +45,6 @@
         <button
           @click="
             doClose();
-            sendGameData();
             reStartTime();
           "
           style="
@@ -211,7 +210,7 @@ export default {
       this.video.hide();
 
       this.snake = sketch.createImg(
-        "https://user-images.githubusercontent.com/53737175/94985813-a6670480-0594-11eb-807d-6bb9303e20c4.png"
+        "https://user-images.githubusercontent.com/53737175/95085712-8da84b80-075a-11eb-8084-ebd1e4166401.png"
       );
       this.snake.hide();
 
@@ -247,10 +246,10 @@ export default {
     },
 
     modelReady() {
-      console.log("Model Loaded");
+      // console.log("Model Loaded");
     },
     videoReady() {
-      console.log("webcam load... finished");
+      // console.log("webcam load... finished");
     },
 
     countDownTimer() {
@@ -408,6 +407,7 @@ export default {
         if (this.countDown == 0) {
           that.end_time = this.timeNow();
           that.game_score = this.score;
+          that.sendGameData()
           that.modal = true;
           that.score = 0;
           that.gamestatus = false;
@@ -435,8 +435,8 @@ export default {
             that.snake,
             that.pose.nose.x - this.snakeCanvasWidth - 0.35 * d,
             that.pose.nose.y,
-            0.9 * d,
-            0.9 * d
+            0.7 * d,
+            0.7 * d
           );
           sketch.fill(0, 0, 255);
 
@@ -556,7 +556,9 @@ export default {
       this.firstStart = false;
     },
     timeNow() {
-      var date = new Date().toISOString();
+      var timezoneOffset = new Date().getTimezoneOffset() * 60000;
+      var timezoneDate = new Date(Date.now() - timezoneOffset);
+      var date = timezoneDate.toISOString();
       var time = new Date().toString("ko-KR");
       return date.slice(0, 10) + " " + time.slice(16, 24);
     },
@@ -571,7 +573,7 @@ export default {
         endTime: this.end_time,
         gameScore: this.game_score,
       };
-      console.log(gameData);
+      // console.log(gameData);
       axios
         .post(
           SERVER.URL +
@@ -583,12 +585,14 @@ export default {
         )
         .then((res) => {
           if (res.status === 201) {
-            console.log("데이터가 생성되었습니다.");
+            // console.log("데이터가 생성되었습니다.");
           } else {
-            console.log("201말고 뭐가 오지?");
+            // console.log("Error No: " + res.status);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          // console.log(err)
+        });
     },
   },
   created() {

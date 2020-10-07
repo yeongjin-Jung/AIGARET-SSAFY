@@ -16,6 +16,7 @@ const userStore = {
       'profile_image': localStorage.getItem('profile_image')
     },
     isIdDuplicated: false,
+    showAlert: false
   },
 
   getters: {
@@ -41,6 +42,10 @@ const userStore = {
     goal_time(state) {
       return state.userInfo.goal_time
     },
+
+    showAlert(state) {
+      return state.showAlert
+    }
   },
 
   mutations: {
@@ -104,6 +109,7 @@ const userStore = {
 
     SET_ID_DUPLICATED(state, data) {
       state.isIdDuplicated = data
+      state.showAlert = true
     }
   },
 
@@ -115,7 +121,7 @@ const userStore = {
 
       axios.post(SERVER.URL + SERVER.ROUTES.checkIdDuplicate, data)
       .then(res => {
-        console.log("res.data.status : ", res.data.status) // fail or success
+        // console.log("res.data.status : ", res.data.status) // fail or success
 
         if(res.data.status == 'success')
           commit('SET_ID_DUPLICATED', false)
@@ -134,11 +140,13 @@ const userStore = {
         }
         dispatch('login', loginData)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        // console.log(err)
+      })
     },
 
     login({ commit }, loginData) {
-      console.log('login')
+      // console.log('login')
       axios.post(SERVER.URL + SERVER.ROUTES.login, loginData)
       .then(res => {
         commit('SET_USER_INFO', res.data.user)
@@ -152,7 +160,7 @@ const userStore = {
     logout({ commit }) {
       commit('LOGOUT')
     },
-
+    
     changePassword ({ state, commit }, userInfo) {
       axios.patch(SERVER.URL + SERVER.ROUTES.changepassword, userInfo)
       .then(res => {
@@ -162,7 +170,7 @@ const userStore = {
       })
       .catch(err => {
         // console.log(err)
-        console.log(err.response)
+        // console.log(err.response)
 
         if(err.response.data.message=='wrong password') {
           alert('잘못된 비밀번호를 입력했습니다. 다시 입력해주세요.')
@@ -171,8 +179,8 @@ const userStore = {
     },
 
     changeImage({ state, commit }, newImage) {
-      console.log('changePicture called.')
-      console.log('new image : ', newImage)
+      // console.log('changePicture called.')
+      // console.log('new image : ', newImage)
 
       const data = {
         "profile_image": newImage
