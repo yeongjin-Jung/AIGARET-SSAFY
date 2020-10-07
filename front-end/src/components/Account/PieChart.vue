@@ -8,7 +8,7 @@ export default {
   data() {
     return {
       chartData: {
-        labels: ["손목터치 게임(분)", "스네이크 게임(분)", "점프 게임(분)"],
+        labels: ["쥐를 잡자(분)", "스네이크 게임(분)", "환상의 점프(분)"],
         datasets: [
           {
             borderWidth: 1,

@@ -397,9 +397,9 @@ export default {
           <h1>${ clickedDate }</h1>
           <hr>
           ${ totaltime == 0 ? `<h2>해당 날짜에 기록이 존재하지 않습니다.</h2><br>` : `<h2>총 운동시간 : ${ totaltime }</h2><br>
-          <h3>손목 터치 게임 : ${ wristTouchGameScore == 0 ? `기록이 없습니다.` : `${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>` } 
+          <h3>쥐를 잡자 : ${ wristTouchGameScore == 0 ? `기록이 없습니다.` : `${ wristTouchGameTime }, 총 스코어 ${ wristTouchGameScore }점</h3>` } 
           <h3>스네이크 게임 : ${ snakeGameScore == 0 ? `기록이 없습니다.` : `${ snakeGameTime }, 총 스코어 ${ snakeGameScore }점</h3>` }
-          <h3>점프 게임 : ${ jumpGameScore == 0 ? `기록이 없습니다.` : `${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>` }`}
+          <h3>환상의 점프 : ${ jumpGameScore == 0 ? `기록이 없습니다.` : `${ jumpGameTime }, 총 스코어 ${ jumpGameScore }점</h3><br>` }`}
         `
 
       $('#modal_content').empty()
