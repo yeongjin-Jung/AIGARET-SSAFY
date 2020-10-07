@@ -7,7 +7,7 @@
 
       <v-col cols="6">
         <v-row no-gutters style="background-color: rgba(254,254,255,0.5);">
-          <div style="height: 32vh; font-size: 3.5vh; font-family: CookieRun-Bold">
+          <div style="overflow: auto; height: 32vh; font-size: 3.5vh; font-family: CookieRun-Bold">
             {{ effect }}
             <br/><br/>
             {{ indication }}
