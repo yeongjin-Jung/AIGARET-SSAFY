@@ -28,7 +28,7 @@ const routes = [
   {
     path: '/rank',
     name: 'Rank',
-    component: () => import('../components/UserInfomation/Ranking.vue')
+    component: () => import('../components/Rank/Ranking.vue')
   },
   {
     path: '/game1/',

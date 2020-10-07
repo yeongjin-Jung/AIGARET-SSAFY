@@ -185,7 +185,7 @@ export default {
 
 <style>
 #myrankboard {
-  background-image: url("../../assets/rank/Myrank.png");
+  background-image: url("../../assets/rank/Myrankboard.png");
   background-size : 40vw 60vh;
 }
 
