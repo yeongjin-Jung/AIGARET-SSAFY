@@ -58,7 +58,7 @@ http://localhost:8080/game
 
   ### 1. 쥐를 잡자
 
- ![wristtouchgame](/uploads/0acdd154ef30cc0919fe9743ece7307a/wristtouchgame.png)
+![wristtouchgame](https://user-images.githubusercontent.com/53737175/99741851-87590d80-2b15-11eb-84cb-5ce1c651b61d.png)
   
   #### :clipboard: 게임 설명
   플레이어는 고양이가 되어 화면 상에 무작위로 등장하는 생쥐를 잡아야합니다. 점점 더 빨리 도망치는 생쥐를 잡아 최고점수에 도전해 보세요!
@@ -76,13 +76,13 @@ http://localhost:8080/game
  - 신경계 질환: 뇌졸중, 파킨슨병, 진행성 근이영양증, 치매, 뇌성마비, 발달장애, 외상 및 질환으로 인한 신경 손상 등 뇌신경계질환으로 상지 ROM, 근지구력 및 인지능력에 저하를 겪은 환자
 
 #### :video_game: 게임 실행 화면
-![wristgameplay](/uploads/892c45c4eca348726f878d55b383fcdc/wristgameplay.png)
-  
+![wristgameplay](https://user-images.githubusercontent.com/53737175/99741858-8922d100-2b15-11eb-898b-9252cf153fd7.png)
+
   
   ### 2. 스네이크 게임
 
-![snakegame](/uploads/3eada5cd2e752783e9bf3d07ca07a65a/snakegame.png)
-  
+![snakegame](https://user-images.githubusercontent.com/53737175/99741860-8a53fe00-2b15-11eb-89d8-a2b789f73fd7.png)
+
   #### :clipboard: 게임 설명
  플레이어는  배고픈 뱀을 위해 화면 상에 무작위로 등장하는 먹이를 먹을 수 있도록 도와줘야합니다. 배고픈 뱀이 점점 더 빨리 사라지는 먹이를 놓치지 않고 무사히 먹을 수 있도록 도와주세요!
   
@@ -100,12 +100,13 @@ http://localhost:8080/game
  - 신경계 질환: 뇌졸중, 파킨슨병, 진행성 근이영양증, 치매, 뇌성마비, 발달장애, 외상 및 질환으로 인한 신경 손상 등 뇌신경계질환으로 몸통 및 머리의 Stability, Balance, 근지구력 및 인지능력에 저하를 겪은 환자
 
 #### :video_game: 게임 실행 화면
-![스네이크게임](/uploads/d0af576edc0ea6260827d38e8db05a6c/스네이크게임.png)
+![스네이크게임](https://user-images.githubusercontent.com/53737175/99741863-8b852b00-2b15-11eb-893d-a95a55c6930a.png)
 
+  
 
   ### 3. 환상의 점프
 
-![jumpgame](/uploads/b50ce89fe21c69b6ae1ad576546c96ab/jumpgame.png)
+![jumpgame](https://user-images.githubusercontent.com/53737175/99741864-8cb65800-2b15-11eb-85d7-75257b586e60.png)
   
   #### :clipboard: 게임 설명
  플레이어는  갈길이 바쁜 여우를 위해 화면 상에 무작위로 등장하는 장애물을 피할 수 있도록 도와줘야합니다. 점점 더 빨리 달리는 여우가 넘어지지 않도록 도와주세요!
@@ -125,5 +126,5 @@ http://localhost:8080/game
  전문가의 조언에 맞게 훈련 상황을 셋팅하여 다양한 질환에 적용이 가능합니다.
 
 #### :video_game: 게임 실행 화면
-![점프게임](/uploads/fb5b043e6303c552624149ace229d247/점프게임.png)
+![점프게임](https://user-images.githubusercontent.com/53737175/99741869-8f18b200-2b15-11eb-8fb4-7fe47936dbcc.png)
 
