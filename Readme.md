@@ -58,7 +58,7 @@ http://localhost:8080/game
 
   ### 1. 쥐를 잡자
 
-  ![wristtouchgame](/uploads/0acdd154ef30cc0919fe9743ece7307a/wristtouchgame.png)
+ ![wristtouchgame](/uploads/0acdd154ef30cc0919fe9743ece7307a/wristtouchgame.png)
   
   #### :clipboard: 게임 설명
   플레이어는 고양이가 되어 화면 상에 무작위로 등장하는 생쥐를 잡아야합니다. 점점 더 빨리 도망치는 생쥐를 잡아 최고점수에 도전해 보세요!
